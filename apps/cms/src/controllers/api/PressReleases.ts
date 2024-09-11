@@ -53,42 +53,44 @@ export const getPressReleases = async (req, res) => {
     }
   };
 
-  export const createPressRelease = async (req, res) => {
-    try {
-      const {
-        title,
-        summary,
-        content,
-        title_ms,
-        summary_ms,
-        content_ms,
-        datetime,
-        attachments,
-        relatedAgency //agencyId
-      } = req.body;
+  //not being used by frontend
   
-      if (!title || !summary || !content || !title_ms || !summary_ms || !content_ms || !datetime || !relatedAgency) {
-        return res.status(400).json({ error: 'Missing required fields' });
-      } //validate
+  // export const createPressRelease = async (req, res) => {
+  //   try {
+  //     const {
+  //       title,
+  //       summary,
+  //       content,
+  //       title_ms,
+  //       summary_ms,
+  //       content_ms,
+  //       datetime,
+  //       attachments,
+  //       relatedAgency //agencyId
+  //     } = req.body;
   
-      const newPressRelease = await payload.create({
-        collection: 'press-releases',
-        data: {
-          title,
-          summary,
-          content,
-          title_ms,
-          summary_ms,
-          content_ms,
-          datetime,
-          attachments: attachments || [],  // attachmentens are optional
-          relatedAgency
-        }
-      });
+  //     if (!title || !summary || !content || !title_ms || !summary_ms || !content_ms || !datetime || !relatedAgency) {
+  //       return res.status(400).json({ error: 'Missing required fields' });
+  //     } //validate
   
-      res.status(201).json(newPressRelease);
-    } catch (error) {
-      console.error('Error creating press release:', error);
-      res.status(500).json({ error: 'An error occurred while creating the press release.' });
-    }
-  };
+  //     const newPressRelease = await payload.create({
+  //       collection: 'press-releases',
+  //       data: {
+  //         title,
+  //         summary,
+  //         content,
+  //         title_ms,
+  //         summary_ms,
+  //         content_ms,
+  //         datetime,
+  //         attachments: attachments || [],  // attachmentens are optional
+  //         relatedAgency
+  //       }
+  //     });
+  
+  //     res.status(201).json(newPressRelease);
+  //   } catch (error) {
+  //     console.error('Error creating press release:', error);
+  //     res.status(500).json({ error: 'An error occurred while creating the press release.' });
+  //   }
+  // };
