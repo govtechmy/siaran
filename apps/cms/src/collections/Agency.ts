@@ -9,6 +9,12 @@ const Agency: CollectionConfig = {
       required: true,
     },
     {
+      name: 'id', 
+      type: 'text',
+      required: true,
+      unique: true, // Ensure the custom ID is unique
+    },
+    {
       name: 'acronym',
       type: 'text',
       required: true,
