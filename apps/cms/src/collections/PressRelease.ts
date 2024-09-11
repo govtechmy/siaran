@@ -9,7 +9,7 @@ const PressRelease: CollectionConfig = {
       required: true,
     },
     {
-      name: 'snippet',
+      name: 'summary',  
       type: 'text',
       required: true,
     },
