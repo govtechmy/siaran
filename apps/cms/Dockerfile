@@ -6,8 +6,8 @@ WORKDIR /home/node/app
 COPY package*.json ./
 
 COPY . .
-RUN yarn install
-RUN yarn build
+RUN npm install
+RUN npm run build
 
 FROM base as runtime
 
@@ -16,12 +16,12 @@ ENV PAYLOAD_CONFIG_PATH=dist/payload.config.js
 
 WORKDIR /home/node/app
 COPY package*.json  ./
-COPY yarn.lock ./
 
-RUN yarn install --production
+RUN npm install --production
 COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/build ./build
 
-EXPOSE 3000
+EXPOSE $PORT
+ENV HOST=0.0.0.0
 
 CMD ["node", "dist/server.js"]

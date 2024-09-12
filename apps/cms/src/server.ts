@@ -1,12 +1,12 @@
-import express from 'express';
-import payload from 'payload';
-import apiRoutes from './routes'; 
+import express from "express";
+import payload from "payload";
+import apiRoutes from "./routes";
 
-require('dotenv').config();
+require("dotenv").config();
 const app = express();
 
-app.get('/', (_, res) => {
-  res.redirect('/admin');
+app.get("/", (_, res) => {
+  res.redirect("/admin");
 });
 
 const start = async () => {
@@ -18,10 +18,10 @@ const start = async () => {
     },
   });
 
-  app.use('/api', apiRoutes);
+  app.use("/api", apiRoutes);
 
-  app.listen(3000, () => {
-    console.log('Server is running on http://localhost:3000');
+  app.listen(process.env.PORT || 3000, () => {
+    console.log("Server is now running");
   });
 };
 
