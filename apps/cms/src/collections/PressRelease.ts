@@ -4,42 +4,63 @@ const PressRelease: CollectionConfig = {
   slug: 'press-releases',
   fields: [
     {
+      name: 'language',
+      type: 'text',
+      required: false,
+    },
+    {
       name: 'title',
       type: 'text',
       required: true,
     },
     {
-      name: 'summary',  
-      type: 'text',
+      name: 'date_published',
+      type: 'date',
       required: true,
+    },
+    {
+      name: 'type',
+      type: 'text',
+      required: true, 
     },
     {
       name: 'content',
-      type: 'richText',
-      required: true,
-    },
-    {
-      name: 'datetime',
-      type: 'date',
-      required: true,
+      type: 'group', 
+      fields: [
+        {
+          name: 'plaintext',
+          type: 'textarea', 
+          required: false,
+        },
+        {
+          name: 'html',
+          type: 'textarea',
+          required: false,
+        },
+        {
+          name: 'markdown',
+          type: 'textarea', 
+          required: false,
+        },
+      ],
     },
     {
       name: 'attachments',
       type: 'array',
       fields: [
         {
-          name: 'fileUrl',
+          name: 'url',
           type: 'text',
           required: true,
         },
         {
-          name: 'filename',
+          name: 'file_name',
           type: 'text',
           required: true,
         },
         {
-          name: 'filesize',
-          type: 'number',
+          name: 'file_type',
+          type: 'text',
           required: true,
         },
       ],
