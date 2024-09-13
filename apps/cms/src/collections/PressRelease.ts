@@ -63,6 +63,11 @@ const PressRelease: CollectionConfig = {
           type: 'text',
           required: true,
         },
+        {
+          name: 'file_size', 
+          type: 'number', //bytes
+          required: false,
+        },
       ],
       required: false,
     },
