@@ -1,19 +1,17 @@
-name: Deploy Payload CMS
+name: Deploy API server
 
 on:
   push:
     branches:
       - staging
-      - staging-cms
+      - staging-api
   workflow_dispatch:
 
 env:
   REGION: "${{ vars.STAGING_GCP_REGION }}"
-  SERVICE: "${{ vars.STAGING_GCP_SERVICE_NAME_CMS }}"
+  SERVICE: "${{ vars.STAGING_GCP_SERVICE_NAME_API }}"
   PROJECT_ID: "${{ vars.STAGING_GCP_PROJECT_ID }}"
   SERVICE_ACCOUNT: "${{ secrets.STAGING_GCP_SERVICE_ACCOUNT }}"
-  DATABASE_URI: "${{ secrets.STAGING_DATABASE_URI }}"
-  PAYLOAD_SECRET: "${{ secrets.STAGING_PAYLOAD_SECRET }}"
   WIF_PROVIDER: "${{ secrets.STAGING_WIF_PROVIDER }}"
 
 jobs:
@@ -42,7 +40,4 @@ jobs:
           region: ${{ env.REGION }}
           flags: "--platform=managed --min-instances=0 --allow-unauthenticated"
           # Update to the appropriate source folder
-          source: ./apps/cms
-          env_vars: |-
-            DATABASE_URI=${{ env.DATABASE_URI }}
-            PAYLOAD_SECRET=${{ env.PAYLOAD_SECRET }}
+          source: ./apps/api

@@ -1,6 +1,6 @@
 # Project Structure
 
-`/apps/api`: API server
+`/apps/api`: API server (default port: 8080)
 
 `/apps/cms`: CMS (default port: 8888)
 
