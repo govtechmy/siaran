@@ -20,8 +20,10 @@ const start = async () => {
 
   app.use("/api", apiRoutes);
 
-  app.listen(process.env.PORT || 3000, () => {
-    console.log("Server is now running");
+  const port = process.env.PORT || 3000;
+
+  app.listen(port, () => {
+    console.log(`Server is now running on port ${port}`);
   });
 };
 
