@@ -1,7 +1,7 @@
 import React from 'react';
 import { getPosts } from '../../actions/apiServices';
 import PostsBox from '../components/PostsBox';
-import { Post } from './types/types';
+import { PaginatedResponse, Post } from '@/app/types/types';
 
 interface MainPageProps {
   searchParams: { [key: string]: string };
@@ -10,12 +10,11 @@ interface MainPageProps {
 const MainPage = async ({ searchParams }: MainPageProps) => {
   const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
 
-  const { docs: posts }: { docs: Post[] } = await getPosts(currentPage, 12);
-
+  const paginatedPosts: PaginatedResponse<Post> = await getPosts(currentPage, 12);
   return (
     <div>
       <h1>Latest Press Releases</h1>
-      <PostsBox posts={posts} />
+      <PostsBox posts={paginatedPosts} /> 
     </div>
   );
 };
