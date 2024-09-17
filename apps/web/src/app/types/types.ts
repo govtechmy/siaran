@@ -1,20 +1,34 @@
 export interface Attachment {
-    fileUrl: string;
-    filename: string;
-    filesize: number;
-  }
+    url: string;
+    alt: string;
+    file_name: string;
+    file_type: string;
+    file_size: number;
+}
+  
+export interface Content {
+    plain: string;
+    html: string;
+    markdown: string;
+}
+  
+export interface RelatedAgency {
+    id: string;
+    name: string;
+    acronym: string;
+    email: string;
+    socialMedia: string[];  
+}
   
 export interface Post {
     id: string;
+    language: string;
     title: string;
-    summary: string;
-    content: string;
-    title_ms: string;
-    summary_ms: string;
-    content_ms: string;
-    datetime: string; 
-    attachments?: Attachment[];
-    relatedAgency: string; // agency ID
+    date_published: string;  
+    type: string;
+    content: Content;  
+    attachments?: Attachment[];  
+    relatedAgency: RelatedAgency;
 }
 
 export interface PaginatedResponse<T> {
