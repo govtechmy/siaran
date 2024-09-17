@@ -1,5 +1,7 @@
 import { Post, PaginatedResponse } from '../src/app/types/types';
+
 const API_URL = process.env.API_URL;
+const TOKEN = process.env.TOKEN;
 
 export const getPosts = async (page: number = 1, limit: number = 10, date?: string): Promise<PaginatedResponse<Post>> => {
   try { //have to receive the date params in this format (2024-09-11) YYYY-MM-DD
@@ -16,6 +18,7 @@ export const getPosts = async (page: number = 1, limit: number = 10, date?: stri
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${TOKEN}`,
       },
     });
 
@@ -47,6 +50,7 @@ export const getPostsByAgency = async (agencyId: string, page: number = 1, limit
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
+        'Authorization': `Bearer ${TOKEN}`, // Add Bearer token here
       },
     });
 
