@@ -1,0 +1,43 @@
+name: Deploy Web server
+
+on:
+  push:
+    branches:
+      - staging
+      - staging-web
+  workflow_dispatch:
+
+env:
+  REGION: "${{ vars.STAGING_GCP_REGION }}"
+  SERVICE: "${{ vars.STAGING_GCP_SERVICE_NAME_WEB }}"
+  PROJECT_ID: "${{ vars.STAGING_GCP_PROJECT_ID }}"
+  SERVICE_ACCOUNT: "${{ secrets.STAGING_GCP_SERVICE_ACCOUNT }}"
+  WIF_PROVIDER: "${{ secrets.STAGING_WIF_PROVIDER }}"
+
+jobs:
+  deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Google Auth
+        id: auth
+        uses: "google-github-actions/auth@v2"
+        with:
+          workload_identity_provider: ${{ env.WIF_PROVIDER }}
+          service_account: "${{ env.SERVICE_ACCOUNT }}"
+
+      - name: Deploy to Cloud Run
+        id: deploy
+        uses: "google-github-actions/deploy-cloudrun@v2"
+        with:
+          service: ${{ env.SERVICE }}
+          region: ${{ env.REGION }}
+          flags: "--platform=managed --min-instances=0 --allow-unauthenticated"
+          # Update to the appropriate source folder
+          source: ./apps/web
