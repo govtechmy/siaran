@@ -64,7 +64,7 @@ const Pagination: React.FC<PaginationProps> = ({
                 onClick={() => onPageChange(pageNumber)}
                 className={`rounded-lg h-10 w-10 ${
                   pageNumber === currentPage
-                    ? 'bg-[#F4EFFF] text-[#702FF9] dark:bg-[#201636] dark:text-[#9E70FF]'
+                    ? 'bg-[#FFF6ED] text-[#DD420A]' 
                     : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'
                 }`}
               >
