@@ -13,7 +13,6 @@ const MainPage = async ({ searchParams }: MainPageProps) => {
   const paginatedPosts: PaginatedResponse<Post> = await getPosts(currentPage, 12);
   return (
     <div>
-      <h1>Latest Press Releases</h1>
       <PostsBox posts={paginatedPosts} /> 
     </div>
   );
