@@ -92,6 +92,14 @@ const config: Config = {
           ["700"]: "rgb(var(--danger-700) / <alpha-value>)",
           ["text_only"]: "rgb(var(--danger-text_only) / 0.4)",
         },
+        warning: {
+          ["50"]: "rgb(var(--warning-50) / <alpha-value>)",
+          ["200"]: "rgb(var(--warning-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--warning-300) / <alpha-value>)",
+          ["600"]: "rgb(var(--warning-600) / <alpha-value>)",
+          ["700"]: "rgb(var(--warning-700) / <alpha-value>)",
+          ["text_only"]: "rgb(var(--warning-text_only) / 0.4)",
+        },
         white: {
           ["background-0"]: "rgb(var(--white-background-0) / <alpha-value>)",
           ["focus_white-100"]:

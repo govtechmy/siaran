@@ -19,6 +19,13 @@
   "common": {
     "names": {
       "kd": "Ministry of Digital"
+    },
+    "pressRelease": {
+      "types": {
+        "mediaRelease": "Media Release",
+        "speech": "Speech",
+        "other": "Other"
+      }
     }
   },
   "pages": {

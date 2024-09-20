@@ -1,9 +1,13 @@
+import Content from "@/components/__pages__/Content";
+import Section from "@/components/Section";
 import { getPageMetadata, MetadataProps } from "@/lib/page/utils";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { PaginatedResponse, Post } from "../types/types";
-import PostsBox from "@/components/PostsBox";
-import { getPosts } from "../../../actions/apiServices";
+import { listPressReleases } from "../../../api/press-release";
+
+type Props = {
+  searchParams: { [key: string]: string };
+};
 
 export async function generateMetadata({
   params: { locale },
@@ -18,27 +22,15 @@ export async function generateMetadata({
   });
 }
 
-export default async function PageIndex() {
-  return (
-    <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start"></main>
-  );
-}
-
-interface MainPageProps {
-  searchParams: { [key: string]: string };
-}
-
-async function MainPage({ searchParams }: MainPageProps) {
-  const currentPage = searchParams.page ? parseInt(searchParams.page) : 1;
-
-  const paginatedPosts: PaginatedResponse<Post> = await getPosts(
-    currentPage,
-    12
-  );
+export default async function PageIndex(props: Props) {
+  const currentPage = parseInt(props.searchParams.page) || 1;
+  const response = await listPressReleases(currentPage, 12);
 
   return (
-    <div>
-      <PostsBox posts={paginatedPosts} />
-    </div>
+    <main className="flex flex-col">
+      <Section>
+        <Content response={response} />
+      </Section>
+    </main>
   );
 }
