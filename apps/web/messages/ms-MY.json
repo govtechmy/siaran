@@ -1,0 +1,46 @@
+{
+  "metadata": {
+    "site": {
+      "title": "SiaranGovMY | Pusat Sumber Siaran Akhbar dan Pengumuman Kerajaan",
+      "description": "Pusat Sumber Siaran Akhbar dan Pengumuman Kerajaan",
+      "openGraph": {
+        "images": {
+          "1": {
+            "url": "https://i.imgur.com/EfRVASR.png",
+            "alt": "Pusat Sumber Siaran Akhbar dan Pengumuman Kerajaan"
+          }
+        }
+      }
+    }
+  },
+  "app": {
+    "name": "SiaranGovMY"
+  },
+  "common": {
+    "names": {
+      "kd": "Kementerian Digital"
+    }
+  },
+  "pages": {
+    "index": {}
+  },
+  "components": {
+    "Masthead": {
+      "officialGovWebsite": "Portal Rasmi Kerajaan Malaysia",
+      "howToIdentify": "Kenal pasti begini",
+      "official": "Pautan portal rasmi berakhir dengan .gov.my",
+      "notGovWebsite": "Sekiranya anda melihat pautan selain ",
+      "closeSite": ", segera tutupkan halaman itu walaupun ia menyerupai portal rasmi!",
+      "secure": "Portal yang selamat menggunakan HTTPS",
+      "findLock": "Periksa ikon loker (",
+      "or": ") atau ",
+      "precaution": " di depan pautan. Sekiranya tiada, jangan kongsikan sebarang maklumat sensitif."
+    },
+    "Header": {},
+    "Footer": {
+      "copyright": "Hak Cipta Terpelihara",
+      "lastUpdated": "Kemaskini Terakhir",
+      "address": "Aras 13, 14 dan 15, Blok Menara, Menara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia."
+    }
+  }
+}
