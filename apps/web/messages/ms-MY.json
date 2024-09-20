@@ -19,6 +19,13 @@
   "common": {
     "names": {
       "kd": "Kementerian Digital"
+    },
+    "pressRelease": {
+      "types": {
+        "mediaRelease": "Kenyataan Media",
+        "speech": "Ucapan",
+        "other": "Other"
+      }
     }
   },
   "pages": {
