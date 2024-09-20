@@ -122,7 +122,7 @@ const config: Config = {
     },
   },
   darkMode: "selector",
-  plugins: [],
+  plugins: [require("tailwindcss-animate")],
 };
 
 export default config;
