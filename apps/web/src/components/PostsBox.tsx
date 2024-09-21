@@ -16,7 +16,8 @@ const PostsBox: React.FC<PostsBoxProps> = ({ posts }) => {
   const { docs: data, totalPages, page } = posts;
   const searchParams = useSearchParams();
   const router = useRouter();
-  const [view, setView] = useState<'card' | 'list'>('card');
+  const initialView = searchParams.get('view') === 'list' ? 'list' : 'card';
+  const [view, setView] = useState<'card' | 'list'>(initialView);
 
   const handlePageChange = (page: number) => {
     if (page >= 1 && page <= totalPages) {
@@ -28,6 +29,9 @@ const PostsBox: React.FC<PostsBoxProps> = ({ posts }) => {
 
   const handleViewChange = (selectedView: 'card' | 'list') => {
     setView(selectedView);
+    const params = new URLSearchParams(searchParams.toString());
+    params.set('view', selectedView);
+    router.push(`${window.location.pathname}?${params.toString()}`);
   };
 
   return (
