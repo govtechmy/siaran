@@ -3,11 +3,11 @@ import { Post, PaginatedResponse } from '../src/app/types/types';
 const API_URL = process.env.API_URL;
 const TOKEN = process.env.TOKEN;
 
-export const getPosts = async (page: number = 1, limit: number = 10, date?: string): Promise<PaginatedResponse<Post>> => {
+export const getPosts = async (page: number = 1, limit: number = 12, date?: string): Promise<PaginatedResponse<Post>> => {
   try { //have to receive the date params in this format (2024-09-11) YYYY-MM-DD
     const queryParams = new URLSearchParams({
       page: String(page),
-      page_size: String(limit),
+      limit: String(limit),
     });
 
     if (date) {
@@ -39,7 +39,7 @@ export const getPostsByAgency = async (agencyId: string, page: number = 1, limit
     const queryParams = new URLSearchParams({
       agencyId,
       page: String(page),
-      page_size: String(limit),
+      limit: String(limit),
     });
 
     if (date) {
