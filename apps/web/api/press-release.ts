@@ -1,4 +1,4 @@
-import { type PressRelease, type PaginatedResponse } from "@/app/types/types";
+import type { PressRelease, PaginatedResponse } from "@/app/types/types";
 
 const API_URL = process.env.API_URL || process.env.STAGING_CMS_URL;
 

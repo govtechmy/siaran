@@ -1,4 +1,4 @@
-import { PressRelease } from "@/app/types/types";
+import type { PressRelease } from "@/app/types/types";
 import { cn } from "@/lib/utils";
 import { format, parseISO } from "date-fns";
 import { useTranslations } from "next-intl";

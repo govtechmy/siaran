@@ -1,6 +1,6 @@
 "use client";
 
-import { PaginatedResponse, PressRelease } from "@/app/types/types";
+import type { PaginatedResponse, PressRelease } from "@/app/types/types";
 import PressReleaseCard from "@/components/PressReleaseCard";
 import {
   type Item as SegmentControlItem,

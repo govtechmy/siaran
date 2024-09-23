@@ -1,4 +1,4 @@
-import { type PressReleaseType } from "@/app/types/types";
+import type { PressReleaseType } from "@/app/types/types";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
