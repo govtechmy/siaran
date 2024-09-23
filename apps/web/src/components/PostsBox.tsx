@@ -2,11 +2,12 @@
 
 import React, { useState } from 'react';
 import PostCard from './PostCard';
+import PostList from './PostList';
 import Pagination from '@/components/ui/pagination';
 import { PaginatedResponse, Post } from '@/app/types/types';
 import { useSearchParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
-import ViewSwitch from './ViewSwitch'; // Import the new component
+import ViewSwitch from './ViewSwitch'; 
 
 interface PostsBoxProps {
   posts: PaginatedResponse<Post>; 
@@ -43,11 +44,15 @@ const PostsBox: React.FC<PostsBoxProps> = ({ posts }) => {
         <ViewSwitch view={view} onViewChange={handleViewChange} />
       </div>
 
-      <div className="grid grid-cols-3 gap-6"> 
-        {data.map((post) => (
-          <PostCard key={post.id} post={post} />
-        ))}
-      </div>
+      {view === 'card' ? (
+        <div className="grid grid-cols-3 gap-6"> 
+          {data.map((post) => (
+            <PostCard key={post.id} post={post} />
+          ))}
+        </div>
+      ) : (
+        <PostList data={data} />
+      )}
 
       <Pagination
         currentPage={page}
