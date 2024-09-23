@@ -1,0 +1,10 @@
+{
+  "name": "@repo/api",
+  "version": "0.0.0",
+  "exports": {
+    "./trpc-router": "./src/trpc/index.ts"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  }
+}
