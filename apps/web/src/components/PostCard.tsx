@@ -5,7 +5,7 @@ interface PostCardProps {
   post: Post;
 }
 
-const truncateContent = (content: string, maxWords: number): string => {
+export const truncateContent = (content: string, maxWords: number): string => {
   const words = content.split(' ');
   if (words.length > maxWords) {
     return words.slice(0, maxWords).join(' ') + '...';
@@ -13,7 +13,7 @@ const truncateContent = (content: string, maxWords: number): string => {
   return content;
 };
 
-const getPostTypeLabel = (type: string): string => {
+export const getPostTypeLabel = (type: string): string => {
   switch (type) {
     case 'kenyataan_media':
       return 'Kenyataan Media';
@@ -24,7 +24,7 @@ const getPostTypeLabel = (type: string): string => {
   }
 };
 
-const getPostTypeColor = (type: string): string => {
+export const getPostTypeColor = (type: string): string => {
   switch (type) {
     case 'kenyataan_media':
       return '#15803D';
