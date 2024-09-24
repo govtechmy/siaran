@@ -27,6 +27,14 @@
     --brand-50: 239 246 255;
     --brand-text_only: 29 78 216;
 
+    --siaran-600: 221 66 10;
+    --siaran-700: 188 55 6;
+    --siaran-300: 254 175 115;
+    --siaran-200: 255 208 169;
+    --siaran-50: 255 246 237;
+    --siaran-text: 221 66 10;
+    --siaran-text_hero: 106 61 45;
+
     --danger-700: 185 28 28;
     --danger-600: 220 38 38;
     --danger-300: 252 165 165;
@@ -82,6 +90,14 @@
     --brand-200: 30 58 138;
     --brand-50: 15 24 54;
     --brand-text_only: 88 139 251;
+
+    --siaran-600: 221 66 10;
+    --siaran-700: 211 56 0;
+    --siaran-300: 195 51 11;
+    --siaran-200: 155 41 17;
+    --siaran-50: 45 27 24;
+    --siaran-text: 255 133 89;
+    --siaran-text_hero: 255 255 255;
 
     --danger-700: 185 28 28;
     --danger-600: 220 38 38;

@@ -84,6 +84,15 @@ const config: Config = {
           600: colors.green[600],
           700: colors.green[700],
         },
+        siaran: {
+          ["50"]: "rgb(var(--siaran-50) / <alpha-value>)",
+          ["200"]: "rgb(var(--siaran-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--siaran-300) / <alpha-value>)",
+          ["600"]: "rgb(var(--siaran-600) / <alpha-value>)",
+          ["700"]: "rgb(var(--siaran-700) / <alpha-value>)",
+          ["text"]: "rgb(var(--siaran-text) / 0.4)",
+          ["text_hero"]: "rgb(var(--siaran-text_hero) / <alpha-value>)",
+        },
         danger: {
           ["50"]: "rgb(var(--danger-50) / <alpha-value>)",
           ["200"]: "rgb(var(--danger-200) / <alpha-value>)",
