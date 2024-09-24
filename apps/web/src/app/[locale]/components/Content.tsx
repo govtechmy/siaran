@@ -2,6 +2,7 @@
 
 import type { PaginatedResponse, PressRelease } from "@/app/types/types";
 import PressReleaseCard from "@/components/PressReleaseCard";
+import PressReleaseList from "@/components/PressReleaseList";
 import {
   type Item as SegmentControlItem,
   SegmentControl,
@@ -59,6 +60,7 @@ export default function Content({ response }: Props) {
           onSegment={onSegment}
         />
       </section>
+      {segment.id === "card" && (
       <section
         className={cn(
           "gap-[1.5rem]",
@@ -70,6 +72,12 @@ export default function Content({ response }: Props) {
           <PressReleaseCard key={i} data={item} />
         ))}
       </section>
+    )}
+    {segment.id === "list" && (
+      <section>
+        <PressReleaseList data={data} />
+      </section>
+    )}
       {segment.id === "card" && (
         <section>
           <Pagination
