@@ -3,8 +3,6 @@ FROM node:18.8-alpine as base
 FROM base as builder
 
 WORKDIR /home/node/app
-COPY package*.json ./
-
 COPY . .
 RUN npm install
 RUN npm run build
@@ -16,7 +14,6 @@ ENV PAYLOAD_CONFIG_PATH=dist/payload.config.js
 
 WORKDIR /home/node/app
 COPY package*.json  ./
-
 RUN npm install --production
 COPY --from=builder /home/node/app/dist ./dist
 COPY --from=builder /home/node/app/build ./build

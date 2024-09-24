@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "site": {
+      "title": "SiaranGovMY | One stop Government Press Releases & Announcements",
+      "description": "One stop Government Press Releases & Announcements",
+      "openGraph": {
+        "images": {
+          "1": {
+            "url": "https://i.imgur.com/EfRVASR.png",
+            "alt": "One stop Government Press Releases & Announcements"
+          }
+        }
+      }
+    }
+  },
+  "app": {
+    "name": "SiaranGovMY"
+  },
+  "common": {
+    "names": {
+      "kd": "Ministry of Digital"
+    },
+    "pressRelease": {
+      "types": {
+        "mediaRelease": "Media Release",
+        "speech": "Speech",
+        "other": "Other"
+      }
+    }
+  },
+  "pages": {
+    "index": {}
+  },
+  "components": {
+    "Masthead": {
+      "officialGovWebsite": "Official Malaysia Government Website",
+      "howToIdentify": "Here's how you know",
+      "official": "Official government websites end with .gov.my",
+      "notGovWebsite": "If the link does not end with ",
+      "closeSite": ", exit the website immediately even if it looks similar.",
+      "secure": "Secure websites use HTTPS",
+      "findLock": "Look for a lock (",
+      "or": ") or ",
+      "precaution": " as an added precaution. If not present, do not share any sensitive information."
+    },
+    "Header": {},
+    "Footer": {
+      "copyright": "All Rights Reserved",
+      "lastUpdated": "Last Updated",
+      "address": "Aras 13, 14 dan 15, Blok Menara, Menara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
+      "links": {}
+    }
+  }
+}

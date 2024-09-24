@@ -1,19 +1,19 @@
-'use client';
+"use client";
 
-import React from 'react';
-import RightArrow from '../icons/rightarrow';
-import LeftArrow from '../icons/leftarrow';
+import React from "react";
+import RightArrow from "../icons/rightarrow";
+import LeftArrow from "../icons/leftarrow";
 
 interface PaginationProps {
   currentPage: number;
   totalPages: number;
-  onPageChange: (page: number) => void;
+  onPage: (page: number) => void;
 }
 
 const Pagination: React.FC<PaginationProps> = ({
   currentPage,
   totalPages,
-  onPageChange,
+  onPage,
 }) => {
   const getPageNumbers = () => {
     const pageNumbers = [];
@@ -21,7 +21,7 @@ const Pagination: React.FC<PaginationProps> = ({
     pageNumbers.push(1);
 
     if (currentPage > 2) {
-      pageNumbers.push('ellipsis-start');
+      pageNumbers.push("ellipsis-start");
     }
 
     let startPage, endPage;
@@ -41,7 +41,7 @@ const Pagination: React.FC<PaginationProps> = ({
     }
 
     if (currentPage < totalPages - 2) {
-      pageNumbers.push('ellipsis-end');
+      pageNumbers.push("ellipsis-end");
     }
 
     if (totalPages > 1) {
@@ -55,17 +55,17 @@ const Pagination: React.FC<PaginationProps> = ({
     const pageNumbers = getPageNumbers();
 
     return (
-      <div className="flex rounded items-center">
+      <div className="flex items-center rounded">
         {pageNumbers.map((pageNumber, index) => {
-          if (typeof pageNumber === 'number') {
+          if (typeof pageNumber === "number") {
             return (
               <button
                 key={index}
-                onClick={() => onPageChange(pageNumber)}
-                className={`rounded-lg h-10 w-10 ${
+                onClick={() => onPage(pageNumber)}
+                className={`h-10 w-10 rounded-lg ${
                   pageNumber === currentPage
-                    ? 'bg-[#FFF6ED] text-[#DD420A]' 
-                    : 'bg-transparent text-black-700 dark:text-[#D4D4D8]'
+                    ? "bg-[#FFF6ED] text-[#DD420A]"
+                    : "bg-transparent text-black-700 dark:text-[#D4D4D8]"
                 }`}
               >
                 {pageNumber}
@@ -84,16 +84,16 @@ const Pagination: React.FC<PaginationProps> = ({
   };
 
   return (
-    <div className="mt-4 rounded-lg flex items-center justify-center pb-7">
+    <div className="mt-4 flex items-center justify-center rounded-lg pb-7">
       <button
-        onClick={() => onPageChange(currentPage - 1)}
+        onClick={() => onPage(currentPage - 1)}
         disabled={currentPage === 1}
-        className={`rounded-lg h-10 w-10 bg-[#FFFFFF] dark:bg-[#18181B] shadow-button text-[#FFFFFF] border-[1px] border-[#E4E4E7] dark:border-[#27272A] ${
-          currentPage === 1 ? 'opacity-30' : 'opacity-100'
+        className={`h-10 w-10 rounded-lg border-[1px] border-[#E4E4E7] bg-[#FFFFFF] text-[#FFFFFF] shadow-button dark:border-[#27272A] dark:bg-[#18181B] ${
+          currentPage === 1 ? "opacity-30" : "opacity-100"
         }`}
       >
-        <div className="h-10 w-10 rounded-lg flex items-center justify-center">
-          <div className="flex items-center justify-center h-5 w-5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg">
+          <div className="flex h-5 w-5 items-center justify-center">
             <LeftArrow className="stroke-[#18181B] dark:stroke-[#FFFFFF]" />
           </div>
         </div>
@@ -102,14 +102,14 @@ const Pagination: React.FC<PaginationProps> = ({
       <div className="rounded-lg p-3">{renderPageNumbers()}</div>
 
       <button
-        onClick={() => onPageChange(currentPage + 1)}
+        onClick={() => onPage(currentPage + 1)}
         disabled={currentPage === totalPages}
-        className={`rounded-lg h-10 w-10 bg-[#FFFFFF] dark:bg-[#18181B] shadow-button text-[#FFFFFF] border-[1px] border-[#E4E4E7] dark:border-[#27272A] ${
-          currentPage === totalPages ? 'opacity-30' : 'opacity-100'
+        className={`h-10 w-10 rounded-lg border-[1px] border-[#E4E4E7] bg-[#FFFFFF] text-[#FFFFFF] shadow-button dark:border-[#27272A] dark:bg-[#18181B] ${
+          currentPage === totalPages ? "opacity-30" : "opacity-100"
         }`}
       >
-        <div className="h-10 w-10 rounded-lg flex items-center justify-center">
-          <div className="flex items-center justify-center h-5 w-5">
+        <div className="flex h-10 w-10 items-center justify-center rounded-lg">
+          <div className="flex h-5 w-5 items-center justify-center">
             <RightArrow className="stroke-[#18181B] dark:stroke-[#FFFFFF]" />
           </div>
         </div>
