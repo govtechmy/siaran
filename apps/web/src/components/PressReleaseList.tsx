@@ -5,6 +5,8 @@ import type { PressRelease } from "@/app/types/types";
 import { format, parseISO } from "date-fns";
 import PressReleaseTag from "./PressReleaseTag";
 import { cn } from "@/lib/utils";
+import { Radius } from "lucide-react";
+import Clipper from "./icons/clipper";
 
 type Props = {
   data: PressRelease[];
@@ -50,8 +52,11 @@ export default function PressReleaseList({ data }: Props) {
         Header: "",
         id: "attachments",
         Cell: ({ row }: { row: any }) => (
-          <div className="text-right text-sm text-gray-dim-500 w-[24px] h-[36px]">
+          <div className="text-right text-sm flex justify-center text-gray-dim-500 w-[36px] h-[24px] border items-center rounded-[6px]">
+            <Clipper className="w-[16px] h-[16px]"></Clipper>
+            <div className="pl-0.5">
             {row.original.attachments ? row.original.attachments.length : 0}
+            </div>
           </div>
         ),
       },
@@ -76,6 +81,7 @@ export default function PressReleaseList({ data }: Props) {
     <table
       {...getTableProps()}
       className="w-[1280px] h-[864px] rounded-[12px] border-[1px] border-gray-outline-200"
+      style={{borderRadius:'12px'}}
     >
       <tbody {...getTableBodyProps()}>
         {rows.map((row, index) => {
