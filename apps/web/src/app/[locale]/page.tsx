@@ -1,9 +1,9 @@
-import Content from "@/components/__pages__/Content";
 import Section from "@/components/Section";
 import { getPageMetadata, MetadataProps } from "@/lib/page/utils";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { listPressReleases } from "../../../api/press-release";
+import Content from "./components/Content";
 
 type Props = {
   searchParams: { [key: string]: string };
