@@ -75,7 +75,7 @@ export default function PressReleaseList({ data }: Props) {
   return (
     <table
       {...getTableProps()}
-      className="w-[1280px]h-[864px] rounded-[12px] border-[1px] border-gray-outline-200"
+      className="w-[1280px] h-[864px] rounded-[12px] border-[1px] border-gray-outline-200"
     >
       <tbody {...getTableBodyProps()}>
         {rows.map((row, index) => {
