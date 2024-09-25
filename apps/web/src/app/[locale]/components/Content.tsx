@@ -48,7 +48,7 @@ export default function Content({ response }: Props) {
           "mb-[1rem] mt-[1.5rem]",
           "lg:mb-[1.75rem] lg:mt-[3rem]",
           "flex items-center justify-between",
-          "gap-[0.75rem]",
+          "gap-[0.75rem] w-[80rem] h-[2rem]",
         )}
       >
         <h2 className={cn("text-base font-medium text-black-700")}>
