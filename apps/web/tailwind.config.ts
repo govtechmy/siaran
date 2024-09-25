@@ -44,6 +44,15 @@ const config: Config = {
           ["700"]: colors.blue[700],
           ["text_only"]: "rgb(var(--brand-text_only) / 0.4)",
         },
+        theme: {
+          ["50"]: "rgb(var(--theme-50) / <alpha-value>)",
+          ["200"]: "rgb(var(--theme-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--theme-300) / <alpha-value>)",
+          ["600"]: "rgb(var(--theme-600) / <alpha-value>)",
+          ["700"]: "rgb(var(--theme-700) / <alpha-value>)",
+          ["text"]: "rgb(var(--theme-text) / 0.4)",
+          ["text_hero"]: "rgb(var(--theme-text_hero) / <alpha-value>)",
+        },
         foreground: {
           DEFAULT: "rgb(var(--brand-700) / <alpha-value>)",
           success: colors.green[700],
@@ -62,15 +71,6 @@ const config: Config = {
         },
         dim: {
           500: "rgb(var(--dim-500) / <alpha-value>)",
-        },
-        theme: {
-          ["50"]: "rgb(var(--theme-50) / <alpha-value>)",
-          ["200"]: "rgb(var(--theme-200) / <alpha-value>)",
-          ["300"]: "rgb(var(--theme-300) / <alpha-value>)",
-          ["600"]: "rgb(var(--theme-600) / <alpha-value>)",
-          ["700"]: "rgb(var(--theme-700) / <alpha-value>)",
-          ["text"]: "rgb(var(--theme-text) / 0.4)",
-          ["text_hero"]: "rgb(var(--theme-text_hero) / <alpha-value>)",
         },
         danger: {
           ["50"]: "rgb(var(--danger-50) / <alpha-value>)",
