@@ -78,7 +78,6 @@ export default function Content({ response }: Props) {
         <PressReleaseList data={data} />
       </section>
     )}
-      {segment.id === "card" && (
         <section>
           <Pagination
             currentPage={page}
@@ -86,7 +85,7 @@ export default function Content({ response }: Props) {
             onPage={onPage}
           />
         </section>
-      )}
+
     </>
   );
 }
