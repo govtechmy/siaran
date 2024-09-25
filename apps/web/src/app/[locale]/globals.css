@@ -41,6 +41,8 @@
     --danger-200: 254 202 202;
     --danger-100: 254 226 226;
     --danger-50: 254 242 242;
+    --danger-text_only: 220 38 38;
+    --danger-text_only-disabled: 220 38 38;
 
     --warning-700: 161 98 7;
     --warning-600: 202 138 4;
@@ -48,10 +50,13 @@
     --warning-200: 254 240 138;
     --warning-100: 254 249 195;
     --warning-50: 254 252 232;
-    --warning-text-700: 161 98 7;
+    --warning-text_only: 161 98 7;
 
+    --success-700: 21 128 61;
+    --success-600: 22 163 74;
     --success-300: 131 218 163;
     --success-200: 187 247 208;
+    --success-100: 220 252 231;
     --success-50: 240 253 244;
 
     --gray-text_only-disabled: 24 24 27;
@@ -105,7 +110,8 @@
     --danger-200: 127 29 29;
     --danger-100: 69 10 10;
     --danger-50: 43 7 7;
-    --danger-text_only-disabled: 88 139 251;
+    --danger-text_only: 255 89 89;
+    --danger-text_only-disabled: 255 89 89;
 
     --warning-700: 161 98 7;
     --warning-600: 202 138 4;
@@ -113,10 +119,13 @@
     --warning-200: 113 63 18;
     --warning-100: 66 32 6;
     --warning-50: 48 23 4;
-    --warning-text-700: 202 138 4;
+    --warning-text_only: 202 138 4;
 
+    --success-700: 21 128 61;
+    --success-600: 22 163 74;
     --success-300: 22 101 52;
     --success-200: 20 83 45;
+    --success-100: 5 46 22;
     --success-50: 5 46 22;
 
     --gray-text_only-disabled: 161 161 170;

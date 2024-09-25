@@ -54,23 +54,23 @@ const config: Config = {
           ["text_hero"]: "rgb(var(--theme-text_hero) / <alpha-value>)",
         },
         foreground: {
-          DEFAULT: "rgb(var(--brand-700) / <alpha-value>)",
-          success: colors.green[700],
+          ["DEFAULT"]: "rgb(var(--brand-700) / <alpha-value>)",
+          ["success"]: colors.green[700],
         },
         background: {
-          DEFAULT: "rgb(var(--base-white) / <alpha-value>)",
-          50: "rgb(var(--background-50) / <alpha-value>)",
+          ["DEFAULT"]: "rgb(var(--base-white) / <alpha-value>)",
+          ["50"]: "rgb(var(--background-50) / <alpha-value>)",
         },
         washed: {
-          100: "rgb(var(--washed-100) / <alpha-value>)",
+          ["100"]: "rgb(var(--washed-100) / <alpha-value>)",
         },
         outline: {
-          200: "rgb(var(--outline-200) / <alpha-value>)",
-          300: "rgb(var(--outline-300) / <alpha-value>)",
-          400: "rgb(var(--outline-400) / <alpha-value>)",
+          ["200"]: "rgb(var(--outline-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--outline-300) / <alpha-value>)",
+          ["400"]: "rgb(var(--outline-400) / <alpha-value>)",
         },
         dim: {
-          500: "rgb(var(--dim-500) / <alpha-value>)",
+          ["500"]: "rgb(var(--dim-500) / <alpha-value>)",
         },
         danger: {
           ["50"]: "rgb(var(--danger-50) / <alpha-value>)",
@@ -79,6 +79,7 @@ const config: Config = {
           ["300"]: "rgb(var(--danger-300) / <alpha-value>)",
           ["600"]: "rgb(var(--danger-600) / <alpha-value>)",
           ["700"]: "rgb(var(--danger-700) / <alpha-value>)",
+          ["text_only"]: "rgb(var(--danger-text_only) / <alpha-value>)",
           ["text_only-disabled"]: "rgb(var(--danger-text_only-disabled) / 0.4)",
         },
         warning: {
@@ -88,12 +89,16 @@ const config: Config = {
           ["300"]: "rgb(var(--warning-300) / <alpha-value>)",
           ["600"]: "rgb(var(--warning-600) / <alpha-value>)",
           ["700"]: "rgb(var(--warning-700) / <alpha-value>)",
-          ["text_only"]: "rgb(var(--warning-text_only) / 0.4)",
+          ["text_only"]: "rgb(var(--warning-text_only) / <alpha-value>)",
         },
         success: {
           ["50"]: "rgb(var(--success-50) / <alpha-value>)",
+          ["100"]: "rgb(var(--success-100) / <alpha-value>)",
           ["200"]: "rgb(var(--success-200) / <alpha-value>)",
           ["300"]: "rgb(var(--success-300) / <alpha-value>)",
+          ["600"]: "rgb(var(--success-600) / <alpha-value>)",
+          ["700"]: "rgb(var(--success-700) / <alpha-value>)",
+          ["text_only"]: "rgb(var(--success-text_only) / <alpha-value>)",
         },
         black: {
           ["700"]: "rgb(var(--black-700) / <alpha-value>)",
@@ -120,8 +125,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        heading: ["var(--font-poppins)"],
-        body: ["var(--font-inter)"],
+        ["heading"]: ["var(--font-poppins)"],
+        ["body"]: ["var(--font-inter)"],
       },
       fontSize: {
         ["xs"]: ["12px", "18px"],
