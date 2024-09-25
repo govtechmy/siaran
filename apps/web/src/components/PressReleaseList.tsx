@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import React from "react";
 import { useTable, Column } from "react-table";
 import type { PressRelease } from "@/app/types/types";
@@ -7,6 +6,7 @@ import PressReleaseTag from "./PressReleaseTag";
 import { cn } from "@/lib/utils";
 import { Radius } from "lucide-react";
 import Clipper from "./icons/clipper";
+import UrgentLabel from "./icons/urgentlabel";
 
 type Props = {
   data: PressRelease[];
@@ -39,8 +39,13 @@ export default function PressReleaseList({ data }: Props) {
         id: "titleAndContent",
         Cell: ({ row }: { row: any }) => (
           <div className="w-[806px] h-[48px] space-y-1">
-            <div className="text-base font-semibold text-black-900 line-clamp-1">
+            <div className="w-[806px] h-[24px] text-base font-semibold text-black-900 line-clamp-1 flex">
+              <div className="w-[68px] h-[22px] pr-1">
+                <UrgentLabel/>
+              </div>
+              <div className="pl-2">
               {row.original.title}
+              </div>
             </div>
             <p className="text-sm font-normal text-black-700 line-clamp-1">
               {row.original.content.plain}
@@ -80,7 +85,7 @@ export default function PressReleaseList({ data }: Props) {
   return (
     <table
       {...getTableProps()}
-      className="w-[1280px] h-[864px] rounded-[12px] border-[1px] border-gray-outline-200"
+      className="w-[1280px] max-h-[864px] rounded-[12px] border-[1px] border-gray-outline-200"
       style={{borderRadius:'12px'}}
     >
       <tbody {...getTableBodyProps()}>
