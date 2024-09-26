@@ -129,6 +129,7 @@ const config: Config = {
         ["base"]: ["16px", "24px"],
         ["lg"]: ["18px", "26px"],
         ["xl"]: ["20px", "30px"],
+        ["xxl"]: ["24px", "32px"],
       },
       keyframes: {
         // Define additional keyframes here
