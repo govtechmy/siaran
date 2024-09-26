@@ -51,6 +51,7 @@ export const listPressReleases = async (
     );
 
     if (!response.ok) {
+      console.log(response.statusText);
       throw new Error(`Error fetching press releases: ${response.statusText}`);
     }
 
