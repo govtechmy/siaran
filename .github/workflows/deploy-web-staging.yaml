@@ -13,6 +13,7 @@ env:
   PROJECT_ID: "${{ vars.STAGING_GCP_PROJECT_ID }}"
   SERVICE_ACCOUNT: "${{ secrets.STAGING_GCP_SERVICE_ACCOUNT }}"
   WIF_PROVIDER: "${{ secrets.STAGING_WIF_PROVIDER }}"
+  TRPC_BATCH_LINK_URL: "${{ vars.STAGING_TRPC_BATCH_LINK_URL }}"
   STAGING_PAYLOAD_LOGIN_EMAIL: "${{ secrets.STAGING_PAYLOAD_LOGIN_EMAIL }}"
   STAGING_PAYLOAD_LOGIN_PASSWORD: "${{ secrets.STAGING_PAYLOAD_LOGIN_PASSWORD }}"
   STAGING_CMS_URL: "${{ vars.STAGING_CMS_URL }}"
@@ -45,6 +46,7 @@ jobs:
           # Update to the appropriate source folder
           source: ./apps/web
           env_vars: |-
+            TRPC_BATCH_LINK_URL=${{ env.TRPC_BATCH_LINK_URL }}
             STAGING_PAYLOAD_LOGIN_EMAIL=${{ env.STAGING_PAYLOAD_LOGIN_EMAIL }}
             STAGING_PAYLOAD_LOGIN_PASSWORD=${{ env.STAGING_PAYLOAD_LOGIN_PASSWORD }}
             STAGING_CMS_URL=${{ env.STAGING_CMS_URL }}
