@@ -1,6 +1,7 @@
 import Footer from "@/components/Footer";
 import { Header } from "@/components/Header";
 import Masthead from "@/components/Masthead";
+import SearchBar from "@/components/SearchBar";
 import { extract } from "@/lib/i18n/utils";
 import { cn } from "@/lib/ui/utils";
 import type { Metadata } from "next";
@@ -45,6 +46,7 @@ export default async function Layout({ children, params }: Readonly<Props>) {
             <div className="flex h-[100vh] flex-col">
               <Masthead />
               <Header locale={params.locale} />
+              <SearchBar></SearchBar>
               <div className="flex-1">{children}</div>
               <Footer
                 ministry={extract(messages, "common.names.kd")}
