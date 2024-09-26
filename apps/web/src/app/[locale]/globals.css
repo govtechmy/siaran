@@ -34,6 +34,14 @@
     --danger-100: 254 226 226;
     --danger-50: 254 242 242;
 
+    --warning-700: 161 98 7;
+    --warning-600: 202 138 4;
+    --warning-300: 225 203 88;
+    --warning-200: 254 240 138;
+    --warning-100: 254 249 195;
+    --warning-50: 254 252 232;
+    --warning-text-700: 161 98 7;
+
     --success-300: 131 218 163;
     --success-200: 187 247 208;
     --success-50: 240 253 244;
@@ -82,6 +90,14 @@
     --danger-100: 69 10 10;
     --danger-50: 43 7 7;
     --danger-text_only-disabled: 88 139 251;
+
+    --warning-700: 161 98 7;
+    --warning-600: 202 138 4;
+    --warning-300: 133 77 14;
+    --warning-200: 113 63 18;
+    --warning-100: 66 32 6;
+    --warning-50: 48 23 4;
+    --warning-text-700: 202 138 4;
 
     --success-300: 22 101 52;
     --success-200: 20 83 45;

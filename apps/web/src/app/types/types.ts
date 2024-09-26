@@ -1,31 +1,48 @@
-export interface Attachment {
-    fileUrl: string;
-    filename: string;
-    filesize: number;
-  }
-  
-export interface Post {
-    id: string;
-    title: string;
-    summary: string;
-    content: string;
-    title_ms: string;
-    summary_ms: string;
-    content_ms: string;
-    datetime: string; 
-    attachments?: Attachment[];
-    relatedAgency: string; // agency ID
-}
+export type Attachment = {
+  url: string;
+  alt: string;
+  // TODO: Rename
+  file_name: string;
+  file_type: string;
+  file_size: number;
+};
 
-export interface PaginatedResponse<T> {
-    docs: T[];
-    totalDocs: number;
-    limit: number;
-    totalPages: number;
-    page: number;
-    pagingCounter: number;
-    hasPrevPage: boolean;
-    hasNextPage: boolean;
-    prevPage: number | null;
-    nextPage: number | null;
-}
+export type Content = {
+  plain: string;
+  html: string;
+  markdown: string;
+};
+
+export type RelatedAgency = {
+  id: string;
+  name: string;
+  acronym: string;
+  email: string;
+  socialMedia: string[];
+};
+
+export type PressRelease = {
+  id: string;
+  language: string;
+  title: string;
+  date_published: string;
+  type: PressReleaseType;
+  content: Content;
+  attachments?: Attachment[];
+  relatedAgency: RelatedAgency;
+};
+
+export type PressReleaseType = "kenyataan_media" | "ucapan" | "other";
+
+export type PaginatedResponse<T> = {
+  docs: T[];
+  totalDocs: number;
+  limit: number;
+  totalPages: number;
+  page: number;
+  pagingCounter: number;
+  hasPrevPage: boolean;
+  hasNextPage: boolean;
+  prevPage: number | null;
+  nextPage: number | null;
+};

@@ -1,0 +1,15 @@
+{
+  "name": "@repo/api",
+  "main": "./src/trpc/index.ts",
+  "version": "0.0.0",
+  "exports": {
+    "./trpc-router": "./src/trpc/index.ts"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "@trpc/server": "^10.45.2",
+    "zod": "^3.23.8"
+  }
+}

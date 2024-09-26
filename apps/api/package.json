@@ -1,13 +1,19 @@
 {
   "name": "api",
   "type": "module",
+  "main": "./dist/index.js",
   "scripts": {
     "dev": "tsx watch src/index.ts",
-    "build": "tsc"
+    "build": "tsup",
+    "start": "node dist/index.js",
+    "clean": "rm -rf dist"
   },
   "dependencies": {
+    "@repo/api": "*",
     "@hono/node-server": "^1.12.2",
-    "hono": "^4.6.1"
+    "@hono/trpc-server": "^0.3.2",
+    "hono": "^4.6.1",
+    "tsup": "^8.3.0"
   },
   "devDependencies": {
     "@types/node": "^20.11.17",
