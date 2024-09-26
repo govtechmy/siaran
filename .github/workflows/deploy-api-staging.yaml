@@ -25,6 +25,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Copy Dockerfile
+        run: cp ./apps/api/Dockerfile .
+
       - name: Google Auth
         id: auth
         uses: "google-github-actions/auth@v2"
@@ -40,4 +43,4 @@ jobs:
           region: ${{ env.REGION }}
           flags: "--platform=managed --min-instances=0 --allow-unauthenticated"
           # Update to the appropriate source folder
-          source: ./apps/api
+          source: ./
