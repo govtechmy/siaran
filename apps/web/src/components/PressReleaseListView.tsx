@@ -1,18 +1,18 @@
-import React from "react";
-import { useTable, Column } from "react-table";
 import type { PressRelease } from "@/app/types/types";
-import { format, parseISO } from "date-fns";
-import PressReleaseTag from "./PressReleaseTag";
 import { cn } from "@/lib/utils";
+import { format, parseISO } from "date-fns";
+import { useMemo } from "react";
+import { Column, useTable } from "react-table";
 import Clipper from "./icons/clipper";
 import UrgentLabel from "./icons/urgentlabel";
+import PressReleaseTag from "./PressReleaseTag";
 
 type Props = {
   data: PressRelease[];
 };
 
-export default function PressReleaseList({ data }: Props) {
-  const columns = React.useMemo<Column<PressRelease>[]>(
+export default function PressReleaseListView({ data }: Props) {
+  const columns = useMemo<Column<PressRelease>[]>(
     () => [
       {
         Header: "",

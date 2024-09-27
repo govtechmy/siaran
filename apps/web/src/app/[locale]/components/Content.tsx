@@ -1,8 +1,8 @@
 "use client";
 
 import type { PressRelease } from "@/app/types/types";
-import PressReleaseCard from "@/components/PressReleaseCard";
-import PressReleaseList from "@/components/PressReleaseList";
+import PressReleaseCardView from "@/components/PressReleaseCardView";
+import PressReleaseListView from "@/components/PressReleaseListView";
 import {
   type Item as SegmentControlItem,
   SegmentControl,
@@ -70,25 +70,8 @@ export default function Content({
           onSegment={onSegment}
         />
       </section>
-      {segment.id === "card" && (
-        <section
-          className={cn(
-            "gap-[1.5rem]",
-            "grid grid-cols-1 lg:grid-cols-3",
-            "lg:col-span-[1/3] col-span-full",
-          )}
-        >
-          {data.map((item, i) => (
-            <PressReleaseCard key={i} data={item} />
-          ))}
-        </section>
-      )}
-      {segment.id === "list" && (
-        <section>
-          <PressReleaseList data={data} />
-        </section>
-      )}
       <section>
+        <PressReleaseView segment={segment} data={data} />
         <Pagination
           currentPage={pagination.current}
           totalPages={pagination.total}
@@ -99,16 +82,31 @@ export default function Content({
   );
 }
 
+function PressReleaseView({
+  segment,
+  data,
+}: {
+  segment: SegmentControlItem;
+  data: PressRelease[];
+}) {
+  switch (segment.id) {
+    case "card":
+      return <PressReleaseCardView data={data} />;
+    case "list":
+      return <PressReleaseListView data={data} />;
+  }
+}
+
 function getSegmentById(segmentId?: string) {
-  const segment = SEGMENTS[0];
+  const defaultSegment = SEGMENTS[0];
 
   if (!segmentId || (segmentId !== "card" && segmentId !== "list")) {
-    return segment;
+    return defaultSegment;
   }
 
   switch (segmentId) {
     case "card":
-      return segment;
+      return defaultSegment;
     case "list":
       return SEGMENTS[1];
   }
