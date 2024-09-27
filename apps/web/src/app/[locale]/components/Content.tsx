@@ -1,6 +1,6 @@
 "use client";
 
-import type { PaginatedResponse, PressRelease } from "@/app/types/types";
+import type { PressRelease } from "@/app/types/types";
 import PressReleaseCard from "@/components/PressReleaseCard";
 import PressReleaseList from "@/components/PressReleaseList";
 import {
@@ -8,12 +8,20 @@ import {
   SegmentControl,
 } from "@/components/SegmentControl";
 import Pagination from "@/components/ui/pagination";
+import { mergePathname } from "@/lib/search-params/utils";
 import { cn } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
 type Props = {
-  response: PaginatedResponse<PressRelease>;
+  data: PressRelease[];
+  segment?: "card" | "list";
+  pagination: {
+    current: number;
+    hasNext: boolean;
+    hasPrev: boolean;
+    total: number;
+  };
 };
 
 const SEGMENTS: SegmentControlItem[] = [
@@ -21,20 +29,22 @@ const SEGMENTS: SegmentControlItem[] = [
   { id: "list", label: "List view" },
 ];
 
-export default function Content({ response }: Props) {
-  const { docs: data, totalPages, page } = response;
-  const searchParams = useSearchParams();
+export default function Content({
+  data,
+  segment: initialSegment,
+  pagination,
+}: Props) {
   const router = useRouter();
-  const [segment, setSegment] = useState<SegmentControlItem>(SEGMENTS[0]);
+  const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const [segment, setSegment] = useState<SegmentControlItem>(
+    getSegmentById(initialSegment) || SEGMENTS[0],
+  );
 
   function onPage(page: number) {
-    if (page <= 0 || page >= totalPages) {
-      return;
-    }
-
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
-    router.push(`${window.location.pathname}?${params.toString()}`);
+    router.push(
+      mergePathname(pathname, searchParams, { page: page.toString() }),
+    );
   }
 
   function onSegment(segment: SegmentControlItem): void {
@@ -48,7 +58,7 @@ export default function Content({ response }: Props) {
           "mb-[1rem] mt-[1.5rem]",
           "lg:mb-[1.75rem] lg:mt-[3rem]",
           "flex items-center justify-between",
-          "gap-[0.75rem] w-[80rem] h-[2rem]",
+          "h-[2rem] w-[80rem] gap-[0.75rem]",
         )}
       >
         <h2 className={cn("text-base font-medium text-black-700")}>
@@ -61,31 +71,45 @@ export default function Content({ response }: Props) {
         />
       </section>
       {segment.id === "card" && (
-      <section
-        className={cn(
-          "gap-[1.5rem]",
-          "grid grid-cols-1 lg:grid-cols-3",
-          "lg:col-span-[1/3] col-span-full",
-        )}
-      >
-        {data.map((item, i) => (
-          <PressReleaseCard key={i} data={item} />
-        ))}
-      </section>
-    )}
-    {segment.id === "list" && (
-      <section>
-        <PressReleaseList data={data} />
-      </section>
-    )}
-        <section>
-          <Pagination
-            currentPage={page}
-            totalPages={totalPages}
-            onPage={onPage}
-          />
+        <section
+          className={cn(
+            "gap-[1.5rem]",
+            "grid grid-cols-1 lg:grid-cols-3",
+            "lg:col-span-[1/3] col-span-full",
+          )}
+        >
+          {data.map((item, i) => (
+            <PressReleaseCard key={i} data={item} />
+          ))}
         </section>
-
+      )}
+      {segment.id === "list" && (
+        <section>
+          <PressReleaseList data={data} />
+        </section>
+      )}
+      <section>
+        <Pagination
+          currentPage={pagination.current}
+          totalPages={pagination.total}
+          onPage={onPage}
+        />
+      </section>
     </>
   );
+}
+
+function getSegmentById(segmentId?: string) {
+  const segment = SEGMENTS[0];
+
+  if (!segmentId || (segmentId !== "card" && segmentId !== "list")) {
+    return segment;
+  }
+
+  switch (segmentId) {
+    case "card":
+      return segment;
+    case "list":
+      return SEGMENTS[1];
+  }
 }

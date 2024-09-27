@@ -24,12 +24,26 @@ export async function generateMetadata({
 
 export default async function PageIndex(props: Props) {
   const currentPage = parseInt(props.searchParams.page) || 1;
-  const response = await listPressReleases(currentPage, 12);
+  const {
+    docs: data,
+    page,
+    totalPages,
+    hasNextPage,
+    hasPrevPage,
+  } = await listPressReleases(currentPage, 12);
 
   return (
     <main className="flex flex-col">
       <Section>
-        <Content response={response} />
+        <Content
+          data={data}
+          pagination={{
+            current: page,
+            total: totalPages,
+            hasNext: hasNextPage,
+            hasPrev: hasPrevPage,
+          }}
+        />
       </Section>
     </main>
   );
