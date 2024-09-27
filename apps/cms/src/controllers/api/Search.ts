@@ -10,7 +10,6 @@ export const Search = async (req: Request, res: Response) => {
     }
 
     const searchQuery = q.trim();
-
     const pressReleases = await payload.find({
       collection: 'press-releases',
       where: {

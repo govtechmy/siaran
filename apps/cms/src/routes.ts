@@ -7,6 +7,6 @@ const router = Router();
 router.get('/press-releases', getPressReleases);
 // router.post('/press-release/create', createPressRelease);
 router.get('/press-releases/by-agency', getPressReleasesByAgency);
-router.get('/search', Search);
+router.get('/find', Search);
 
 export default router;
