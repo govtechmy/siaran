@@ -5,6 +5,7 @@ import { mongooseAdapter } from '@payloadcms/db-mongodb';
 import { webpackBundler } from '@payloadcms/bundler-webpack';
 import { slateEditor } from '@payloadcms/richtext-slate';
 import { buildConfig } from 'payload/config';
+import search from '@payloadcms/plugin-search';
 
 import Users from './collections/Users';
 import PressRelease from './collections/PressRelease'; 
@@ -27,8 +28,16 @@ export default buildConfig({
   graphQL: {
     schemaOutputFile: path.resolve(__dirname, 'generated-schema.graphql'),
   },
-  plugins: [payloadCloud()],
-  db: mongooseAdapter({
+  plugins: [
+    payloadCloud(),
+    search({
+      collections: ['press-releases', 'agencies'],
+      defaultPriorities: {
+        PressRelease: 10,
+        Agency: 20,
+      },
+    }),
+  ],  db: mongooseAdapter({
     url: process.env.DATABASE_URI, 
   }),
 });
