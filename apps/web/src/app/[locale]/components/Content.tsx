@@ -10,6 +10,7 @@ import {
 import Pagination from "@/components/ui/pagination";
 import { mergePathname } from "@/lib/search-params/utils";
 import { cn } from "@/lib/utils";
+import { useTranslations } from "next-intl";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useState } from "react";
 
@@ -24,11 +25,6 @@ type Props = {
   };
 };
 
-const SEGMENTS: SegmentControlItem[] = [
-  { id: "card", label: "Card view" },
-  { id: "list", label: "List view" },
-];
-
 export default function Content({
   data,
   segment: initialSegment,
@@ -37,9 +33,29 @@ export default function Content({
   const router = useRouter();
   const searchParams = useSearchParams();
   const pathname = usePathname();
+  const t = useTranslations();
+  const SEGMENTS: SegmentControlItem[] = [
+    { id: "card", label: t("pages.index.view.card") },
+    { id: "list", label: t("pages.index.view.list") },
+  ];
   const [segment, setSegment] = useState<SegmentControlItem>(
     getSegmentById(initialSegment) || SEGMENTS[0],
   );
+
+  function getSegmentById(segmentId?: string) {
+    const defaultSegment = SEGMENTS[0];
+
+    if (!segmentId || (segmentId !== "card" && segmentId !== "list")) {
+      return defaultSegment;
+    }
+
+    switch (segmentId) {
+      case "card":
+        return defaultSegment;
+      case "list":
+        return SEGMENTS[1];
+    }
+  }
 
   function onPage(page: number) {
     router.push(
@@ -62,7 +78,7 @@ export default function Content({
         )}
       >
         <h2 className={cn("text-base font-medium text-black-700")}>
-          Latest Releases
+          {t("pages.index.latestReleases")}
         </h2>
         <SegmentControl
           items={SEGMENTS}
@@ -94,20 +110,5 @@ function PressReleaseView({
       return <PressReleaseCardView data={data} />;
     case "list":
       return <PressReleaseListView data={data} />;
-  }
-}
-
-function getSegmentById(segmentId?: string) {
-  const defaultSegment = SEGMENTS[0];
-
-  if (!segmentId || (segmentId !== "card" && segmentId !== "list")) {
-    return defaultSegment;
-  }
-
-  switch (segmentId) {
-    case "card":
-      return defaultSegment;
-    case "list":
-      return SEGMENTS[1];
   }
 }
