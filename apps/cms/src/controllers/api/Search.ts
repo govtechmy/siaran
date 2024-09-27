@@ -1,7 +1,7 @@
 import { Request, Response } from 'express';
 import payload from 'payload';
 
-export const searchContent = async (req: Request, res: Response) => {
+export const Search = async (req: Request, res: Response) => {
   try {
     const { q, limit = 10, page = 1 } = req.query;
 
