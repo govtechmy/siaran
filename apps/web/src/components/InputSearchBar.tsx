@@ -43,37 +43,31 @@ function InputSearchBar() {
     }
   };
 
-  // Handle input changes with debounce
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
 
-    // Clear the previous timeout
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     }
 
-    // Set a new timeout
     debounceTimeoutRef.current = setTimeout(() => {
       handleSearch(value);
-    }, 300); // Debounce delay in milliseconds
+    }, 300);
   };
 
-  // Clear the search input and close results
   const handleClearSearch = () => {
     setSearchTerm('');
     setIsOpen(false);
     inputRef.current?.focus();
   };
 
-  // Close the search results when input is empty
   useEffect(() => {
     if (!searchTerm.trim()) {
       setIsOpen(false);
     }
   }, [searchTerm]);
 
-  // Close the command menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
