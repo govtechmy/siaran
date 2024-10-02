@@ -25,7 +25,6 @@ function InputSearchBar() {
   const commandRef = useRef<HTMLDivElement>(null);
   const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Function to perform the search
   const handleSearch = async (query: string) => {
     if (query.trim()) {
       try {
@@ -85,6 +84,34 @@ function InputSearchBar() {
     };
   }, []);
 
+  const escapeRegExp = (string: string) => {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+  };
+
+  const highlightText = (text: string, query: string) => {
+    if (!query) return text;
+
+    const escapedQuery = escapeRegExp(query);
+    const regex = new RegExp(escapedQuery, 'gi');
+    const parts = text.split(regex);
+
+    const matches = text.match(regex);
+
+    const result = [];
+
+    for (let i = 0; i < parts.length; i++) {
+      result.push(parts[i]);
+      if (matches && matches[i]) {
+        result.push(
+          <span key={i} className="text-siaran-600">
+            {matches[i]}
+          </span>
+        );
+      }
+    }
+
+    return result;
+  };
   return (
     <div className="w-[37.5rem] relative">
       <div className="relative mb-[0.375rem]">
@@ -163,7 +190,7 @@ function InputSearchBar() {
                     className="flex items-center justify-between h-[2.25rem] w-full px-3 text-black-800 text-sm rounded-[0.375rem] hover:bg-gray-100"
                   >
                     <div className="flex-1 min-w-0 truncate">
-                      {pressRelease.title}
+                      {highlightText(pressRelease.title, searchTerm)}
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="text-sm text-black-800">
