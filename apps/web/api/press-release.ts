@@ -1,4 +1,5 @@
-import type { PressRelease, PaginatedResponse } from "@/app/types/types";
+"use server"
+import type { PressRelease, PaginatedResponse, SearchResponse } from "@/app/types/types";
 
 const API_URL = process.env.API_URL || process.env.STAGING_CMS_URL;
 
@@ -32,7 +33,7 @@ export const listPressReleases = async (
     // Format: YYYY-MM-DD (e.g. 2024-09-11)
     const queryParams = new URLSearchParams({
       page: String(page),
-      page_size: String(limit),
+      limit: String(limit),
     });
 
     if (date) {
@@ -104,3 +105,38 @@ export async function listPressReleasesByAgency(
     throw error;
   }
 }
+
+export async function searchContent(
+  query: string,
+  limit: number = 5,
+  page: number = 1
+): Promise<SearchResponse> {
+  try {
+    const { token } = await getToken();
+
+    const queryParams = new URLSearchParams({
+      q: query,
+      limit: String(limit),
+      page: String(page),
+    });
+
+    const response = await fetch(`${API_URL}/api/search?${queryParams.toString()}`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${token}`,
+      },
+    });
+    if (!response.ok) {
+      throw new Error(`Error searching content: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+
+    return data 
+  } catch (error) {
+    console.error('Failed to search content:', error);
+    throw error;
+  }
+}
+
