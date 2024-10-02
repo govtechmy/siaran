@@ -163,12 +163,10 @@
 }
 
 
-/* Hide the scrollbar track background */
 .custom-scrollbar::-webkit-scrollbar-track {
   background: transparent;
 }
 
-/* Style the scrollbar thumb */
 .custom-scrollbar::-webkit-scrollbar {
   width: 7px;
 }
@@ -176,10 +174,10 @@
 .custom-scrollbar::-webkit-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.4);
   border-radius: 12px;
-  min-height: 45px;
+  max-height: 45px;
+  height: 45px;
 }
 
-/* For Firefox */
 .custom-scrollbar {
   scrollbar-width: thin;
   scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
@@ -188,5 +186,6 @@
 .custom-scrollbar::-moz-scrollbar-thumb {
   background-color: rgba(0, 0, 0, 0.4);
   border-radius: 12px;
-  min-height: 45px;
+  max-height: 45px;
+  height: 45px;
 }
