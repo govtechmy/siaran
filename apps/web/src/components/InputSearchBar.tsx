@@ -43,31 +43,37 @@ function InputSearchBar() {
     }
   };
 
+  // Handle input changes with debounce
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
 
+    // Clear the previous timeout
     if (debounceTimeoutRef.current) {
       clearTimeout(debounceTimeoutRef.current);
     }
 
+    // Set a new timeout
     debounceTimeoutRef.current = setTimeout(() => {
       handleSearch(value);
     }, 300); // Debounce delay in milliseconds
   };
 
+  // Clear the search input and close results
   const handleClearSearch = () => {
     setSearchTerm('');
     setIsOpen(false);
     inputRef.current?.focus();
   };
 
+  // Close the search results when input is empty
   useEffect(() => {
     if (!searchTerm.trim()) {
       setIsOpen(false);
     }
   }, [searchTerm]);
 
+  // Close the command menu when clicking outside
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
       if (
@@ -86,8 +92,8 @@ function InputSearchBar() {
   }, []);
 
   return (
-    <div className="w-[600px] relative">
-      <div className="relative mb-[6px]">
+    <div className="w-[37.5rem] relative">
+      <div className="relative mb-[0.375rem]">
         <Input
           ref={inputRef}
           className="w-full pr-[8rem]"
@@ -131,15 +137,18 @@ function InputSearchBar() {
       {isOpen && (
         <Command
           ref={commandRef}
-          className="absolute w-full mt-[1.2px] h-[266px] overflow-y-auto bg-white-focus_white-200 shadow-lg rounded-[22px] z-10 custom-scrollbar"
+          className="absolute w-full mt-[0.075rem] h-[16.625rem] overflow-y-auto bg-white-focus_white-200 shadow-lg rounded-[1.375rem] z-10 custom-scrollbar"
         >
           <CommandList>
             {agencies.length > 0 && (
-              <CommandGroup className="text-gray-500 text-sm mt-1" heading="Agencies">
+              <CommandGroup
+                className="text-gray-500 text-sm mt-1"
+                heading="Agencies"
+              >
                 {agencies.map((agency) => (
                   <CommandItem
                     key={agency.id}
-                    className="flex items-center justify-between h-[36px] w-full px-3 text-black-800 text-sm rounded-[6px] hover:bg-gray-100"
+                    className="flex items-center justify-between h-[2.25rem] w-full px-3 text-black-800 text-sm rounded-[0.375rem] hover:bg-gray-100"
                   >
                     <span className="truncate">
                       {agency.name} ({agency.acronym})
@@ -150,11 +159,14 @@ function InputSearchBar() {
               </CommandGroup>
             )}
             {pressReleases.length > 0 && (
-              <CommandGroup className="text-gray-500 text-sm" heading="Press Releases">
+              <CommandGroup
+                className="text-gray-500 text-sm"
+                heading="Press Releases"
+              >
                 {pressReleases.map((pressRelease) => (
                   <CommandItem
                     key={pressRelease.id}
-                    className="flex items-center justify-between h-[36px] w-full px-3 text-black-800 text-sm rounded-[6px] hover:bg-gray-100"
+                    className="flex items-center justify-between h-[2.25rem] w-full px-3 text-black-800 text-sm rounded-[0.375rem] hover:bg-gray-100"
                   >
                     <div className="flex-1 min-w-0 truncate">
                       {pressRelease.title}
