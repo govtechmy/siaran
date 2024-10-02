@@ -9,13 +9,11 @@ import ChevronRight from '@/icons/chevron-right';
 
 import {
   Command,
-  CommandInput,
   CommandList,
   CommandGroup,
   CommandItem,
   CommandEmpty,
 } from '@/components/ui/command';
-
 
 function InputSearchBar() {
   const [searchTerm, setSearchTerm] = useState('');
@@ -25,7 +23,9 @@ function InputSearchBar() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const commandRef = useRef<HTMLDivElement>(null);
+  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Function to perform the search
   const handleSearch = async (query: string) => {
     if (query.trim()) {
       try {
@@ -46,7 +46,20 @@ function InputSearchBar() {
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = e.target.value;
     setSearchTerm(value);
-    handleSearch(value);
+
+    if (debounceTimeoutRef.current) {
+      clearTimeout(debounceTimeoutRef.current);
+    }
+
+    debounceTimeoutRef.current = setTimeout(() => {
+      handleSearch(value);
+    }, 300); // Debounce delay in milliseconds
+  };
+
+  const handleClearSearch = () => {
+    setSearchTerm('');
+    setIsOpen(false);
+    inputRef.current?.focus();
   };
 
   useEffect(() => {
@@ -74,7 +87,7 @@ function InputSearchBar() {
 
   return (
     <div className="w-[600px] relative">
-      <div className="relative mb-[6px]"> 
+      <div className="relative mb-[6px]">
         <Input
           ref={inputRef}
           className="w-full pr-[8rem]"
@@ -91,11 +104,21 @@ function InputSearchBar() {
           }}
         />
         <div className="absolute inset-y-0 right-0 flex items-center">
-          <div className="flex items-center gap-1">
-            <span className="text-gray-500 text-sm">Press</span>
-            <SearchSlash />
-            <span className="text-gray-400 text-sm">to search</span>
-          </div>
+          {searchTerm ? (
+            <button
+              className="flex items-center justify-center rounded-full focus:outline-none"
+              style={{ minWidth: '1rem', minHeight: '1rem' }}
+              onClick={handleClearSearch}
+            >
+              <CrossX className="w-full h-full" />
+            </button>
+          ) : (
+            <div className="flex items-center gap-1">
+              <span className="text-gray-500 text-sm">Press</span>
+              <SearchSlash />
+              <span className="text-gray-400 text-sm">to search</span>
+            </div>
+          )}
           <button
             className="flex items-center justify-center rounded-full focus:outline-none"
             style={{ minWidth: '3rem', minHeight: '3rem' }}
@@ -112,13 +135,13 @@ function InputSearchBar() {
         >
           <CommandList>
             {agencies.length > 0 && (
-              <CommandGroup className='text-gray-500 text-sm mt-1' heading="Agencies">
+              <CommandGroup className="text-gray-500 text-sm mt-1" heading="Agencies">
                 {agencies.map((agency) => (
                   <CommandItem
                     key={agency.id}
-                    className="flex items-center justify-between w-[588px] h-[36px] px-3 text-black-800 text-sm rounded-[6px] hover:bg-gray-100"
+                    className="flex items-center justify-between h-[36px] w-full px-3 text-black-800 text-sm rounded-[6px] hover:bg-gray-100"
                   >
-                    <span className="max-w-[535px] line-clamp-1">
+                    <span className="truncate">
                       {agency.name} ({agency.acronym})
                     </span>
                     <ChevronRight className="w-4 h-4 text-gray-400" />
@@ -127,21 +150,21 @@ function InputSearchBar() {
               </CommandGroup>
             )}
             {pressReleases.length > 0 && (
-              <CommandGroup className='text-gray-500 text-sm' heading="Press Releases">
+              <CommandGroup className="text-gray-500 text-sm" heading="Press Releases">
                 {pressReleases.map((pressRelease) => (
                   <CommandItem
-                  key={pressRelease.id}
-                  className="flex items-center justify-between w-[588px] h-[36px] px-3 text-black-800 text-sm rounded-[6px] hover:bg-gray-100"
+                    key={pressRelease.id}
+                    className="flex items-center justify-between h-[36px] w-full px-3 text-black-800 text-sm rounded-[6px] hover:bg-gray-100"
                   >
-                  <div className="flex-1 max-w-[478px] line-clamp-1">
-                    {pressRelease.title}
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <span className="text-sm text-black-800">
-                      {pressRelease.relatedAgency.acronym.toUpperCase()}
-                    </span>
-                    <ChevronRight className="w-4 h-4 text-gray-400" />
-                  </div>
+                    <div className="flex-1 min-w-0 truncate">
+                      {pressRelease.title}
+                    </div>
+                    <div className="flex items-center gap-1">
+                      <span className="text-sm text-black-800">
+                        {pressRelease.relatedAgency.acronym.toUpperCase()}
+                      </span>
+                      <ChevronRight className="w-4 h-4 text-gray-400" />
+                    </div>
                   </CommandItem>
                 ))}
               </CommandGroup>
