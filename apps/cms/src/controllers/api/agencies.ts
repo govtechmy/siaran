@@ -5,7 +5,7 @@ export const agencyList = async (req, res) => {
       const agencies = await payload.find({
         collection: 'agencies',
         where: {}, 
-        limit: 20, 
+        limit: 0, 
       });
   
       res.status(200).json(agencies);
