@@ -41,8 +41,9 @@ const AgencyDropDown: React.FC<AgencyDropDownProps> = ({ agencies }) => {
         variant="outline"
         role="combobox"
         aria-expanded={open}
-        className="w-fit max-w[10.3125rem] h-[2rem] justify-between gap-[0.375rem] rounded-[0.5rem] border border-gray-200 px-[0.625rem] py-[0.375rem]"
-        >
+        className={`w-fit max-w[10.3125rem] h-[2rem] justify-between gap-[0.375rem] rounded-[0.5rem] px-[0.625rem] py-[0.375rem]
+          ${open ? 'border-[3px] border-siaran-600 border-opacity-20' : 'border border-gray-200'}`}
+      >
           <span className='text-sm text-gray-500'>
             Agency: 
           </span>
