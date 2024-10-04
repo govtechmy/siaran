@@ -42,8 +42,8 @@ const AgencyDropDown: React.FC<AgencyDropDownProps> = ({ agencies }) => {
         role="combobox"
         aria-expanded={open}
         className={`w-fit max-w[10.3125rem] h-[2rem] justify-between gap-[0.375rem] rounded-[0.5rem] px-[0.625rem] py-[0.375rem]
-          ${open ? 'border-[3px] border-siaran-600 border-opacity-20' : 'border border-gray-200'}`}
-      >
+          ${open ? 'ring-[0.1875rem] ring-siaran-600 ring-offset-siaran-600 ring-opacity-20' : 'border border-gray-200'}`}
+          >
           <span className='text-sm text-gray-500'>
             Agency: 
           </span>
@@ -52,7 +52,7 @@ const AgencyDropDown: React.FC<AgencyDropDownProps> = ({ agencies }) => {
         </Button> 
       </PopoverTrigger>
       <PopoverContent 
-      className=" w-fit ml-[7.4rem] min-w-[15rem] h-[14.0625rem] p-0 bg-white-background-0 pr-[0.5rem] pt-[0.5rem] pl-[0.5rem] rounded-[0.875rem]"
+      className=" mt-[0.125rem] w-fit ml-[7.4rem] min-w-[15rem] h-[14.0625rem] p-0 bg-white-background-0 pr-[0.5rem] pt-[0.5rem] pl-[0.5rem] rounded-[0.875rem]"
       >
         <Command onValueChange={(val) => setInputValue(val)}>
         <CommandInput 
