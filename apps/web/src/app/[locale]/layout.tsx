@@ -10,6 +10,8 @@ import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
+import { listAgencies } from "../../../api/agency";
+import type { Agency } from "../types/types";
 
 type Props = {
   children: React.ReactNode;
@@ -37,6 +39,7 @@ export const metadata: Metadata = {
 
 export default async function Layout({ children, params }: Readonly<Props>) {
   const messages = await getMessages();
+  const agencies: Agency[] = await listAgencies();
 
   return (
     <html lang="en">
@@ -46,7 +49,7 @@ export default async function Layout({ children, params }: Readonly<Props>) {
             <div className="flex h-[100vh] flex-col">
               <Masthead />
               <Header locale={params.locale} />
-              <SearchBar></SearchBar>
+              <SearchBar agencies={agencies} />
               <div className="flex-1">{children}</div>
               <Footer
                 ministry={extract(messages, "common.names.kd")}
