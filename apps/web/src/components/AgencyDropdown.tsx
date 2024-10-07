@@ -19,57 +19,66 @@ import { cn } from '@/lib/utils';
 
 interface AgencyDropDownProps {
   agencies: Agency[];
+  selectedAgency: string | undefined;
+  onAgencyChange: (newAgency: string | undefined) => void;
 }
 
-const AgencyDropDown: React.FC<AgencyDropDownProps> = ({ agencies }) => {
+const AgencyDropDown: React.FC<AgencyDropDownProps> = ({
+  agencies,
+  selectedAgency,
+  onAgencyChange,
+}) => {
   const [open, setOpen] = useState(false);
-  const [value, setValue] = useState(''); 
-
-  const selectedAgency = agencies.find((agency) => agency.id === value) || null;
-
   const [inputValue, setInputValue] = useState('');
 
-  const filteredAgencies = agencies.filter((agency) =>
-    agency.name.toLowerCase().includes(inputValue.toLowerCase()) ||
-    agency.acronym.toLowerCase().includes(inputValue.toLowerCase())
+  const selectedAgencyObj = agencies.find(
+    (agency) => agency.id === selectedAgency
+  );
+
+  const filteredAgencies = agencies.filter(
+    (agency) =>
+      agency.name.toLowerCase().includes(inputValue.toLowerCase()) ||
+      agency.acronym.toLowerCase().includes(inputValue.toLowerCase())
   );
 
   return (
     <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
-      <Button
-        variant="outline"
-        role="combobox"
-        aria-expanded={open}
-        className={`w-fit max-w[10.3125rem] h-[2rem] justify-between gap-[0.375rem] rounded-[0.5rem] px-[0.625rem] py-[0.375rem]
-          ${open ? 'ring-[0.1875rem] ring-siaran-600 ring-offset-siaran-600 ring-opacity-20' : 'border border-gray-200'}`}
-          >
-          <span className='text-sm text-gray-500'>
-            Agency: 
-          </span>
-          {selectedAgency ? selectedAgency.acronym : 'All'}
-          <ChevronDown className=" h-4 w-4" />
-        </Button> 
+        <Button
+          variant="outline"
+          role="combobox"
+          aria-expanded={open}
+          className={`w-fit max-w[10.3125rem] h-[2rem] justify-between gap-[0.375rem] rounded-[0.5rem] px-[0.625rem] py-[0.375rem]
+            ${
+              open
+                ? 'ring-[0.1875rem] ring-siaran-600 ring-offset-siaran-600 ring-opacity-20'
+                : 'border border-gray-200'
+            }`}
+        >
+          <span className="text-sm text-gray-500">Agency:</span>
+          {selectedAgencyObj ? selectedAgencyObj.acronym : 'All'}
+          <ChevronDown className="h-4 w-4" />
+        </Button>
       </PopoverTrigger>
-      <PopoverContent 
-      className=" mt-[0.125rem] w-fit ml-[7.4rem] min-w-[15rem] h-[14.0625rem] p-0 bg-white-background-0 pr-[0.5rem] pt-[0.5rem] pl-[0.5rem] rounded-[0.875rem]"
+      <PopoverContent
+        className="mt-[0.125rem] w-fit ml-[7.4rem] min-w-[15rem] h-[14.0625rem] p-0 bg-white-background-0 pr-[0.5rem] pt-[0.5rem] pl-[0.5rem] rounded-[0.875rem]"
       >
         <Command onValueChange={(val) => setInputValue(val)}>
-        <CommandInput 
-          className='w-fit h-[2rem] rounded-[0.5rem] text-sm text-gray-500' 
-          placeholder="Type to search" 
-        />
-          <CommandList className='custom-scrollbar'>
+          <CommandInput
+            className="w-fit h-[2rem] rounded-[0.5rem] text-sm text-gray-500"
+            placeholder="Type to search"
+          />
+          <CommandList className="custom-scrollbar">
             <CommandEmpty>No agency found.</CommandEmpty>
-            <CommandGroup className='text-sm text-black-900'>
+            <CommandGroup className="text-sm text-black-900">
               <CommandItem
                 value=""
-                onSelect={(currentValue) => {
-                  setValue('');
+                onSelect={() => {
+                  onAgencyChange(undefined);
                   setOpen(false);
                   setInputValue('');
                 }}
-                className='hover:bg-gray-100 rounded-[0.25rem]'
+                className="hover:bg-gray-100 rounded-[0.25rem]"
               >
                 All
               </CommandItem>
@@ -77,12 +86,12 @@ const AgencyDropDown: React.FC<AgencyDropDownProps> = ({ agencies }) => {
                 <CommandItem
                   key={agency.id}
                   value={agency.id}
-                  onSelect={(currentValue) => {
-                    setValue(currentValue);
+                  onSelect={() => {
+                    onAgencyChange(agency.id);
                     setOpen(false);
                     setInputValue('');
                   }}
-                  className='hover:bg-gray-100 rounded-[0.25rem]'
+                  className="hover:bg-gray-100 rounded-[0.25rem]"
                 >
                   {agency.acronym}
                 </CommandItem>
