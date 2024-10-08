@@ -10,9 +10,10 @@ export async function searchAll(req: Request, res: Response) {
     const {
       query,
       locale,
-      limit = 10,
-      page = 1,
-    } = parseQuerystring(req.query as unknown as string);
+      limit = DEFAULT_PAGE_SIZE,
+      page = DEFAULT_PAGE,
+      type = 'all',
+    } = parseQuerystring(req.query as any);
 
     if (!query) {
       return res
@@ -20,72 +21,104 @@ export async function searchAll(req: Request, res: Response) {
         .json({ error: 'Query parameter "q" is required.' });
     }
 
-    const pressReleases = await payload.find({
-      collection: "press-releases",
-      where: {
-        or: [
-          {
-            ["title"]: {
-              contains: query,
+    if (type === 'press-releases') {
+      const pressReleases = await payload.find({
+        collection: 'press-releases',
+        where: {
+          or: [
+            {
+              title: {
+                contains: query,
+              },
             },
-          },
-          {
-            ["content.plaintext"]: {
-              contains: query,
+            {
+              'content.plaintext': {
+                contains: query,
+              },
             },
-          },
-        ],
-        and: [
-          {
-            ["language"]: {
-              equals: locale,
+          ],
+          and: [
+            {
+              language: {
+                equals: locale,
+              },
             },
-          },
-        ],
-      },
-      limit: limit,
-      page: page,
-    });
+          ],
+        },
+        limit: limit,
+        page: page,
+      });
 
-    const agencies = await payload.find({
-      collection: "agencies",
-      where: {
-        or: [
-          {
-            ["name"]: {
-              contains: query,
+      return res.status(200).json(pressReleases);
+    } else {
+      const pressReleases = await payload.find({
+        collection: 'press-releases',
+        where: {
+          or: [
+            {
+              title: {
+                contains: query,
+              },
             },
-          },
-          {
-            ["acronym"]: {
-              contains: query,
+            {
+              'content.plaintext': {
+                contains: query,
+              },
             },
-          },
-        ],
-      },
-      limit: limit,
-      page: page,
-    });
+          ],
+          and: [
+            {
+              language: {
+                equals: locale,
+              },
+            },
+          ],
+        },
+        limit: limit,
+        page: page,
+      });
 
-    return res.status(200).json({
-      pressReleases: pressReleases.docs,
-      agencies: agencies.docs,
-    });
+      const agencies = await payload.find({
+        collection: 'agencies',
+        where: {
+          or: [
+            {
+              name: {
+                contains: query,
+              },
+            },
+            {
+              acronym: {
+                contains: query,
+              },
+            },
+          ],
+        },
+        limit: limit,
+        page: page,
+      });
+
+      return res.status(200).json({
+        pressReleases: pressReleases.docs,
+        agencies: agencies.docs,
+      });
+    }
   } catch (error) {
-    console.error("Error searching content:", error);
+    console.error('Error searching content:', error);
     return res
       .status(500)
-      .json({ error: "An error occurred while searching." });
+      .json({ error: 'An error occurred while searching.' });
   }
 }
 
-function parseQuerystring(query: string) {
+function parseQuerystring(query: any) {
   const params = new URLSearchParams(query);
 
   return {
-    query: params.get("q")?.trim() || "",
-    locale: params.get("locale") || DEFAULT_LOCALE,
-    limit: parseInt(params.get("limit")) || DEFAULT_PAGE_SIZE,
-    page: parseInt(params.get("page")) || DEFAULT_PAGE,
+    query: params.get('q')?.trim() || '',
+    locale: params.get('locale') || DEFAULT_LOCALE,
+    limit: parseInt(params.get('limit') || '') || DEFAULT_PAGE_SIZE,
+    page: parseInt(params.get('page') || '') || DEFAULT_PAGE,
+    type: params.get('type') || 'all',
   };
 }
