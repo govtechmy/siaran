@@ -45,7 +45,7 @@ const MediaTypeDropdown: React.FC<MediaTypeDropdownProps> = ({
         </Button>
       </PopoverTrigger>
       <PopoverContent
-        className="mt-[0.3rem] ml-[3rem] w-[10rem] h-[6.625rem] p-0 px-[0.3125rem] pt-1 bg-white-background-0 border rounded-[0.5rem] custom-scrollbar"
+        className="mt-[0.3rem] mr-[3rem] w-[10rem] max-h-[6.625rem] p-0 px-[0.3125rem] pt-1 bg-white-background-0 border rounded-[0.5rem] custom-scrollbar"
       >
         <Command>
           <CommandList>
