@@ -6,11 +6,12 @@
     "moduleResolution": "Bundler",
     "strict": true,
     "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
+    "types": ["node"],
     "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "#logging/*": ["src/logging/*"],
+      "#env": ["src/env.ts"]
+    }
   }
 }

@@ -1,15 +1,27 @@
 {
   "name": "@repo/api",
-  "main": "./src/trpc/index.ts",
+  "main": "./src/trpc/trpc.ts",
   "version": "0.0.0",
+  "imports": {
+    "#cms/*": "./src/cms/*.ts",
+    "#trpc": "./src/trpc/index.ts",
+    "#trpc/*": "./src/trpc/*.ts",
+    "#utils/*": "./src/utils/*.ts",
+    "#types/*": "./src/types/*.ts",
+    "#http": "./src/http.ts"
+  },
   "exports": {
-    "./trpc-router": "./src/trpc/index.ts"
+    "./trpc": "./src/trpc/index.ts",
+    "./trpc-router": "./src/trpc/routers/app.ts",
+    "./cms/types": "./src/cms/types.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
-    "@trpc/server": "^10.45.2",
+    "@trpc/server": "^11.0.0-rc.553",
+    "consola": "^3.2.3",
+    "ofetch": "^1.4.0",
     "zod": "^3.23.8"
   }
 }
