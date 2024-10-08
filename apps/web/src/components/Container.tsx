@@ -5,7 +5,7 @@ type Props = {
   className?: string;
 };
 
-export default function Section(props: Props) {
+export default function Container(props: Props) {
   return (
     <section className={cn("container", props.className)}>
       {props.children}

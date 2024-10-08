@@ -1,5 +1,5 @@
-import { listPressReleases } from "@/api/press-release";
-import Section from "@/components/Section";
+import { trpc } from "@/api/trpc/proxy/server";
+import Container from "@/components/Container";
 import { getPageMetadata, MetadataProps } from "@/lib/page/utils";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
@@ -23,28 +23,15 @@ export async function generateMetadata({
 }
 
 export default async function PageIndex(props: Props) {
-  const currentPage = parseInt(props.searchParams.page) || 1;
-  const {
-    docs: data,
-    page,
-    totalPages,
-    hasNextPage,
-    hasPrevPage,
-  } = await listPressReleases(currentPage, 12);
+  const data = await trpc.pressRelease.list.query({
+    page: parseInt(props.searchParams.page) || 1,
+  });
 
   return (
     <main className="flex flex-col">
-      <Section>
-        <Content
-          data={data}
-          pagination={{
-            current: page,
-            total: totalPages,
-            hasNext: hasNextPage,
-            hasPrev: hasPrevPage,
-          }}
-        />
-      </Section>
+      <Container>
+        <Content initialData={data} />
+      </Container>
     </main>
   );
 }
