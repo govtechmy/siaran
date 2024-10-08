@@ -3,7 +3,6 @@ import payload from "payload";
 export const list = async (req, res) => {
   try {
     const { page = 1, limit = 10, agency, mediaType, fromDate, toDate } = req.query;
-    console.log("hello")
     let where = {
 
     };
@@ -28,21 +27,25 @@ export const list = async (req, res) => {
 
     if (fromDate) {
       const from = new Date(fromDate);
+      console.log('From Date:', from);
+
       if (!isNaN(from.getTime())) {
-        where["date_published"] = { greater_than_equal: from };
+        where['date_published'] = { greater_than_equal: from };
       } else {
-        return res.status(400).json({ error: "Invalid fromDate format" });
+        return res.status(400).json({ error: 'Invalid fromDate format' });
       }
     }
 
     if (toDate) {
       const to = new Date(toDate);
+      console.log('To Date:', to);
+
       if (!isNaN(to.getTime())) {
-        where["date_published"] = where["date_published"]
-          ? { ...where["date_published"], less_than_equal: to }
-          : { lte: to };
+        where['date_published'] = where['date_published']
+          ? { ...where['date_published'], less_than_equal: to }
+          : { less_than_equal: to };
       } else {
-        return res.status(400).json({ error: "Invalid toDate format" });
+        return res.status(400).json({ error: 'Invalid toDate format' });
       }
     }
 
@@ -51,7 +54,7 @@ export const list = async (req, res) => {
       where,
       limit: parseInt(limit, 10),
       page: parseInt(page, 10),
-      sort: "-datetime",
+      sort: "-date_published",
     });
 
     res.status(200).json(pressReleases);
