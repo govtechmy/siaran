@@ -18,10 +18,10 @@ RUN turbo build --filter=api
 FROM base AS runner
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 hono
-COPY --from=installer --chown=hono:nodejs /app/ .
+RUN adduser --system --uid 1001 express
+COPY --from=installer --chown=express:nodejs /app/ .
 
-USER hono
+USER express
 EXPOSE $PORT
 ENV HOST=0.0.0.0
 

@@ -1,6 +1,5 @@
 import express from "express";
 import payload from "payload";
-import apiRoutes from "./routes";
 
 require("dotenv").config();
 const app = express();
@@ -17,8 +16,6 @@ const start = async () => {
       payload.logger.info(`Payload Admin URL: ${payload.getAdminURL()}`);
     },
   });
-
-  app.use("/api", apiRoutes);
 
   const port = process.env.PORT || 3000;
 

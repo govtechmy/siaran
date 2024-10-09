@@ -1,40 +1,57 @@
 "use client";
 
-import type { PaginatedResponse, PressRelease } from "@/app/types/types";
-import PressReleaseCard from "@/components/PressReleaseCard";
-import PressReleaseList from "@/components/PressReleaseList";
+import { useTRPCQuery } from "@/api/hooks/query";
+import PressReleaseCardView from "@/components/PressReleaseCardView";
+import PressReleaseListView from "@/components/PressReleaseListView";
 import {
   type Item as SegmentControlItem,
   SegmentControl,
 } from "@/components/SegmentControl";
 import Pagination from "@/components/ui/pagination";
 import { cn } from "@/lib/utils";
-import { useRouter, useSearchParams } from "next/navigation";
-import { useState } from "react";
+import type { PaginatedResponse, PressRelease } from "@repo/api/cms/types";
+import { useTranslations } from "next-intl";
+import { Suspense, useState } from "react";
 
 type Props = {
-  response: PaginatedResponse<PressRelease>;
+  initialData: PaginatedResponse<PressRelease>;
+  segment?: "card" | "list";
 };
 
-const SEGMENTS: SegmentControlItem[] = [
-  { id: "card", label: "Card view" },
-  { id: "list", label: "List view" },
-];
+export default function Content({
+  initialData,
+  segment: initialSegment,
+}: Props) {
+  const t = useTranslations();
+  const { data, onPage } = useTRPCQuery({
+    type: "pressRelease",
+    initialData,
+    initialPage: initialData.page,
+    queryFn: async (trpc, { page }) => trpc.list.query({ page }),
+  });
 
-export default function Content({ response }: Props) {
-  const { docs: data, totalPages, page } = response;
-  const searchParams = useSearchParams();
-  const router = useRouter();
-  const [segment, setSegment] = useState<SegmentControlItem>(SEGMENTS[0]);
+  const segments: SegmentControlItem[] = [
+    { id: "card", label: t("pages.index.view.card") },
+    { id: "list", label: t("pages.index.view.list") },
+  ];
 
-  function onPage(page: number) {
-    if (page <= 0 || page >= totalPages) {
-      return;
+  const [segment, setSegment] = useState<SegmentControlItem>(
+    getSegmentById(initialSegment),
+  );
+
+  function getSegmentById(segmentId?: string) {
+    const defaultSegment = segments[1];
+
+    if (!segmentId || (segmentId !== "card" && segmentId !== "list")) {
+      return defaultSegment;
     }
 
-    const params = new URLSearchParams(searchParams.toString());
-    params.set("page", page.toString());
-    router.push(`${window.location.pathname}?${params.toString()}`);
+    switch (segmentId) {
+      case "card":
+        return defaultSegment;
+      case "list":
+        return segments[1];
+    }
   }
 
   function onSegment(segment: SegmentControlItem): void {
@@ -48,44 +65,43 @@ export default function Content({ response }: Props) {
           "mb-[1rem] mt-[1.5rem]",
           "lg:mb-[1.75rem] lg:mt-[3rem]",
           "flex items-center justify-between",
-          "gap-[0.75rem] w-[80rem] h-[2rem]",
+          "h-[2rem] w-[80rem] gap-[0.75rem]",
         )}
       >
         <h2 className={cn("text-base font-medium text-black-700")}>
-          Latest Releases
+          {t("pages.index.latestReleases")}
         </h2>
         <SegmentControl
-          items={SEGMENTS}
+          items={segments}
           active={segment}
           onSegment={onSegment}
         />
       </section>
-      {segment.id === "card" && (
-      <section
-        className={cn(
-          "gap-[1.5rem]",
-          "grid grid-cols-1 lg:grid-cols-3",
-          "lg:col-span-[1/3] col-span-full",
-        )}
-      >
-        {data.map((item, i) => (
-          <PressReleaseCard key={i} data={item} />
-        ))}
-      </section>
-    )}
-    {segment.id === "list" && (
-      <section>
-        <PressReleaseList data={data} />
-      </section>
-    )}
+      <Suspense>
         <section>
+          <PressReleaseView segment={segment} data={data.docs} />
           <Pagination
-            currentPage={page}
-            totalPages={totalPages}
+            currentPage={data.page || 1}
+            totalPages={data.totalPages || 1}
             onPage={onPage}
           />
         </section>
-
+      </Suspense>
     </>
   );
+}
+
+function PressReleaseView({
+  segment,
+  data,
+}: {
+  segment: SegmentControlItem;
+  data: PressRelease[];
+}) {
+  switch (segment.id) {
+    case "card":
+      return <PressReleaseCardView data={data} />;
+    case "list":
+      return <PressReleaseListView data={data} />;
+  }
 }
