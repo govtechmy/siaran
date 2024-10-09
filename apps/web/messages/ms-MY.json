@@ -29,7 +29,13 @@
     }
   },
   "pages": {
-    "index": {}
+    "index": {
+      "latestReleases": "Paparan Terkini",
+      "view": {
+        "list": "Senarai",
+        "card": "Kad"
+      }
+    }
   },
   "components": {
     "Masthead": {

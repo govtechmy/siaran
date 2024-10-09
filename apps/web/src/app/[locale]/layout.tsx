@@ -1,12 +1,6 @@
-import Footer from "@/components/Footer";
-import { Header } from "@/components/Header";
-import Masthead from "@/components/Masthead";
-import { extract } from "@/lib/i18n/utils";
+import App from "@/components/App";
 import { cn } from "@/lib/ui/utils";
 import type { Metadata } from "next";
-import { NextIntlClientProvider } from "next-intl";
-import { getMessages } from "next-intl/server";
-import { ThemeProvider } from "next-themes";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
 
@@ -35,33 +29,10 @@ export const metadata: Metadata = {
 };
 
 export default async function Layout({ children, params }: Readonly<Props>) {
-  const messages = await getMessages();
-
   return (
     <html lang="en">
       <body className={cn(inter.className, poppins.variable)}>
-        <ThemeProvider defaultTheme="light">
-          <NextIntlClientProvider messages={messages}>
-            <div className="flex h-[100vh] flex-col">
-              <Masthead />
-              <Header locale={params.locale} />
-              <div className="flex-1">{children}</div>
-              <Footer
-                ministry={extract(messages, "common.names.kd")}
-                descriptionWithNewlines={extract(
-                  messages,
-                  "components.Footer.address"
-                )}
-                links={
-                  [
-                    // Put links here
-                  ]
-                }
-                showLastUpdated
-              />
-            </div>
-          </NextIntlClientProvider>
-        </ThemeProvider>
+        <App locale={params.locale}>{children}</App>
       </body>
     </html>
   );

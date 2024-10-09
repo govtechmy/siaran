@@ -29,7 +29,13 @@
     }
   },
   "pages": {
-    "index": {}
+    "index": {
+      "latestReleases": "Latest Releases",
+      "view": {
+        "list": "List View",
+        "card": "Card View"
+      }
+    }
   },
   "components": {
     "Masthead": {
