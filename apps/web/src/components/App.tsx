@@ -4,6 +4,7 @@ import { Header } from "@/components/Header";
 import Masthead from "@/components/Masthead";
 import QueryProvider from "@/components/QueryProvider";
 import SearchBar from "@/components/SearchBar";
+import { Locale } from "@/i18n/routing";
 import { extract } from "@/lib/i18n/utils";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
@@ -12,10 +13,11 @@ import { ReactNode } from "react";
 
 type Props = {
   children: ReactNode;
-  locale: string;
+  locale: Locale;
 };
 
 export default async function App(props: Props) {
+  const locale = props.locale as Locale;
   const messages = await getMessages();
   const agencies = await trpc.agency.list.query();
 
@@ -25,8 +27,8 @@ export default async function App(props: Props) {
         <QueryProvider>
           <div className="flex h-[100vh] flex-col">
             <Masthead />
-            <Header locale={props.locale} />
-            <SearchBar agencies={agencies} />
+            <Header locale={locale} />
+            <SearchBar locale={locale} agencies={agencies} />
             <div className="flex-1">{props.children}</div>
             <Footer
               ministry={extract(messages, "common.names.kd")}

@@ -13,6 +13,13 @@ export function mergeSearchParams(
   return params;
 }
 
+/**
+ * Merge search params into a URL
+ * @param pathname The pathname (e.g. /login) without query string
+ * @param searchParams The current search params (if any)
+ * @param records The parameters to merge
+ * @returns
+ */
 export function mergePathname(
   pathname: string,
   searchParams: URLSearchParams,

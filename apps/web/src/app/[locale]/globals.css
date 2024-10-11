@@ -4,9 +4,12 @@
 
 @layer base {
   :root {
+    --scrollbar-width: .4375rem;
+
     --black-900: 24 24 27;
     --black-800: 39 39 42;
     --black-700: 63 63 70;
+    --black-text_only-disabled: 82 82 91;
 
     --base-white: 255 255 255;
 
@@ -62,6 +65,7 @@
     --gray-text_only-disabled: 24 24 27;
     --gray-washed-100: 244 244 245;
     --gray-focus_washed-100: 244 244 245;
+    --gray-outline-400: 161 161 170;
     --gray-outline-300: 212 212 216;
     --gray-outline-200: 228 228 231;
     --gray-dim-500: 113 113 122;
@@ -77,6 +81,8 @@
     --black-900: 255 255 255;
     --black-800: 244 244 245;
     --black-700: 212 212 216;
+    --black-text_only-disabled: 161 161 170;
+
     --base-white: 24 24 27;
 
     --dim-500: 161 161 170;
@@ -131,6 +137,7 @@
     --gray-text_only-disabled: 161 161 170;
     --gray-washed-100: 29 29 33;
     --gray-focus_washed-100: 39 39 42;
+    --gray-outline-400: 82 82 91;
     --gray-outline-300: 63 63 70;
     --gray-outline-200: 39 39 42;
     --gray-dim-500: 161 161 170;
@@ -153,10 +160,6 @@
     box-sizing: inherit;
   }
 
-  :focus:not(:focus-visible) {
-    @apply outline-none;
-  }
-
   body {
     @apply bg-background text-black-900;
   }
@@ -171,30 +174,18 @@
   }
 }
 
+@layer utilities {
+  @supports (scrollbar-color: auto) {
+    .dropdown-scrollbar {
+      scrollbar-color: rgb(var(--gray-outline-400)) transparent;
+      scrollbar-width: auto;
+    }
+  }
 
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
-}
-
-.custom-scrollbar::-webkit-scrollbar {
-  width: 7px;
-}
-
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.4);
-  border-radius: 12px;
-  max-height: 45px;
-  height: 45px;
-}
-
-.custom-scrollbar {
-  scrollbar-width: thin;
-  scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
-}
-
-.custom-scrollbar::-moz-scrollbar-thumb {
-  background-color: rgba(0, 0, 0, 0.4);
-  border-radius: 12px;
-  max-height: 45px;
-  height: 45px;
+  @supports selector(::-webkit-scrollbar) {
+    .dropdown-scrollbar::-webkit-scrollbar-thumb {
+      background: rgb(var(--gray-outline-400));
+      width: var(--scrollbar-width);
+    }
+  }
 }
