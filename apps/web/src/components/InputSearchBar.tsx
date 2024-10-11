@@ -1,74 +1,76 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Input } from '@/components/ui/input';
-import SearchButton from './icons/searchbutton';
-import SearchSlash from './icons/searchslash';
-import CrossX from './icons/cross-x';
-import type { PressRelease, Agency } from '@/app/types/types';
-import { searchContent } from '../../api/press-release';
-import ChevronRight from '@/icons/chevron-right';
+import { Input } from "@/components/ui/input";
+import ChevronRight from "@/icons/chevron-right";
+import { useDebounce } from "@uidotdev/usehooks";
+import React, { useEffect, useRef, useState } from "react";
+import CrossX from "./icons/cross-x";
+import SearchButton from "./icons/searchbutton";
+import SearchSlash from "./icons/searchslash";
 
+import { useTRPCQuery } from "@/api/hooks/query";
 import {
   Command,
-  CommandList,
+  CommandEmpty,
   CommandGroup,
   CommandItem,
-  CommandEmpty,
-} from '@/components/ui/command';
+  CommandList,
+} from "@/components/ui/command";
+import { cn } from "@/lib/utils";
 
 function InputSearchBar() {
-  const [searchTerm, setSearchTerm] = useState('');
-  const [pressReleases, setPressReleases] = useState<PressRelease[]>([]);
-  const [agencies, setAgencies] = useState<Agency[]>([]);
+  const [query, setQuery] = useState("");
   const [isOpen, setIsOpen] = useState(false);
-
   const inputRef = useRef<HTMLInputElement>(null);
   const commandRef = useRef<HTMLDivElement>(null);
-  const debounceTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const debouncedQuery = useDebounce(query, 300);
+  const { data, isLoading } = useTRPCQuery({
+    type: "search",
+    queryKey: [debouncedQuery],
+    queryFn: async (trpc) => await trpc.searchAll.query({ q: debouncedQuery }),
+  });
 
-  const handleSearch = async (query: string) => {
-    if (query.trim()) {
-      try {
-        const data = await searchContent(query);
-        setPressReleases(data.pressReleases);
-        setAgencies(data.agencies);
-        setIsOpen(true);
-      } catch (error) {
-        console.error('Error searching:', error);
-      }
-    } else {
-      setPressReleases([]);
-      setAgencies([]);
-      setIsOpen(false);
-    }
-  };
+  function onQueryChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const newQuery = e.target.value.trim();
 
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const value = e.target.value;
-    setSearchTerm(value);
+    setIsOpen(!!newQuery);
+    setQuery(newQuery);
+  }
 
-    if (debounceTimeoutRef.current) {
-      clearTimeout(debounceTimeoutRef.current);
-    }
-
-    debounceTimeoutRef.current = setTimeout(() => {
-      handleSearch(value);
-    }, 300);
-  };
-
-  const handleClearSearch = () => {
-    setSearchTerm('');
+  function onClearQuery() {
     setIsOpen(false);
+    setQuery("");
     inputRef.current?.focus();
+  }
+
+  function escapeRegExp(string: string) {
+    return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  }
+
+  const highlightText = (text: string, query: string) => {
+    if (!query) return text;
+
+    const escapedQuery = escapeRegExp(query);
+    const regex = new RegExp(escapedQuery, "gi");
+    const parts = text.split(regex);
+    const matches = text.match(regex);
+    const result = [];
+
+    for (let i = 0; i < parts.length; i++) {
+      result.push(parts[i]);
+
+      if (matches && matches[i]) {
+        result.push(
+          <span key={i} className="text-siaran-600">
+            {matches[i]}
+          </span>,
+        );
+      }
+    }
+
+    return result;
   };
 
   useEffect(() => {
-    if (!searchTerm.trim()) {
-      setIsOpen(false);
-    }
-  }, [searchTerm]);
-
-  useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
+    function onClickOutside(event: MouseEvent) {
       if (
         commandRef.current &&
         !commandRef.current.contains(event.target as Node) &&
@@ -77,132 +79,107 @@ function InputSearchBar() {
       ) {
         setIsOpen(false);
       }
-    };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
-
-  const escapeRegExp = (string: string) => {
-    return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  };
-
-  const highlightText = (text: string, query: string) => {
-    if (!query) return text;
-
-    const escapedQuery = escapeRegExp(query);
-    const regex = new RegExp(escapedQuery, 'gi');
-    const parts = text.split(regex);
-
-    const matches = text.match(regex);
-
-    const result = [];
-
-    for (let i = 0; i < parts.length; i++) {
-      result.push(parts[i]);
-      if (matches && matches[i]) {
-        result.push(
-          <span key={i} className="text-siaran-600">
-            {matches[i]}
-          </span>
-        );
-      }
     }
 
-    return result;
-  };
+    window.addEventListener("mousedown", onClickOutside);
+
+    return () => window.removeEventListener("mousedown", onClickOutside);
+  }, []);
+
   return (
-    <div className="w-[37.5rem] relative">
+    <div className="relative w-[37.5rem]">
       <div className="relative mb-[0.375rem]">
         <Input
           ref={inputRef}
-          className="w-full pr-[8rem]"
+          className="w-full"
           placeholder="Search by keywords"
-          value={searchTerm}
-          onChange={handleInputChange}
+          value={query}
+          onChange={onQueryChange}
           onFocus={() => {
-            if (searchTerm.trim()) {
+            if (query.trim()) {
               setIsOpen(true);
             }
           }}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') handleSearch(searchTerm);
-          }}
         />
-        <div className="absolute inset-y-0 right-0 flex items-center">
-          {searchTerm ? (
+        <div
+          className={cn(
+            "absolute",
+            "flex flex-row items-center",
+            "bottom-0 right-0 top-0",
+            "pointer-events-none",
+          )}
+        >
+          {query ? (
             <button
               className="flex items-center justify-center rounded-full focus:outline-none"
-              style={{ minWidth: '1rem', minHeight: '1rem' }}
-              onClick={handleClearSearch}
+              style={{ minWidth: "1rem", minHeight: "1rem" }}
+              onClick={onClearQuery}
             >
-              <CrossX className="w-full h-full" />
+              <CrossX className="h-full w-full" />
             </button>
           ) : (
             <div className="flex items-center gap-1">
-              <span className="text-gray-500 text-sm">Press</span>
+              <span className="text-sm text-gray-500">Press</span>
               <SearchSlash />
-              <span className="text-gray-400 text-sm">to search</span>
+              <span className="text-sm text-gray-400">to search</span>
             </div>
           )}
           <button
             className="flex items-center justify-center rounded-full focus:outline-none"
-            style={{ minWidth: '3rem', minHeight: '3rem' }}
-            onClick={() => handleSearch(searchTerm)}
+            style={{ minWidth: "3rem", minHeight: "3rem" }}
           >
-            <SearchButton className="w-full h-full" />
+            <SearchButton className="h-full w-full" />
           </button>
         </div>
       </div>
       {isOpen && (
         <Command
           ref={commandRef}
-          className="absolute w-full mt-[0.075rem] h-[16.625rem] overflow-y-auto bg-white-focus_white-200 shadow-lg rounded-[1.375rem] z-10 custom-scrollbar"
+          className="custom-scrollbar absolute z-10 mt-[0.075rem] h-[16.625rem] w-full overflow-y-auto rounded-[1.375rem] bg-white-focus_white-200 shadow-lg"
         >
           <CommandList>
-            {agencies.length > 0 && (
+            {data.agencies.length > 0 && (
               <CommandGroup
-                className="text-gray-500 text-sm mt-1"
+                className="mt-1 text-sm text-gray-500"
                 heading="Agencies"
               >
-                {agencies.map((agency) => (
+                {data.agencies.map((agency) => (
                   <CommandItem
                     key={agency.id}
-                    className="flex items-center justify-between h-[2.25rem] w-full px-3 text-black-800 text-sm rounded-[0.375rem] hover:bg-gray-100"
+                    className="flex h-[2.25rem] w-full items-center justify-between rounded-[0.375rem] px-3 text-sm text-black-800 hover:bg-gray-100"
                   >
                     <span className="truncate">
                       {agency.name} ({agency.acronym})
                     </span>
-                    <ChevronRight className="w-4 h-4 text-gray-400" />
+                    <ChevronRight className="h-4 w-4 text-gray-400" />
                   </CommandItem>
                 ))}
               </CommandGroup>
             )}
-            {pressReleases.length > 0 && (
+            {data.pressReleases.length > 0 && (
               <CommandGroup
-                className="text-gray-500 text-sm"
+                className="text-sm text-gray-500"
                 heading="Press Releases"
               >
-                {pressReleases.map((pressRelease) => (
+                {data.pressReleases.map((pressRelease) => (
                   <CommandItem
                     key={pressRelease.id}
-                    className="flex items-center justify-between h-[2.25rem] w-full px-3 text-black-800 text-sm rounded-[0.375rem] hover:bg-gray-100"
+                    className="flex h-[2.25rem] w-full items-center justify-between rounded-[0.375rem] px-3 text-sm text-black-800 hover:bg-gray-100"
                   >
-                    <div className="flex-1 min-w-0 truncate">
-                      {highlightText(pressRelease.title, searchTerm)}
+                    <div className="min-w-0 flex-1 truncate">
+                      {highlightText(pressRelease.title, debouncedQuery)}
                     </div>
                     <div className="flex items-center gap-1">
                       <span className="text-sm text-black-800">
                         {pressRelease.relatedAgency.acronym.toUpperCase()}
                       </span>
-                      <ChevronRight className="w-4 h-4 text-gray-400" />
+                      <ChevronRight className="h-4 w-4 text-gray-400" />
                     </div>
                   </CommandItem>
                 ))}
               </CommandGroup>
             )}
-            {agencies.length === 0 && pressReleases.length === 0 && (
+            {data.agencies.length === 0 && data.pressReleases.length === 0 && (
               <CommandEmpty>No results found</CommandEmpty>
             )}
           </CommandList>

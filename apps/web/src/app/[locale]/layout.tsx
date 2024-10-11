@@ -3,8 +3,6 @@ import { cn } from "@/lib/ui/utils";
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
 import "./globals.css";
-import { listAgencies } from "../../../api/agency";
-import type { Agency } from "../types/types";
 
 type Props = {
   children: React.ReactNode;
