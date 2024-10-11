@@ -13,7 +13,7 @@ export type Content = {
   markdown: string;
 };
 
-export type RelatedAgency = {
+export type Agency = {
   id: string;
   name: string;
   acronym: string;
@@ -29,7 +29,7 @@ export type PressRelease = {
   type: PressReleaseType;
   content: Content;
   attachments?: Attachment[];
-  relatedAgency: RelatedAgency;
+  relatedAgency: Agency;
 };
 
 export type PressReleaseType = "kenyataan_media" | "ucapan" | "other";
@@ -45,4 +45,9 @@ export type PaginatedResponse<T> = {
   hasNextPage: boolean;
   prevPage: number | null;
   nextPage: number | null;
+};
+
+export type SearchResponse = {
+  pressReleases: PressRelease[];
+  agencies: Agency[];
 };

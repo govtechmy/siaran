@@ -170,3 +170,31 @@
     @apply font-heading;
   }
 }
+
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 7px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  max-height: 45px;
+  height: 45px;
+}
+
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.4) transparent;
+}
+
+.custom-scrollbar::-moz-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.4);
+  border-radius: 12px;
+  max-height: 45px;
+  height: 45px;
+}
