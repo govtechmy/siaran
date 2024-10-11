@@ -1,11 +1,16 @@
 import { isAuthenticated } from "../utils/auth";
 import { Endpoint } from "payload/config";
-import { list } from "../controllers/api/press-releases";
+import { list, insertManyPressReleases } from "../controllers/api/press-releases";
 
 export const endpoints: Endpoint[] = [
   {
-    path: "/",
+    path: "/v1/press-releases",
     method: "get",
     handler: isAuthenticated(list),
+  },
+  {
+    path: "/v1/press-releases",
+    method: "post",
+    handler: isAuthenticated(insertManyPressReleases),
   },
 ];
