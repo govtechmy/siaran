@@ -74,3 +74,58 @@ export const list = async (req, res) => {
       .json({ error: "An error occurred while fetching press releases." });
   }
 };
+
+export const insertManyPressReleases = async (req, res) => {
+  try {
+    const { data } = req.body;
+
+    if (!Array.isArray(data) || data.length === 0) {
+      return res.status(400).json({
+        error: 'Invalid data format. "data" should be a non-empty array.',
+      });
+    }
+
+    const transactionID = await payload.db.beginTransaction();
+
+    const transactionalReq = {
+      ...req,
+      transactionID,
+    };
+
+    try {
+      for (const pressRelease of data) {
+        await payload.create({
+          collection: 'press-releases',
+          data: pressRelease,
+          req: transactionalReq,
+        });
+      }
+
+      if (transactionID) {
+        await payload.db.commitTransaction(transactionID);
+      }
+
+      return res.status(201).json({
+        message: 'All press releases inserted successfully.',
+      });
+    } catch (insertionError) {
+      if (transactionID) {
+        await payload.db.rollbackTransaction(transactionID);
+      }
+
+      console.error('Error inserting press releases:', insertionError);
+
+      return res.status(500).json({
+        error: 'An error occurred while inserting press releases.',
+        details: insertionError.message,
+      });
+    }
+  } catch (error) {
+    console.error('Error in insertManyPressReleases:', error);
+
+    return res.status(500).json({
+      error: 'An unexpected error occurred.',
+      details: error.message,
+    });
+  }
+};
