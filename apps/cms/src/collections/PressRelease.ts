@@ -1,5 +1,4 @@
 import { CollectionConfig } from 'payload/types';
-import { endpoints } from '../endpoints/press-releases';
 
 const PressRelease: CollectionConfig = {
   slug: 'press-releases',
@@ -79,7 +78,6 @@ const PressRelease: CollectionConfig = {
       required: true,
     },
   ],
-  endpoints,
 };
 
 export default PressRelease;
