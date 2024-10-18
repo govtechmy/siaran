@@ -17,6 +17,9 @@
     "name": "SiaranGovMY"
   },
   "common": {
+    "errors": {
+      "notFound": "Not found"
+    },
     "names": {
       "kd": "Ministry of Digital"
     },
@@ -26,6 +29,26 @@
         "speech": "Speech",
         "other": "Other"
       }
+    },
+    "filters": {
+      "types": {
+        "all": "All",
+        "mediaRelease": "Media Release",
+        "speech": "Speech Collection"
+      },
+      "labels": {
+        "all": "All",
+        "multiple": "Multiple",
+        "agency": "Agency",
+        "type": "Type",
+        "selectAll": "Select All",
+        "clear": "Clear",
+        "none": "None",
+        "reset": "Reset",
+        "search": "Search",
+        "from": "From",
+        "to": "To"
+      }
     }
   },
   "pages": {
@@ -34,10 +57,45 @@
       "view": {
         "list": "List View",
         "card": "Card View"
+      },
+      "titles": {
+        "hero": "One Stop Government Press Releases & Announcements"
       }
     }
   },
   "components": {
+    "FilterDate": {
+      "labels": {
+        "trigger": "Pick a date"
+      }
+    },
+    "GovBadge": {
+      "labels": {
+        "visitPortal": "Visit our portal",
+        "sponsor": "Brought to you by",
+        "governmentOfMalaysia": "Government of Malaysia"
+      }
+    },
+    "SearchFilterList": {
+      "labels": {
+        "filterBy": "Filter by"
+      }
+    },
+    "SearchInput": {
+      "placeholders": {
+        "searchInput": "Search by keywords"
+      },
+      "labels": {
+        "noResults": "No results found"
+      },
+      "titles": {
+        "pressReleases": "Press Releases",
+        "agencies": "Agencies"
+      }
+    },
+    "PressToSearch": {
+      "label": "Press <shortcut></shortcut> to search"
+    },
     "Masthead": {
       "officialGovWebsite": "Official Malaysia Government Website",
       "howToIdentify": "Here's how you know",

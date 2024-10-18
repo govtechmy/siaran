@@ -1,60 +1,60 @@
-import { CollectionConfig } from 'payload/types';
+import { CollectionConfig } from "payload/types";
 
 const Agency: CollectionConfig = {
-  slug: 'agencies',
+  slug: "agencies",
   fields: [
     {
-      name: 'name',
-      type: 'text',
+      name: "name",
+      type: "text",
       required: true,
     },
     {
-      name: 'id', 
-      type: 'text',
+      name: "id",
+      type: "text",
       required: true,
       unique: true, // Ensure the custom ID is unique
     },
     {
-      name: 'acronym',
-      type: 'text',
+      name: "acronym",
+      type: "text",
       required: true,
     },
     {
-      name: 'email',
-      type: 'email',
+      name: "email",
+      type: "email",
       required: true,
     },
     {
-      name: 'website',
-      type: 'text',
+      name: "website",
+      type: "text",
       required: false,
     },
     {
-      name: 'socialMedia',
-      type: 'array',
+      name: "socialMedia",
+      type: "array",
       fields: [
         {
-          name: 'platform',
-          type: 'select',
+          name: "platform",
+          type: "select",
           options: [
             {
-              label: 'Facebook',
-              value: 'facebook',
+              label: "Facebook",
+              value: "facebook",
             },
             {
-              label: 'Twitter',
-              value: 'twitter',
+              label: "Twitter",
+              value: "twitter",
             },
             {
-              label: 'TikTok',
-              value: 'tiktok',
+              label: "TikTok",
+              value: "tiktok",
             },
           ],
           required: true,
         },
         {
-          name: 'url',
-          type: 'text',
+          name: "url",
+          type: "text",
           required: true,
         },
       ],

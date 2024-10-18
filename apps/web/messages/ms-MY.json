@@ -17,6 +17,9 @@
     "name": "SiaranGovMY"
   },
   "common": {
+    "errors": {
+      "notFound": "Tidak ditemui"
+    },
     "names": {
       "kd": "Kementerian Digital"
     },
@@ -26,6 +29,26 @@
         "speech": "Ucapan",
         "other": "Other"
       }
+    },
+    "filters": {
+      "types": {
+        "all": "Semua",
+        "mediaRelease": "Kenyataan Media",
+        "speech": "Ucapan"
+      },
+      "labels": {
+        "all": "Semua",
+        "multiple": "Berbilang",
+        "agency": "Agensi",
+        "type": "Jenis",
+        "selectAll": "Pilih semua",
+        "clear": "Hapus",
+        "none": "Tiada",
+        "reset": "Set semula",
+        "search": "Cari",
+        "from": "Dari",
+        "to": "Hingga"
+      }
     }
   },
   "pages": {
@@ -34,10 +57,45 @@
       "view": {
         "list": "Senarai",
         "card": "Kad"
+      },
+      "titles": {
+        "hero": "Siaran dan Pengumuman Kerajaan Satu Henti"
       }
     }
   },
   "components": {
+    "FilterDate": {
+      "labels": {
+        "trigger": "Pilih tarikh"
+      }
+    },
+    "GovBadge": {
+      "labels": {
+        "visitPortal": "Kunjungi portal kami",
+        "sponsor": "Dibawakan kepada anda oleh",
+        "governmentOfMalaysia": "Kerajaan Malaysia"
+      }
+    },
+    "SearchFilterList": {
+      "labels": {
+        "filterBy": "Tapis"
+      }
+    },
+    "SearchInput": {
+      "placeholders": {
+        "searchInput": "Cari dengan kata kunci"
+      },
+      "labels": {
+        "noResults": "Tiada keputusan ditemui"
+      },
+      "titles": {
+        "pressReleases": "Siaran",
+        "agencies": "Kementerian"
+      }
+    },
+    "PressToSearch": {
+      "label": "Tekan <shortcut></shortcut> untuk mencari"
+    },
     "Masthead": {
       "officialGovWebsite": "Portal Rasmi Kerajaan Malaysia",
       "howToIdentify": "Kenal pasti begini",

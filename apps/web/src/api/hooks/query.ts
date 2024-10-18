@@ -1,5 +1,6 @@
 import { mergePathname } from "@/lib/search-params/utils";
 import {
+  Agency,
   PaginatedResponse,
   PaginatedSearchResponse,
   PressRelease,
@@ -12,6 +13,7 @@ import { ProxyClient, useTRPCProxy } from "../trpc/proxy/client";
 type QueryTypeMap = {
   ["pressRelease"]: PaginatedResponse<PressRelease>;
   ["search"]: PaginatedSearchResponse;
+  ["agency"]: Agency[];
 };
 
 export function useTRPCQuery<QueryType extends keyof QueryTypeMap>({
@@ -22,8 +24,8 @@ export function useTRPCQuery<QueryType extends keyof QueryTypeMap>({
   queryFn,
 }: {
   type: QueryType;
-  initialData: QueryTypeMap[QueryType];
-  initialPage: number;
+  initialData?: QueryTypeMap[QueryType];
+  initialPage?: number;
   queryKey?: QueryKey;
   queryFn: (
     trpc: ProxyClient[QueryType],
@@ -37,7 +39,7 @@ export function useTRPCQuery<QueryType extends keyof QueryTypeMap>({
   const { data, isLoading } = useSuspenseQuery<QueryTypeMap[QueryType]>({
     queryKey: [...queryKey, page],
     queryFn: () => queryFn(trpc[type], { page }),
-    initialData: initialPage === page ? initialData : undefined,
+    initialData: initialData && initialPage === page ? initialData : undefined,
   });
 
   function savePage(page: number) {

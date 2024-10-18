@@ -28,8 +28,8 @@ export default function IconRoundMagnifier({ ...props }) {
           y2="-14.6364"
           gradientUnits="userSpaceOnUse"
         >
-          <stop stop-color="#DD420A" />
-          <stop offset="1" stop-color="#FEAF73" />
+          <stop stopColor="#DD420A" />
+          <stop offset="1" stopColor="#FEAF73" />
         </linearGradient>
       </defs>
     </svg>
