@@ -54,6 +54,10 @@
   "pages": {
     "index": {
       "latestReleases": "Paparan Terkini",
+      "searchResults": {
+        "count": "{count, plural, =0 {0 rekod} =1 {1 rekod} other {# rekod}} dijumpai untuk \"<query></query>\"",
+        "notFound": "Maaf, kami tidak dapat menemukan hasil pencarian. Sila cuba lagi dengan menggunakan bilah pencarian di atas."
+      },
       "view": {
         "list": "Senarai",
         "card": "Kad"
@@ -86,7 +90,7 @@
         "searchInput": "Cari dengan kata kunci"
       },
       "labels": {
-        "noResults": "Tiada keputusan ditemui"
+        "noResults": "Tiada keputusan dijumpai"
       },
       "titles": {
         "pressReleases": "Siaran",

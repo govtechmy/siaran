@@ -8,18 +8,22 @@ import CheckCircle from "@/icons/check-circle";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
 
-export type Option = {
-  id: string;
+export interface Option<Id extends string> {
+  id: Id;
   label: string;
+}
+
+type Props<OptionId extends string> = {
+  options: Option<OptionId>[];
+  selected?: Option<OptionId>;
+  onChange: (option: Option<OptionId>) => void;
 };
 
-type Props = {
-  options: Option[];
-  selected?: Option;
-  onChange: (option: Option) => void;
-};
-
-export function Filter({ options, selected, onChange }: Props) {
+export function Filter<OptionId extends string>({
+  options,
+  selected,
+  onChange,
+}: Props<OptionId>) {
   const t = useTranslations();
 
   return (

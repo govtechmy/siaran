@@ -6,23 +6,6 @@ export interface InputProps
 
 const Input = forwardRef<HTMLInputElement, InputProps>(
   ({ className, type = "text", ...props }, ref) => {
-    function onKeyDown(e: KeyboardEvent) {
-      if (ref == null || typeof ref !== "object") {
-        return;
-      }
-
-      if (e.key === "Escape") {
-        e.preventDefault();
-        ref.current?.blur();
-      }
-    }
-
-    useEffect(() => {
-      window.addEventListener("keydown", onKeyDown);
-
-      return () => window.removeEventListener("keydown", onKeyDown);
-    }, [onKeyDown]);
-
     return (
       <input
         ref={ref}

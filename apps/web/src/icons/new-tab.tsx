@@ -11,9 +11,9 @@ export default function NewTab({ ...props }) {
       <path
         d="M1 13L13 1M13 1L13 11M13 1L3 1"
         stroke="currentColor"
-        stroke-width="1.5"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );

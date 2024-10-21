@@ -13,6 +13,7 @@ import FilterPopoverText from "@/components/FilterPopoverText";
 import FilterPopoverTrigger from "@/components/FilterPopoverTrigger";
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
+import { useEffect, useState } from "react";
 
 export type Option = {
   id: string;
@@ -37,12 +38,14 @@ export function Filter({
   onChange,
 }: Props) {
   const t = useTranslations();
+  const [sortedOptions, setSortedOptions] = useState(options.sort(sort));
+  const [isOpen, setIsOpen] = useState<boolean>(false);
 
-  function hasSelected(option: Option) {
+  function hasChecked(option: Option) {
     return !!selected.find((value) => value.id === option.id);
   }
 
-  function hasSelectedAll() {
+  function hasCheckedAll() {
     return selected.length === options.length;
   }
 
@@ -50,19 +53,41 @@ export function Filter({
     onChange(value);
   }
 
+  useEffect(
+    function sortOptionsOnClose() {
+      if (isOpen) {
+        return;
+      }
+
+      // Set a timeout for the animation to finish before sorting
+      const timeout = setTimeout(function sortOptions() {
+        setSortedOptions((sortedOptions) => [
+          ...sortedOptions.filter(hasChecked).sort(sort),
+          ...sortedOptions.filter((current) => !hasChecked(current)).sort(sort),
+        ]);
+      }, 300);
+
+      return () => clearTimeout(timeout);
+    },
+    [isOpen],
+  );
+
   return (
     <FilterPopover
       align="start"
       side="bottom"
+      onOpenChange={setIsOpen}
       trigger={
         <FilterPopoverTrigger
           label={trigger.label}
           value={
-            hasSelectedAll()
+            hasCheckedAll()
               ? t("common.filters.labels.all")
               : selected.length === 0
                 ? t("common.filters.labels.none")
-                : t("common.filters.labels.multiple")
+                : selected.length === 1
+                  ? selected[0].label
+                  : t("common.filters.labels.multiple")
           }
           className={{ value: cn("max-w-[8ch]", "truncate") }}
         />
@@ -89,23 +114,23 @@ export function Filter({
             <CheckboxItem
               id={t("common.filters.labels.all")}
               label={t("common.filters.labels.selectAll")}
-              checked={hasSelectedAll()}
-              onCheckedChange={function toggleAll(checked) {
-                if (hasSelectedAll()) {
+              checked={hasCheckedAll()}
+              onCheckedChange={function checkAll(checked) {
+                if (hasCheckedAll()) {
                   onOptions([]);
                 } else {
                   onOptions(options);
                 }
               }}
             />
-            {options.sort(sort).map((option, index) => (
+            {sortedOptions.map((option, index) => (
               <CheckboxItem
-                key={index}
+                key={option.id}
                 id={option.id}
                 label={option.label}
-                checked={hasSelected(option)}
-                onCheckedChange={function toggleItem(checked) {
-                  if (hasSelected(option)) {
+                checked={hasChecked(option)}
+                onCheckedChange={function toggleCheck(checked) {
+                  if (hasChecked(option)) {
                     onOptions(
                       selected.filter((value) => value.id !== option.id),
                     );

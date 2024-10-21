@@ -14,11 +14,12 @@ type Props = {
   children: ReactNode;
   side?: PopoverContentProps["side"];
   align?: PopoverContentProps["align"];
+  onOpenChange?: (open: boolean) => void;
   className?: string;
 };
 
 const Popover = forwardRef<Ref, Props>(
-  ({ trigger, children, side, align, className }, ref) => {
+  ({ trigger, children, side, align, onOpenChange, className }, ref) => {
     const [isOpen, setIsOpen] = useState(false);
 
     useImperativeHandle(ref, () => {
@@ -33,7 +34,13 @@ const Popover = forwardRef<Ref, Props>(
     }, []);
 
     return (
-      <Base.Popover open={isOpen} onOpenChange={setIsOpen}>
+      <Base.Popover
+        open={isOpen}
+        onOpenChange={function updateState(open) {
+          setIsOpen(open);
+          onOpenChange?.(open);
+        }}
+      >
         <Base.PopoverTrigger asChild>
           <Button
             variant="outline"

@@ -1,36 +1,45 @@
 "use client";
 
-import type { Agency } from "@/app/types/types";
 import * as FilterDate from "@/components/FilterDate";
 import * as FilterMultiple from "@/components/FilterMultiple";
 import * as FilterOneOf from "@/components/FilterOneOf";
 import CrossX from "@/components/icons/cross-x";
 import { cn } from "@/lib/utils";
+import type { Agency, PressReleaseType } from "@repo/api/cms/types";
+import { format } from "date-fns";
 import { useTranslations } from "next-intl";
 import { useEffect, useRef, useState } from "react";
+import { usePressReleasesStore } from "./stores/search-results";
+import { useEffectMounted } from "./hooks/mounted";
+
+interface FilterTypeOption
+  extends FilterOneOf.Option<Exclude<PressReleaseType, "other"> | "all"> {}
 
 type Props = {
   agencies: Agency[];
+  params?: {
+    agencies?: string[];
+    type?: FilterTypeOption;
+    startDate?: string;
+    endDate?: string;
+  };
   className?: string;
 };
 
 type FilterArg =
-  | { type: "agency"; value: FilterMultiple.Option[] }
-  | { type: "type"; value: FilterOneOf.Option }
+  | { type: "agencies"; value: FilterMultiple.Option[] }
+  | { type: "type"; value: FilterTypeOption }
   | { type: "startDate"; value?: Date }
   | { type: "endDate"; value?: Date };
 
-function mapAgency(agency: Agency) {
-  return {
-    id: agency.id,
-    label: agency.acronym,
-  } satisfies FilterMultiple.Option;
-}
-
 export default function SearchFilterList({ agencies, className }: Props) {
   const t = useTranslations();
-
-  const allAgencies = agencies.map(mapAgency);
+  const allAgencies = agencies.map(function mapAgency(agency: Agency) {
+    return {
+      id: agency.id,
+      label: agency.acronym,
+    };
+  }) satisfies FilterMultiple.Option[];
   const [selectedAgencies, setSelectedAgencies] = useState(allAgencies);
 
   const allPostTypes = [
@@ -39,14 +48,14 @@ export default function SearchFilterList({ agencies, className }: Props) {
       label: t("common.filters.types.all"),
     },
     {
-      id: "mediaRelease",
+      id: "kenyataan_media",
       label: t("common.filters.types.mediaRelease"),
     },
     {
-      id: "speech",
+      id: "ucapan",
       label: t("common.filters.types.speech"),
     },
-  ] satisfies FilterOneOf.Option[];
+  ] satisfies FilterTypeOption[];
   const defaultPostType = allPostTypes[0];
   const [selectedPostType, setSelectedPostType] = useState(defaultPostType);
 
@@ -54,6 +63,8 @@ export default function SearchFilterList({ agencies, className }: Props) {
   const [endDate, setEndDate] = useState<Date>();
   const startDateRef = useRef<FilterDate.Ref>(null);
   const endDateRef = useRef<FilterDate.Ref>(null);
+
+  const setLocalParams = usePressReleasesStore((state) => state.setParams);
 
   const isFilterApplied =
     selectedAgencies.length !== allAgencies.length ||
@@ -63,11 +74,14 @@ export default function SearchFilterList({ agencies, className }: Props) {
 
   function onFilter({ type, value }: FilterArg) {
     switch (type) {
-      case "agency":
+      case "agencies":
         setSelectedAgencies(value);
         break;
       case "type":
-        setSelectedPostType(value);
+        setSelectedPostType({
+          id: value.id,
+          label: value.label,
+        });
         break;
       case "startDate":
         setStartDate(value);
@@ -110,6 +124,18 @@ export default function SearchFilterList({ agencies, className }: Props) {
     startDateRef.current?.close();
   }
 
+  useEffectMounted(
+    function updateParams() {
+      setLocalParams({
+        agencies: selectedAgencies.map((current) => current.id),
+        type: selectedPostType.id === "all" ? undefined : selectedPostType.id,
+        startDate: startDate && format(startDate, "yyyy-MM-dd"),
+        endDate: endDate && format(endDate, "yyyy-MM-dd"),
+      });
+    },
+    [selectedAgencies, selectedPostType, startDate, endDate],
+  );
+
   return (
     <div
       className={cn(
@@ -126,7 +152,7 @@ export default function SearchFilterList({ agencies, className }: Props) {
         options={allAgencies}
         selected={selectedAgencies}
         sort={(a, b) => (a.id < b.id ? -1 : a.id > b.id ? 1 : 0)}
-        onChange={(value) => onFilter({ type: "agency", value })}
+        onChange={(value) => onFilter({ type: "agencies", value })}
       />
       <FilterOneOf.Filter
         options={allPostTypes}
