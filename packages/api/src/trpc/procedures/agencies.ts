@@ -8,7 +8,7 @@ export const list = publicProcedure.query(async () => {
   } catch (e) {
     throw new TRPCError({
       code: "INTERNAL_SERVER_ERROR",
-      message: e.message,
+      message: (e as Error).message,
     });
   }
 });
