@@ -1,5 +1,5 @@
-import type { PressReleaseType } from "@/app/types/types";
 import { cn } from "@/lib/utils";
+import type { PressReleaseType } from "@repo/api/cms/types";
 import { useTranslations } from "next-intl";
 
 type Props = {

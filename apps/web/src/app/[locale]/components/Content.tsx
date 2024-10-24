@@ -1,107 +1,145 @@
 "use client";
 
-import { useTRPCQuery } from "@/api/hooks/query";
-import PressReleaseCardView from "@/components/PressReleaseCardView";
-import PressReleaseListView from "@/components/PressReleaseListView";
 import {
-  type Item as SegmentControlItem,
+  type ListPressReleaseData,
+  type ListPressReleaseParams,
+  useTRPCQuery,
+} from "@/api/hooks/query";
+import PressReleaseView from "@/components/PressReleaseView";
+import {
   SegmentControl,
+  type Item as SegmentControlItem,
 } from "@/components/SegmentControl";
-import Pagination from "@/components/ui/pagination";
+import Pagination from "@/components/base/pagination";
+import { Skeleton } from "@/components/base/skeleton";
+import { type Segment, useViewSegment } from "@/components/hooks/view-segment";
+import { usePressReleasesStore } from "@/components/stores/search-results";
 import { cn } from "@/lib/utils";
 import type { PaginatedResponse, PressRelease } from "@repo/api/cms/types";
 import { useTranslations } from "next-intl";
-import { Suspense, useState } from "react";
+import { Suspense, useEffect } from "react";
 
 type Props = {
   initialData: PaginatedResponse<PressRelease>;
-  segment?: "card" | "list";
+  initialParams?: ListPressReleaseParams;
+  initialSegment?: Segment;
 };
 
 export default function Content({
   initialData,
-  segment: initialSegment,
+  initialParams,
+  initialSegment,
 }: Props) {
   const t = useTranslations();
-  const { data, onPage } = useTRPCQuery({
-    type: "pressRelease",
-    initialData,
-    initialPage: initialData.page,
-    queryFn: async (trpc, { page }) => trpc.list.query({ page }),
-  });
+  const { segments, active, onSegment } = useViewSegment(initialSegment);
+  const isLoading = usePressReleasesStore((state) => state.isLoading);
+  const localData = usePressReleasesStore((state) => state.data);
+  const localParams = usePressReleasesStore((state) => state.params);
+  const setLocalData = usePressReleasesStore((state) => state.setData);
+  const setLocalParams = usePressReleasesStore((state) => state.setParams);
 
-  const segments: SegmentControlItem[] = [
-    { id: "card", label: t("pages.index.view.card") },
-    { id: "list", label: t("pages.index.view.list") },
-  ];
-
-  const [segment, setSegment] = useState<SegmentControlItem>(
-    getSegmentById(initialSegment),
-  );
-
-  function getSegmentById(segmentId?: string) {
-    const defaultSegment = segments[1];
-
-    if (!segmentId || (segmentId !== "card" && segmentId !== "list")) {
-      return defaultSegment;
-    }
-
-    switch (segmentId) {
-      case "card":
-        return defaultSegment;
-      case "list":
-        return segments[1];
-    }
-  }
-
-  function onSegment(segment: SegmentControlItem): void {
-    setSegment(segment);
-  }
+  const data = localData || initialData;
+  const params = localParams || initialParams;
+  const isSearching = !!localParams.query;
 
   return (
     <>
-      <section
-        className={cn(
-          "mb-[1rem] mt-[1.5rem]",
-          "lg:mb-[1.75rem] lg:mt-[3rem]",
-          "flex items-center justify-between",
-          "h-[2rem] w-[80rem] gap-[0.75rem]",
-        )}
-      >
-        <h2 className={cn("text-base font-medium text-black-700")}>
-          {t("pages.index.latestReleases")}
-        </h2>
-        <SegmentControl
-          items={segments}
-          active={segment}
-          onSegment={onSegment}
-        />
-      </section>
-      <Suspense>
-        <section>
-          <PressReleaseView segment={segment} data={data.docs} />
-          <Pagination
-            currentPage={data.page || 1}
-            totalPages={data.totalPages || 1}
-            onPage={onPage}
-          />
+      {!isLoading && (
+        <section
+          className={cn(
+            "mb-[1rem] mt-[1.5rem]",
+            "lg:mb-[1.75rem] lg:mt-[3rem]",
+            "flex items-center justify-between",
+            "h-fit w-full gap-[0.75rem]",
+          )}
+        >
+          <div className={cn("flex flex-col gap-y-[1.5rem]", "flex-1")}>
+            <h2 className={cn("text-base font-medium text-black-700")}>
+              {isSearching
+                ? t.rich("pages.index.searchResults.count", {
+                    count: data.totalDocs,
+                    query: () => <span>{localParams.query}</span>,
+                  })
+                : t("pages.index.latestReleases")}
+            </h2>
+            {isSearching && data.totalDocs === 0 && (
+              <p className={cn("text-base font-normal text-gray-dim-500")}>
+                {t("pages.index.searchResults.notFound")}
+              </p>
+            )}
+          </div>
+          {data.totalDocs > 0 && !isLoading && (
+            <SegmentControl
+              items={segments}
+              active={active}
+              onSegment={onSegment}
+            />
+          )}
         </section>
+      )}
+      <Suspense fallback={<Loading />}>
+        <Data
+          initialData={initialData}
+          params={params}
+          segment={active}
+          onDataChange={setLocalData}
+          onPageChange={(page) => setLocalParams({ page })}
+        />
       </Suspense>
     </>
   );
 }
 
-function PressReleaseView({
+function Loading() {
+  return (
+    <div
+      className={cn(
+        "flex flex-col items-center space-y-4",
+        "px-[1rem] py-[2rem]",
+      )}
+    >
+      <Skeleton className={cn("h-6 w-full max-w-[50rem]")} />
+      <Skeleton className={cn("h-6 w-full max-w-[50rem]")} />
+      <Skeleton className={cn("h-6 w-full max-w-[50rem]")} />
+      <Skeleton className={cn("h-6 w-full max-w-[50rem]")} />
+      <Skeleton className={cn("h-6 w-full max-w-[50rem]")} />
+      <Skeleton className={cn("h-6 w-full max-w-[50rem]")} />
+    </div>
+  );
+}
+
+function Data({
+  initialData,
+  params,
   segment,
-  data,
+  onDataChange,
+  onPageChange,
 }: {
+  initialData: PaginatedResponse<PressRelease>;
+  params?: ListPressReleaseParams;
   segment: SegmentControlItem;
-  data: PressRelease[];
+  onDataChange?: (data: ListPressReleaseData) => void;
+  onPageChange?: (page: number) => void;
 }) {
-  switch (segment.id) {
-    case "card":
-      return <PressReleaseCardView data={data} />;
-    case "list":
-      return <PressReleaseListView data={data} />;
-  }
+  const { data } = useTRPCQuery({
+    type: "pressRelease",
+    initialData,
+    params,
+    queryFn: async (trpc, { params }) => trpc.list.query(params),
+  });
+
+  useEffect(() => onDataChange?.(data), [onDataChange, data]);
+
+  return (
+    <section>
+      <PressReleaseView segment={segment} data={data.docs} />
+      {data.totalDocs > 0 && (
+        <Pagination
+          currentPage={data.page}
+          totalPages={data.totalPages}
+          onPage={(page) => onPageChange?.(page)}
+        />
+      )}
+    </section>
+  );
 }
