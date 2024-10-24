@@ -26,6 +26,9 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Copy Dockerfile
+        run: cp ./apps/web/Dockerfile .
+
       - name: Google Auth
         id: auth
         uses: "google-github-actions/auth@v2"
@@ -40,7 +43,7 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
           flags: "--platform=managed --min-instances=0 --allow-unauthenticated"
-          # Update to the appropriate source folder
-          source: ./apps/web
+          # Use the appropriate source folder
+          source: ./
           env_vars: |-
             TRPC_HTTP_BATCH_LINK_URL=${{ env.TRPC_HTTP_BATCH_LINK_URL }}

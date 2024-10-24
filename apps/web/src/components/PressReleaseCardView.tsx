@@ -1,4 +1,4 @@
-import type { PressRelease } from "@/app/types/types";
+import type { PressRelease } from "@repo/api/cms/types";
 import { cn } from "@/lib/utils";
 import PressReleaseCard from "./PressReleaseCard";
 

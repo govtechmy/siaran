@@ -1,4 +1,5 @@
 import App from "@/components/App";
+import { Locale } from "@/i18n/routing";
 import { cn } from "@/lib/ui/utils";
 import type { Metadata } from "next";
 import { Inter, Poppins } from "next/font/google";
@@ -6,7 +7,7 @@ import "./globals.css";
 
 type Props = {
   children: React.ReactNode;
-  params: { locale: string };
+  params: { locale: Locale };
 };
 
 const inter = Inter({

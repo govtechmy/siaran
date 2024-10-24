@@ -32,7 +32,7 @@ const buttonVariants = cva(
       variant: "secondary",
       size: "sm",
     },
-  }
+  },
 );
 
 export interface ButtonProps
@@ -51,7 +51,7 @@ const Button = forwardRef<HTMLButtonElement, ButtonProps>(
         {...props}
       />
     );
-  }
+  },
 );
 Button.displayName = "Button";
 

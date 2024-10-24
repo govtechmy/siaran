@@ -1,5 +1,5 @@
-import type { PressRelease } from "@/app/types/types";
 import { cn } from "@/lib/utils";
+import type { PressRelease } from "@repo/api/cms/types";
 import { format, parseISO } from "date-fns";
 import { useTranslations } from "next-intl";
 import PressReleaseTag from "./PressReleaseTag";
