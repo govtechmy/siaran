@@ -5,6 +5,7 @@ import { cn } from "@/lib/utils";
 type Props = {
   className?: string;
   disabled?: boolean;
+  type?: "button" | "submit" | "reset";
 };
 
 export default function SearchButton(props: Props) {
@@ -23,6 +24,7 @@ export default function SearchButton(props: Props) {
         props.className,
       )}
       data-disabled={props.disabled}
+      type={props.type}
     >
       <CurrentStrokeIcon icon={<Search />} />
     </button>

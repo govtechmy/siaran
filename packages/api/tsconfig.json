@@ -5,8 +5,6 @@
       "#cms/*": ["src/cms/*.ts"],
       "#trpc": ["src/trpc/index.ts"],
       "#trpc/*": ["src/trpc/*"],
-      "#utils/*": ["src/utils/*.ts"],
-      "#types/*": ["src/types/*.ts"],
       "#http": ["src/http.ts"]
     },
     "strict": true,

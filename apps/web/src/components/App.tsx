@@ -1,9 +1,7 @@
-import { trpc } from "@/api/trpc/proxy/server";
 import Footer from "@/components/Footer";
 import { Header } from "@/components/Header";
 import Masthead from "@/components/Masthead";
 import QueryProvider from "@/components/QueryProvider";
-import SearchBar from "@/components/SearchBar";
 import { Locale } from "@/i18n/routing";
 import { extract } from "@/lib/i18n/utils";
 import { NextIntlClientProvider } from "next-intl";
@@ -19,7 +17,6 @@ type Props = {
 export default async function App(props: Props) {
   const locale = props.locale as Locale;
   const messages = await getMessages();
-  const agencies = await trpc.agency.list.query();
 
   return (
     <ThemeProvider defaultTheme="light">
@@ -28,7 +25,6 @@ export default async function App(props: Props) {
           <div className="flex h-[100vh] flex-col">
             <Masthead />
             <Header locale={locale} />
-            <SearchBar locale={locale} agencies={agencies} />
             <div className="flex-1">{props.children}</div>
             <Footer
               ministry={extract(messages, "common.names.kd")}

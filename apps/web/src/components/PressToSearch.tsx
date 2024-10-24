@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { useTranslations } from "next-intl";
-import { useEffect, useMemo } from "react";
+import { useCallback, useEffect, useMemo } from "react";
 
 type Props = {
   shortcut: string;
@@ -12,12 +12,15 @@ export default function PressToSearch(props: Props) {
   const t = useTranslations();
   const { shortcut, onShortcutPressed } = props;
 
-  function onKeyDown(e: KeyboardEvent) {
-    if (e.key === shortcut && onShortcutPressed) {
-      e.preventDefault();
-      onShortcutPressed();
-    }
-  }
+  const onKeyDown = useCallback(
+    function onKeyDown(e: KeyboardEvent) {
+      if (e.key === shortcut && onShortcutPressed) {
+        e.preventDefault();
+        onShortcutPressed();
+      }
+    },
+    [onShortcutPressed],
+  );
 
   useEffect(() => {
     window.addEventListener("keydown", onKeyDown);

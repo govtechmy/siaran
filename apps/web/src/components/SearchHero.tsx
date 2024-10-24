@@ -1,27 +1,33 @@
-import type { Agency } from "@/app/types/types";
+import GovBadge from "@/components/GovBadge";
+import SearchFilterList from "@/components/SearchFilterList";
+import SearchSuggestion from "@/components/SearchSuggestion";
 import { Locale } from "@/i18n/routing";
 import { cn } from "@/lib/utils";
+import type { Agency } from "@repo/api/cms/types";
 import { getTranslations } from "next-intl/server";
-import GovBadge from "@/components/GovBadge";
-import SearchFilterList from "./SearchFilterList";
-import SearchInput from "./SearchInput";
 
-interface SearchBarProps {
+type Props = {
   locale: Locale;
   agencies: Agency[];
-}
+  className?: string;
+};
 
-export default async function SearchBar({ locale, agencies }: SearchBarProps) {
+export default async function SearchHero({
+  locale,
+  agencies,
+  className,
+}: Props) {
   const t = await getTranslations({ locale });
 
   return (
-    <div
+    <section
       className={cn(
         "relative",
         "h-fit w-full",
         "bg-[radial-gradient(117.1%_158.96%_at_50%_-58.96%,#FFD0A9_0%,#FFF6ED_100%)]",
         "px-[1.5rem] py-[3rem]",
         "flex flex-col items-center",
+        className,
       )}
     >
       <h1
@@ -41,8 +47,8 @@ export default async function SearchBar({ locale, agencies }: SearchBarProps) {
           "ml-auto",
         )}
       />
-      <SearchInput className={cn("mt-[1.5rem]")} />
+      <SearchSuggestion className={cn("mt-[1.5rem]")} />
       <SearchFilterList className={cn("mt-[.75rem]")} agencies={agencies} />
-    </div>
+    </section>
   );
 }

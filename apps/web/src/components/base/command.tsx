@@ -124,6 +124,7 @@ const CommandItem = React.forwardRef<
       "text-sm",
       "cursor-default select-none",
       "data-[disabled=true]:pointer-events-none data-[disabled=true]:opacity-50",
+      "data-[selected=true]:bg-gray-washed-100",
       className,
     )}
     {...props}
