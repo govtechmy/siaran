@@ -1,5 +1,5 @@
 import type { ListPressReleaseParams } from "@/api/hooks/query";
-import { trpc } from "@/api/trpc/proxy/server";
+import { getTrpcServerClient } from "@/api/trpc/proxy/server";
 import Container from "@/components/Container";
 import SearchHero from "@/components/SearchHero";
 import { Locale } from "@/i18n/routing";
@@ -31,6 +31,7 @@ export default async function PageIndex({
   searchParams,
 }: Props) {
   const params = defaultSearchParams(searchParams);
+  const trpc = getTrpcServerClient();
   const data = await trpc.pressRelease.list.query(params);
   const agencies = await trpc.agency.list.query();
 
