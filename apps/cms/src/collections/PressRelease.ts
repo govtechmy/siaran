@@ -2,6 +2,16 @@ import { CollectionConfig } from "payload/types";
 
 const PressRelease: CollectionConfig = {
   slug: "press-releases",
+  admin: {
+    listSearchableFields: [
+      "title",
+      "content.plaintext",
+      "content.markdown",
+      "type",
+      "attachments.file_name",
+      "relatedAgency",
+    ],
+  },
   fields: [
     {
       name: "language",

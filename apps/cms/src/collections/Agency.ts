@@ -2,17 +2,27 @@ import { CollectionConfig } from "payload/types";
 
 const Agency: CollectionConfig = {
   slug: "agencies",
+  admin: {
+    listSearchableFields: [
+      "id",
+      "name",
+      "acronym",
+      "email",
+      "website",
+      "socialMedia",
+    ],
+  },
   fields: [
-    {
-      name: "name",
-      type: "text",
-      required: true,
-    },
     {
       name: "id",
       type: "text",
       required: true,
       unique: true, // Ensure the custom ID is unique
+    },
+    {
+      name: "name",
+      type: "text",
+      required: true,
     },
     {
       name: "acronym",
