@@ -11,7 +11,7 @@ import { Popover as FilterPopover } from "@/components/FilterPopover";
 import FilterPopoverItem from "@/components/FilterPopoverItem";
 import FilterPopoverText from "@/components/FilterPopoverText";
 import FilterPopoverTrigger from "@/components/FilterPopoverTrigger";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
 

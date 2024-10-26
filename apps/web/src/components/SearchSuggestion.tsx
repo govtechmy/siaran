@@ -23,7 +23,7 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/base/command";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { useAtom } from "jotai";
 import { LoaderCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -159,6 +159,7 @@ function SearchForm({
     >
       <Input
         name="search"
+        autoComplete="off"
         type="text"
         ref={inputRef}
         className={cn(

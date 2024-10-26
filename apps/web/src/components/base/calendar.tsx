@@ -15,7 +15,7 @@ import {
   type ClassNames,
 } from "react-day-picker";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 
 import { buttonVariants } from "@/components/base/button";
 

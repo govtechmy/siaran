@@ -1,5 +1,5 @@
 import type { PressRelease } from "@repo/api/cms/types";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import PressReleaseCard from "./PressReleaseCard";
 
 type Props = {

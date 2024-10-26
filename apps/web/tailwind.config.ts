@@ -25,8 +25,15 @@ const config: Config = {
       screens: {
         tall: { raw: "(min-height: 720px)" },
       },
+      keyframes: {
+        ["pulse-dot"]: {
+          "0%, 100%": { opacity: "1" },
+          "60%": { opacity: "1" },
+          "80%": { opacity: "0" },
+        },
+      },
       animation: {
-        // Define additional animations here
+        ["pulse-dot"]: "pulse-dot 2.4s ease-in-out infinite",
       },
       backgroundImage: {
         // Define gradient backgrounds here
@@ -137,9 +144,6 @@ const config: Config = {
         ["lg"]: ["18px", "26px"],
         ["xl"]: ["20px", "30px"],
         ["2xl"]: ["24px", "32px"],
-      },
-      keyframes: {
-        // Define additional keyframes here
       },
       // spacing: {
       //   4.5: "18px",

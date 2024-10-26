@@ -3,7 +3,7 @@
 import * as Base from "@/components/base/popover";
 import React from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 
 const PopoverClose = React.forwardRef<
   React.ElementRef<typeof Base.PopoverClose>,

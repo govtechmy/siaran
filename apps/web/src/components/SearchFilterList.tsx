@@ -5,7 +5,7 @@ import * as FilterMultiple from "@/components/FilterMultiple";
 import * as FilterOneOf from "@/components/FilterOneOf";
 import { useEffectMounted } from "@/components/hooks/mounted";
 import CrossX from "@/components/icons/cross-x";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import type { Agency, PressReleaseType } from "@repo/api/cms/types";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";

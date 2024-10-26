@@ -1,6 +1,6 @@
 import { Button } from "@/components/base/button";
 import * as Base from "@/components/base/popover";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { PopoverContentProps } from "@radix-ui/react-popover";
 import { forwardRef, ReactNode, useImperativeHandle, useState } from "react";
 

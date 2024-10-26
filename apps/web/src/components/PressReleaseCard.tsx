@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import type { PressRelease } from "@repo/api/cms/types";
 import { format, parseISO } from "date-fns";
 import { useTranslations } from "next-intl";
@@ -20,7 +20,7 @@ export default function PressReleaseCard({ data }: Props) {
         "p-[1.5rem]",
       )}
     >
-      <PressReleaseTag type={data.type} />
+      <PressReleaseTag type={data.type} className={cn("mb-[0.25rem]")} />
       <div
         className={cn(
           "text-base font-semibold text-black-900",

@@ -19,7 +19,7 @@ import {
   isLoadingAtom,
   paramsAtom,
 } from "@/components/stores/press-releases";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import type { PaginatedResponse, PressRelease } from "@repo/api/cms/types";
 import { useAtom } from "jotai";
 import { useTranslations } from "next-intl";
@@ -132,7 +132,7 @@ function Data({
   useEffect(() => onDataChange?.(data), [onDataChange, data]);
 
   return (
-    <section>
+    <section className={cn("w-full", "flex flex-col")}>
       <PressReleaseView segment={segment} data={data.docs} />
       {data.totalDocs > 0 && (
         <Pagination

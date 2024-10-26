@@ -3,7 +3,7 @@
 import * as Base from "@/components/base/calendar";
 import React from "react";
 
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 
 type Props = React.ComponentPropsWithoutRef<typeof Base.Calendar>;
 

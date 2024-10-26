@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { useTranslations } from "next-intl";
 import { useCallback, useEffect, useMemo } from "react";
 

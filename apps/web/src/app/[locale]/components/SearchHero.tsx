@@ -5,7 +5,7 @@ import { Filters } from "@/components/SearchFilterList";
 import SearchSuggestion from "@/components/SearchSuggestion";
 import { useEffectMounted } from "@/components/hooks/mounted";
 import { paramsAtom } from "@/components/stores/press-releases";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import type { Agency } from "@repo/api/cms/types";
 import { useAtom } from "jotai";
 import { useTranslations } from "next-intl";

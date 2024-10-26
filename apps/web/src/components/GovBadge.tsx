@@ -2,7 +2,7 @@
 
 import { Link } from "@/components/Link";
 import NewTab from "@/icons/new-tab";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { useHover } from "@uidotdev/usehooks";
 import { useTranslations } from "next-intl";
 

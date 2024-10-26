@@ -25,10 +25,12 @@ export type PressRelease = {
   id: string;
   language: string;
   title: string;
+  // TODO: make optional
   date_published: string;
   type: PressReleaseType;
   content: Content;
   attachments?: Attachment[];
+  priority?: "high" | "normal" | "low";
   relatedAgency: Agency;
 };
 
