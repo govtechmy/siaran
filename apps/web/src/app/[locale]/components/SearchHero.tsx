@@ -41,7 +41,7 @@ export default function SearchHero({ agencies, className }: Props) {
     <section
       className={cn(
         "relative",
-        "h-fit w-full",
+        "h-[17.5rem] w-full lg:h-[15rem]",
         "bg-[radial-gradient(117.1%_158.96%_at_50%_-58.96%,#FFD0A9_0%,#FFF6ED_100%)]",
         "px-[1.5rem] py-[3rem]",
         "flex flex-col items-center",
