@@ -13,34 +13,35 @@ import {
 import Pagination from "@/components/base/pagination";
 import { Skeleton } from "@/components/base/skeleton";
 import { type Segment, useViewSegment } from "@/components/hooks/view-segment";
-import { usePressReleasesStore } from "@/components/stores/search-results";
+import {
+  dataAtom,
+  isInitialDataAtom,
+  isLoadingAtom,
+  paramsAtom,
+} from "@/components/stores/press-releases";
 import { cn } from "@/lib/utils";
 import type { PaginatedResponse, PressRelease } from "@repo/api/cms/types";
+import { useAtom } from "jotai";
 import { useTranslations } from "next-intl";
 import { Suspense, useEffect } from "react";
 
 type Props = {
-  initialData: PaginatedResponse<PressRelease>;
-  initialParams?: ListPressReleaseParams;
   initialSegment?: Segment;
 };
 
-export default function Content({
-  initialData,
-  initialParams,
-  initialSegment,
-}: Props) {
+export default function Content({ initialSegment }: Props) {
   const t = useTranslations();
   const { segments, active, onSegment } = useViewSegment(initialSegment);
-  const isLoading = usePressReleasesStore((state) => state.isLoading);
-  const localData = usePressReleasesStore((state) => state.data);
-  const localParams = usePressReleasesStore((state) => state.params);
-  const setLocalData = usePressReleasesStore((state) => state.setData);
-  const setLocalParams = usePressReleasesStore((state) => state.setParams);
 
-  const data = localData || initialData;
-  const params = localParams || initialParams;
-  const isSearching = !!localParams.query;
+  const [data, setData] = useAtom(dataAtom);
+  const isInitialData = useAtom(isInitialDataAtom);
+  const [params, setParams] = useAtom(paramsAtom);
+  const [isLoading] = useAtom(isLoadingAtom);
+  const isSearching = !!params.query;
+
+  if (!data) {
+    return <></>;
+  }
 
   return (
     <>
@@ -58,7 +59,7 @@ export default function Content({
               {isSearching
                 ? t.rich("pages.index.searchResults.count", {
                     count: data.totalDocs,
-                    query: () => <span>{localParams.query}</span>,
+                    query: () => <span>{params.query}</span>,
                   })
                 : t("pages.index.latestReleases")}
             </h2>
@@ -79,11 +80,11 @@ export default function Content({
       )}
       <Suspense fallback={<Loading />}>
         <Data
-          initialData={initialData}
+          initialData={isInitialData && data}
           params={params}
           segment={active}
-          onDataChange={setLocalData}
-          onPageChange={(page) => setLocalParams({ page })}
+          onDataChange={setData}
+          onPageChange={(page) => setParams({ page })}
         />
       </Suspense>
     </>

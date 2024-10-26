@@ -5,6 +5,7 @@ import {
   PaginatedSearchResponse,
   PressRelease,
   PressReleaseType,
+  Sort,
 } from "@repo/api/cms/types";
 import { QueryKey, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
@@ -16,6 +17,7 @@ export type ListPressReleaseParams = {
   agencies?: string[];
   query?: string;
   type?: PressReleaseType;
+  sort?: Sort["pressReleases"];
   startDate?: string;
   endDate?: string;
 };

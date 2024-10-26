@@ -4,16 +4,25 @@ import { useCallback, useEffect, useMemo } from "react";
 
 type Props = {
   shortcut: string;
+  disabled?: boolean;
   className?: string;
   onShortcutPressed?: () => void;
 };
 
-export default function PressToSearch(props: Props) {
+export default function PressToSearch({
+  shortcut,
+  disabled,
+  className,
+  onShortcutPressed,
+}: Props) {
   const t = useTranslations();
-  const { shortcut, onShortcutPressed } = props;
 
   const onKeyDown = useCallback(
     function onKeyDown(e: KeyboardEvent) {
+      if (disabled) {
+        return;
+      }
+
       if (e.key === shortcut && onShortcutPressed) {
         e.preventDefault();
         onShortcutPressed();
@@ -35,7 +44,7 @@ export default function PressToSearch(props: Props) {
         "font-normal",
         "pointer-events-none",
         "select-none",
-        props.className,
+        className,
       )}
     >
       {t.rich("components.PressToSearch.label", {
@@ -49,7 +58,7 @@ export default function PressToSearch(props: Props) {
               "shadow-[0_1px_3px_0_rgba(0,0,0,0.07)]",
             )}
           >
-            {props.shortcut}
+            {shortcut}
           </span>
         ),
       })}

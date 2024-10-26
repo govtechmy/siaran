@@ -50,9 +50,11 @@ export default function PressReleaseCard({ data }: Props) {
           {data.relatedAgency.acronym}
         </div>
         <div className="text-gray-outline-300">•</div>
-        <div className={"text-gray-dim-500"}>
-          {format(parseISO(data.date_published), "d MMM yyyy, H:mm a")}
-        </div>
+        {data.date_published && (
+          <div className={"text-gray-dim-500"}>
+            {format(parseISO(data.date_published), "d MMM yyyy, H:mm a")}
+          </div>
+        )}
       </div>
     </div>
   );

@@ -9,9 +9,10 @@ export const list = publicProcedure
       page: z.number().min(1).optional().default(1),
       limit: z.number().min(1).optional().default(12),
       type: z.enum(["kenyataan_media", "ucapan", "other"]).optional(),
+      sort: z.enum(["asc", "desc"]).optional(),
       agencies: z.array(z.string()).optional(),
-      startDate: z.string().date().optional(), // YYYY-MM-DD (e.g. 2024-09-11)
-      endDate: z.string().date().optional(), // YYYY-MM-DD (e.g. 2024-09-11)
+      startDate: z.string().date().optional(),
+      endDate: z.string().date().optional(),
       query: z.string().optional(),
     }),
   )

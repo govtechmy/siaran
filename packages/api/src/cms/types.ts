@@ -34,6 +34,10 @@ export type PressRelease = {
 
 export type PressReleaseType = "kenyataan_media" | "ucapan" | "other";
 
+export type Sort = {
+  pressReleases: "asc" | "desc";
+};
+
 export type PaginationParams = {
   page: number;
   limit: number;
