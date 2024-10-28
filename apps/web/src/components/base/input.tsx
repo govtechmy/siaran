@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { forwardRef, useEffect } from "react";
 
 export interface InputProps

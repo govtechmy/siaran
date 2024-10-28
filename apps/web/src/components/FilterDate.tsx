@@ -4,7 +4,7 @@ import {
   type Ref as FilterPopoverRef,
 } from "@/components/FilterPopover";
 import FilterPopoverTrigger from "@/components/FilterPopoverTrigger";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { format } from "date-fns";
 import { RefObject } from "react";
 import { useDateLocale } from "./hooks/date";

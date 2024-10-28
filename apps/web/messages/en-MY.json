@@ -26,8 +26,11 @@
     "pressRelease": {
       "types": {
         "mediaRelease": "Media Release",
-        "speech": "Speech",
+        "speech": "Speech Collection",
         "other": "Other"
+      },
+      "labels": {
+        "urgent": "Urgent!"
       }
     },
     "filters": {

@@ -1,6 +1,6 @@
 import CurrentStrokeIcon from "@/components/utils/CurrentStrokeIcon";
 import Search from "@/icons/search";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 
 type Props = {
   className?: string;

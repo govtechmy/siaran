@@ -23,17 +23,24 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/base/command";
-import { usePressReleasesStore } from "@/components/stores/search-results";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
+import { useAtom } from "jotai";
 import { LoaderCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import PressToSearch from "./PressToSearch";
+import { isLoadingAtom } from "./stores/press-releases";
 
 type Props = {
+  onSubmitQuery?: (query: string) => void;
+  onClearQuery?: () => void;
   className?: string;
 };
 
-export default function SearchSuggestion({ className }: Props) {
+export default function SearchSuggestion({
+  className,
+  onSubmitQuery,
+  onClearQuery,
+}: Props) {
   const [currentQuery, setCurrentQuery] = useState("");
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const containerRef = useClickAway<HTMLDivElement>(() =>
@@ -42,9 +49,7 @@ export default function SearchSuggestion({ className }: Props) {
   const searchInputRef: MutableRefObject<HTMLDivElement | null> = useRef(null);
   const searchResultListRef = useRef<HTMLDivElement>(null);
 
-  const params = usePressReleasesStore((state) => state.params);
-  const setParams = usePressReleasesStore((state) => state.setParams);
-  const isLoading = usePressReleasesStore((state) => state.isLoading);
+  const [isLoading] = useAtom(isLoadingAtom);
 
   function closeSearchResults() {
     searchResultListRef.current?.blur();
@@ -65,18 +70,15 @@ export default function SearchSuggestion({ className }: Props) {
         isLoading={isLoading}
         onInputFocusChange={setIsDropdownOpen}
         onQueryClear={function clearParams() {
-          const query = "";
-          setParams({ query });
-          setCurrentQuery(query);
+          // setParams({ query });
+          setCurrentQuery("");
+          onClearQuery?.();
         }}
         onQueryChange={setCurrentQuery}
         onSubmit={function updateParamsAndCloseSearchResults() {
-          if (currentQuery === params.query) {
-            return;
-          }
-
-          setParams({ query: currentQuery });
+          // setParams({ query: currentQuery });
           closeSearchResults();
+          onSubmitQuery?.(currentQuery);
         }}
         onKeyArrowDown={() => searchResultListRef.current?.focus()}
         searchInputRef={function setSearchInputRef(ref) {
@@ -157,6 +159,7 @@ function SearchForm({
     >
       <Input
         name="search"
+        autoComplete="off"
         type="text"
         ref={inputRef}
         className={cn(
@@ -213,11 +216,10 @@ function SearchForm({
                 "w-0 overflow-hidden": isInputFocused || query,
               },
             )}
-            shortcut="/"
+            shortcut={"/"}
+            disabled={isInputFocused}
             onShortcutPressed={function focusInput() {
-              if (!isInputFocused) {
-                inputRef.current?.focus();
-              }
+              inputRef.current?.focus();
             }}
           />
         }

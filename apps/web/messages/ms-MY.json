@@ -28,6 +28,9 @@
         "mediaRelease": "Kenyataan Media",
         "speech": "Ucapan",
         "other": "Other"
+      },
+      "labels": {
+        "urgent": "Penting!"
       }
     },
     "filters": {
@@ -59,8 +62,8 @@
         "notFound": "Maaf, kami tidak dapat menemukan hasil pencarian. Sila cuba lagi dengan menggunakan bilah pencarian di atas."
       },
       "view": {
-        "list": "Senarai",
-        "card": "Kad"
+        "list": "Paparan Senarai",
+        "card": "Paparan Kad"
       },
       "titles": {
         "hero": "Siaran dan Pengumuman Kerajaan Satu Henti"

@@ -3,6 +3,7 @@ import type {
   PaginatedResponse,
   PaginationParams,
   PressRelease,
+  Sort,
 } from "#cms/types";
 import { cmsFetch, CMSFetchError } from "#http";
 import { type SinglePossibleClause, whereClause } from "#cms/utils";
@@ -12,12 +13,14 @@ export async function list({
   limit,
   agencies,
   type,
+  sort,
   startDate,
   endDate,
   query,
 }: PaginationParams & {
   agencies?: string[];
   type?: string;
+  sort?: Sort["pressReleases"];
   startDate?: string;
   endDate?: string;
   query?: string;
@@ -89,7 +92,7 @@ export async function list({
         query: {
           page,
           limit,
-          sort: "-date_published",
+          sort: sort && sort === "asc" ? "date_published" : "-date_published",
           ...whereClause({ and }),
         },
       },

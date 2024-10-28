@@ -1,24 +1,26 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import type { PressReleaseType } from "@repo/api/cms/types";
 import { useTranslations } from "next-intl";
 
 type Props = {
   type: PressReleaseType;
+  className?: string;
 };
 
-export default function PressReleaseTag({ type }: Props) {
+export default function PressReleaseTag({ type, className }: Props) {
   const t = useTranslations();
 
   return (
-    <span
+    <div
       className={cn(
-        "mb-[0.25rem]",
+        "w-fit",
         "text-sm font-semibold",
         type === "kenyataan_media"
           ? "text-success-700"
           : type === "ucapan"
             ? "text-warning-700"
             : "text-black-700",
+        className,
       )}
     >
       {type === "kenyataan_media"
@@ -26,6 +28,6 @@ export default function PressReleaseTag({ type }: Props) {
         : type === "ucapan"
           ? t("common.pressRelease.types.speech")
           : t("common.pressRelease.types.other")}
-    </span>
+    </div>
   );
 }
