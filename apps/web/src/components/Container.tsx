@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 
 type Props = {
   children: React.ReactNode;
@@ -7,7 +7,7 @@ type Props = {
 
 export default function Container(props: Props) {
   return (
-    <section className={cn("container", props.className)}>
+    <section className={cn("container", "p-[1.125rem]", props.className)}>
       {props.children}
     </section>
   );

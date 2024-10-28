@@ -6,7 +6,7 @@
       "openGraph": {
         "images": {
           "1": {
-            "url": "https://i.imgur.com/EfRVASR.png",
+            "url": "https://i.imgur.com/eMZumEA.png",
             "alt": "Pusat Sumber Siaran Akhbar dan Pengumuman Kerajaan"
           }
         }
@@ -17,6 +17,9 @@
     "name": "SiaranGovMY"
   },
   "common": {
+    "errors": {
+      "notFound": "Tidak ditemui"
+    },
     "names": {
       "kd": "Kementerian Digital"
     },
@@ -25,19 +28,89 @@
         "mediaRelease": "Kenyataan Media",
         "speech": "Ucapan",
         "other": "Other"
+      },
+      "labels": {
+        "urgent": "Penting!"
+      }
+    },
+    "readingTime": {
+      "labels": {
+        "minutes": "Bacaan {minutes, plural, =0 {0 minit} =1 {1 minit} other {# minit}}"
+      }
+    },
+    "labels": {
+      "read": "Baca"
+    },
+    "filters": {
+      "types": {
+        "all": "Semua",
+        "mediaRelease": "Kenyataan Media",
+        "speech": "Ucapan"
+      },
+      "labels": {
+        "all": "Semua",
+        "multiple": "Berbilang",
+        "agency": "Agensi",
+        "type": "Jenis",
+        "selectAll": "Pilih semua",
+        "clear": "Hapus",
+        "none": "Tiada",
+        "reset": "Set semula",
+        "search": "Cari",
+        "from": "Dari",
+        "to": "Hingga"
       }
     }
   },
   "pages": {
     "index": {
       "latestReleases": "Paparan Terkini",
+      "searchResults": {
+        "count": "{count, plural, =0 {0 rekod} =1 {1 rekod} other {# rekod}} dijumpai untuk \"<query></query>\"",
+        "notFound": "Maaf, kami tidak dapat menemukan hasil pencarian. Sila cuba lagi dengan menggunakan bilah pencarian di atas."
+      },
       "view": {
-        "list": "Senarai",
-        "card": "Kad"
+        "list": "Paparan Senarai",
+        "card": "Paparan Kad"
+      },
+      "titles": {
+        "hero": "Siaran dan Pengumuman Kerajaan Satu Henti"
       }
     }
   },
   "components": {
+    "FilterDate": {
+      "labels": {
+        "trigger": "Pilih tarikh"
+      }
+    },
+    "GovBadge": {
+      "labels": {
+        "visitPortal": "Kunjungi portal kami",
+        "sponsor": "Dibawakan oleh",
+        "governmentOfMalaysia": "Kerajaan Malaysia"
+      }
+    },
+    "SearchFilterList": {
+      "labels": {
+        "filterBy": "Tapis"
+      }
+    },
+    "SearchInput": {
+      "placeholders": {
+        "searchInput": "Cari dengan kata kunci"
+      },
+      "labels": {
+        "noResults": "Tiada keputusan dijumpai"
+      },
+      "titles": {
+        "pressReleases": "Siaran",
+        "agencies": "Kementerian"
+      }
+    },
+    "PressToSearch": {
+      "label": "Tekan <shortcut></shortcut> untuk mencari"
+    },
     "Masthead": {
       "officialGovWebsite": "Portal Rasmi Kerajaan Malaysia",
       "howToIdentify": "Kenal pasti begini",

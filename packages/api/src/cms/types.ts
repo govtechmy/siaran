@@ -13,7 +13,7 @@ export type Content = {
   markdown: string;
 };
 
-export type RelatedAgency = {
+export type Agency = {
   id: string;
   name: string;
   acronym: string;
@@ -25,14 +25,20 @@ export type PressRelease = {
   id: string;
   language: string;
   title: string;
+  // TODO: make optional
   date_published: string;
   type: PressReleaseType;
   content: Content;
   attachments?: Attachment[];
-  relatedAgency: RelatedAgency;
+  priority?: "high" | "normal" | "low";
+  relatedAgency: Agency;
 };
 
 export type PressReleaseType = "kenyataan_media" | "ucapan" | "other";
+
+export type Sort = {
+  pressReleases: "asc" | "desc";
+};
 
 export type PaginationParams = {
   page: number;
@@ -57,7 +63,7 @@ export type PaginatedResponse<T> = PaginatedResponseFields & {
 
 export type PaginatedSearchResponse = PaginatedResponseFields & {
   pressReleases: PressRelease[];
-  agencies: RelatedAgency[];
+  agencies: Agency[];
 };
 
 export type Locale = "en-MY" | "ms-MY";

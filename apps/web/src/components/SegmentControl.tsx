@@ -1,9 +1,10 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 
 type Props = {
   items: Item[];
   active: Item;
   onSegment?: (id: Item) => void;
+  className?: string;
 };
 
 export type Item = {
@@ -12,24 +13,26 @@ export type Item = {
   [key: string]: unknown;
 };
 
-export function SegmentControl(props: Props) {
+export function SegmentControl({ active, items, onSegment, className }: Props) {
   function isActive(item: Item) {
-    return item.id === props.active.id;
+    return item.id === active.id;
   }
 
   return (
-    <div className={cn("flex flex-row items-center")}>
-      {props.items.map((item, i) => (
+    <div className={cn("flex flex-row items-center gap-x-[.25rem]", className)}>
+      {items.map((item, i) => (
         <button
           key={i}
           className={cn(
+            "shrink-0",
             "rounded-full border-b-[2px]",
             isActive(item)
               ? cn("border-gray-outline-200", "bg-gray-outline-200")
               : cn("border-transparent", "bg-transparent"),
             "px-[0.625rem] py-[0.375rem]",
+            !isActive(item) && "hover:bg-washed-100",
           )}
-          onClick={() => props.onSegment?.(item)}
+          onClick={() => onSegment?.(item)}
         >
           <span
             className={cn(

@@ -25,8 +25,15 @@ const config: Config = {
       screens: {
         tall: { raw: "(min-height: 720px)" },
       },
+      keyframes: {
+        ["pulse-dot"]: {
+          "0%, 100%": { opacity: "1" },
+          "60%": { opacity: "1" },
+          "80%": { opacity: "0" },
+        },
+      },
       animation: {
-        // Define additional animations here
+        ["pulse-dot"]: "pulse-dot 2.4s ease-in-out infinite",
       },
       backgroundImage: {
         // Define gradient backgrounds here
@@ -104,6 +111,7 @@ const config: Config = {
           ["700"]: "rgb(var(--black-700) / <alpha-value>)",
           ["800"]: "rgb(var(--black-800) / <alpha-value>)",
           ["900"]: "rgb(var(--black-900) / <alpha-value>)",
+          ["text_only-disabled"]: "rgb(var(--black-text_only-disabled) / 0.4)",
         },
         gray: {
           ["text_only-disabled"]: "rgb(var(--gray-text_only-disabled) / 0.4)",
@@ -112,6 +120,7 @@ const config: Config = {
             "rgb(var(--gray-focus_washed-100) / <alpha-value>)",
           ["outline-200"]: "rgb(var(--gray-outline-200) / <alpha-value>)",
           ["outline-300"]: "rgb(var(--gray-outline-300) / <alpha-value>)",
+          ["outline-400"]: "rgb(var(--gray-outline-400) / <alpha-value>)",
           ["dim-500"]: "rgb(var(--gray-dim-500) / <alpha-value>)",
         },
         white: {
@@ -134,13 +143,11 @@ const config: Config = {
         ["base"]: ["16px", "24px"],
         ["lg"]: ["18px", "26px"],
         ["xl"]: ["20px", "30px"],
+        ["2xl"]: ["24px", "32px"],
       },
-      keyframes: {
-        // Define additional keyframes here
-      },
-      spacing: {
-        4.5: "18px",
-      },
+      // spacing: {
+      //   4.5: "18px",
+      // },
     },
   },
   darkMode: "selector",

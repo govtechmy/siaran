@@ -1,62 +1,103 @@
-import { mergePathname } from "@/lib/search-params/utils";
+import { useEffectMounted } from "@/components/hooks/mounted";
 import {
+  Agency,
   PaginatedResponse,
   PaginatedSearchResponse,
   PressRelease,
+  PressReleaseType,
+  Sort,
 } from "@repo/api/cms/types";
 import { QueryKey, useSuspenseQuery } from "@tanstack/react-query";
-import { usePathname, useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { ProxyClient, useTRPCProxy } from "../trpc/proxy/client";
 
-type QueryTypeMap = {
-  ["pressRelease"]: PaginatedResponse<PressRelease>;
-  ["search"]: PaginatedSearchResponse;
+export type ListPressReleaseParams = {
+  page?: number;
+  limit?: number;
+  agencies?: string[];
+  query?: string;
+  type?: PressReleaseType;
+  sort?: Sort["pressReleases"];
+  startDate?: string;
+  endDate?: string;
 };
 
-export function useTRPCQuery<QueryType extends keyof QueryTypeMap>({
+export type ListPressReleaseData = PaginatedResponse<PressRelease>;
+
+export type QueryMap = {
+  ["pressRelease"]: {
+    params: ListPressReleaseParams;
+    data: ListPressReleaseData;
+  };
+  ["search"]: {
+    params: {
+      page: number;
+    };
+    data: PaginatedSearchResponse;
+  };
+  ["agency"]: {
+    params: {
+      page: number;
+    };
+    data: Agency[];
+  };
+};
+
+export function useTRPCQuery<T extends keyof QueryMap>({
   type,
   initialData,
-  initialPage,
+  params,
   queryKey = [],
   queryFn,
 }: {
-  type: QueryType;
-  initialData: QueryTypeMap[QueryType];
-  initialPage: number;
+  type: T;
+  initialData?: QueryMap[T]["data"];
+  params?: QueryMap[T]["params"];
   queryKey?: QueryKey;
   queryFn: (
-    trpc: ProxyClient[QueryType],
-    options: { page: number },
-  ) => Promise<QueryTypeMap[QueryType]>;
+    trpc: ProxyClient[T],
+    options: { params: QueryMap[T]["params"] },
+  ) => Promise<QueryMap[T]["data"]>;
 }) {
-  const pathname = usePathname();
-  const searchParams = useSearchParams();
+  const [currentParams, setCurrentParams] = useState(params ?? { page: 1 });
   const trpc = useTRPCProxy();
-  const [page, setPage] = useState(initialPage || 1);
-  const { data, isLoading } = useSuspenseQuery<QueryTypeMap[QueryType]>({
-    queryKey: [...queryKey, page],
-    queryFn: () => queryFn(trpc[type], { page }),
-    initialData: initialPage === page ? initialData : undefined,
+  const [shouldShowInitialData, setShouldShowInitialData] = useState(true);
+  const { data, isLoading } = useSuspenseQuery<QueryMap[T]["data"]>({
+    queryKey: [...queryKey, currentParams],
+    queryFn: () => queryFn(trpc[type], { params: currentParams }),
+    initialData: initialData && shouldShowInitialData ? initialData : undefined,
   });
 
-  function savePage(page: number) {
-    // Keep the current page in the URL but don't re-render the page
-    window.history.pushState(
-      {},
-      "",
-      mergePathname(pathname, searchParams, { page: page.toString() }),
-    );
-  }
+  useEffectMounted(
+    function updateParamsAndTriggerRefetch() {
+      setCurrentParams(params ?? { page: 1 });
+      setShouldShowInitialData(
+        JSON.stringify(params) === JSON.stringify(currentParams),
+      );
+    },
+    [params],
+  );
+
+  // function saveParams(params: QueryMap[T]["params"]) {
+  //   // Keep params in the URL but don't re-render the page
+  //   window.history.pushState(
+  //     {},
+  //     "",
+  //     mergePathname(
+  //       pathname,
+  //       searchParams,
+  //       Object.entries(params).reduce((acc, [key, value]) => {
+  //         if (Array.isArray(value)) {
+  //           return { ...acc, [key]: value.join("|") };
+  //         }
+  //         return { ...acc, [key]: `${value}` };
+  //       }, {}),
+  //     ),
+  //   );
+  // }
 
   return {
-    data,
+    data: data || initialData,
     isLoading,
-    onPage(page: number) {
-      savePage(page);
-      setPage(page);
-    },
   };
 }
-
-export async function listPressReleases() {}

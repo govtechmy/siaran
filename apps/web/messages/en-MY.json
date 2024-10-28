@@ -6,7 +6,7 @@
       "openGraph": {
         "images": {
           "1": {
-            "url": "https://i.imgur.com/EfRVASR.png",
+            "url": "https://i.imgur.com/eMZumEA.png",
             "alt": "One stop Government Press Releases & Announcements"
           }
         }
@@ -17,27 +17,100 @@
     "name": "SiaranGovMY"
   },
   "common": {
+    "errors": {
+      "notFound": "Not found"
+    },
     "names": {
       "kd": "Ministry of Digital"
     },
     "pressRelease": {
       "types": {
         "mediaRelease": "Media Release",
-        "speech": "Speech",
+        "speech": "Speech Collection",
         "other": "Other"
+      },
+      "labels": {
+        "urgent": "Urgent!"
+      }
+    },
+    "readingTime": {
+      "labels": {
+        "minutes": "{minutes, plural, =0 {0 minutes} =1 {1 minute} other {# minutes}} read"
+      }
+    },
+    "labels": {
+      "read": "Read"
+    },
+    "filters": {
+      "types": {
+        "all": "All",
+        "mediaRelease": "Media Release",
+        "speech": "Speech Collection"
+      },
+      "labels": {
+        "all": "All",
+        "multiple": "Multiple",
+        "agency": "Agency",
+        "type": "Type",
+        "selectAll": "Select All",
+        "clear": "Clear",
+        "none": "None",
+        "reset": "Reset",
+        "search": "Search",
+        "from": "From",
+        "to": "To"
       }
     }
   },
   "pages": {
     "index": {
       "latestReleases": "Latest Releases",
+      "searchResults": {
+        "count": "{count, plural, =0 {0 results} =1 {1 result} other {# results}} found for \"<query></query>\"",
+        "notFound": "Sorry, we couldn't find any results for your search. Please try again using the search bar above."
+      },
       "view": {
         "list": "List View",
         "card": "Card View"
+      },
+      "titles": {
+        "hero": "One Stop Government Press Releases & Announcements"
       }
     }
   },
   "components": {
+    "FilterDate": {
+      "labels": {
+        "trigger": "Pick a date"
+      }
+    },
+    "GovBadge": {
+      "labels": {
+        "visitPortal": "Visit our portal",
+        "sponsor": "Brought to you by",
+        "governmentOfMalaysia": "Government of Malaysia"
+      }
+    },
+    "SearchFilterList": {
+      "labels": {
+        "filterBy": "Filter by"
+      }
+    },
+    "SearchInput": {
+      "placeholders": {
+        "searchInput": "Search by keywords"
+      },
+      "labels": {
+        "noResults": "No results found"
+      },
+      "titles": {
+        "pressReleases": "Press Releases",
+        "agencies": "Agencies"
+      }
+    },
+    "PressToSearch": {
+      "label": "Press <shortcut></shortcut> to search"
+    },
     "Masthead": {
       "officialGovWebsite": "Official Malaysia Government Website",
       "howToIdentify": "Here's how you know",

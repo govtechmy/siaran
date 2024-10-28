@@ -1,148 +1,302 @@
-import type { PressRelease } from "@/app/types/types";
-import { cn } from "@/lib/utils";
+import Clipper from "@/components/icons/clipper";
+import PressReleaseTag from "@/components/PressReleaseTag";
+import Separator from "@/components/Separator";
+import UrgentTag from "@/components/UrgentTag";
+import { cn } from "@/lib/ui/utils";
+import type { PressRelease, PressReleaseType } from "@repo/api/cms/types";
 import { format, parseISO } from "date-fns";
-import { useMemo } from "react";
-import { Column, useTable } from "react-table";
-import Clipper from "./icons/clipper";
-import UrgentLabel from "./icons/urgentlabel";
-import PressReleaseTag from "./PressReleaseTag";
 
 type Props = {
   data: PressRelease[];
 };
 
 export default function PressReleaseListView({ data }: Props) {
-  const columns = useMemo<Column<PressRelease>[]>(
-    () => [
-      {
-        Header: "",
-        id: "type",
-        Cell: ({ row }) => (
-          <div className="h-[1.25rem] w-[8.75rem]">
-            <PressReleaseTag type={row.original.type} />
-          </div>
-        ),
-      },
-      {
-        Header: "",
-        accessor: (row) => row.relatedAgency.acronym,
-        id: "agency",
-        Cell: ({ value }: { value: string }) => (
-          <div className="font-base h-[1.5rem] w-[5.625rem] gap-0 text-left text-gray-dim-500">
-            {value}
-          </div>
-        ),
-      },
-      {
-        Header: "",
-        id: "titleAndContent",
-        Cell: ({ row }) => (
-          <div className="h-[3rem] w-[50.375rem] space-y-1">
-            <div className="line-clamp-1 flex h-[1.5rem] w-[50.375rem] text-base font-semibold text-black-900">
-              <div className="h-[1.375rem] w-[4.25rem] pr-1">
-                <UrgentLabel />
-              </div>
-              <div className="pl-2">{row.original.title}</div>
-            </div>
-            <p className="line-clamp-1 text-sm font-normal text-black-700">
-              {row.original.content.plain}
-            </p>
-          </div>
-        ),
-      },
-      {
-        Header: "",
-        id: "attachments",
-        Cell: ({ row }) => (
-          <div className="flex h-[1.5rem] w-[2.25rem] items-center justify-center rounded-[0.375rem] border text-right text-sm text-gray-dim-500">
-            <Clipper className="h-[1rem] w-[1rem]"></Clipper>
-            <div className="pl-0.5">
-              {row.original.attachments ? row.original.attachments.length : 0}
-            </div>
-          </div>
-        ),
-      },
-      {
-        Header: "",
-        id: "date",
-        Cell: ({ row }) => (
-          <div className="h-[2.5rem] w-[6.25rem] text-right text-sm text-gray-dim-500">
-            {format(
-              parseISO(row.original.date_published),
-              "d MMM yyyy, h:mm a",
-            )}
-          </div>
-        ),
-      },
-    ],
-    [],
-  );
-
-  const tableInstance = useTable<PressRelease>({ columns, data });
-
-  const { getTableProps, getTableBodyProps, rows, prepareRow } = tableInstance;
+  function hasAttachment(pressRelease: PressRelease) {
+    return pressRelease.attachments && pressRelease.attachments.length > 0;
+  }
 
   return (
-    <table
-      {...getTableProps()}
-      className="max-h-[54rem] w-[80rem] rounded-[0.75rem] border-[0.0625rem] border-gray-outline-200"
-      style={{ borderRadius: "0.75rem" }}
-    >
-      <tbody {...getTableBodyProps()}>
-        {rows.map((row, index) => {
-          prepareRow(row);
-          return (
-            <tr
-              {...row.getRowProps()}
-              key={row.getRowProps().key}
+    <div className={cn("w-full")}>
+      {data.map((pressRelease, index) => (
+        <div
+          key={index}
+          className={cn(
+            "w-full",
+            "gap-y-[.25rem]",
+            "px-[1.125rem] py-[.75rem]",
+            "border-x border-b border-gray-outline-200 first:border-t",
+            "first:rounded-t-[.75rem] last:rounded-b-[.75rem]",
+            "grid",
+            "lg:grid-cols-[8.75rem_5.625rem_auto_1fr_auto_auto]",
+            "grid-cols-[auto_auto_1fr_auto_auto]",
+            "grid-rows-2 grid-rows-[auto_auto]",
+            "cursor-pointer",
+          )}
+        >
+          <ViewType
+            type={pressRelease.type}
+            className={cn(
+              "hidden lg:block",
+              "lg:row-span-full",
+              "lg:col-span-1 lg:col-start-1",
+            )}
+          />
+          <ViewAgency
+            acronym={pressRelease.relatedAgency.acronym}
+            className={cn(
+              "row-span-1 row-start-1",
+              "col-span-1 col-start-1",
+              "lg:row-span-full",
+              "lg:col-span-1 lg:col-start-2",
+            )}
+          />
+          {pressRelease.priority === "high" && (
+            <UrgentTag
               className={cn(
-                index < rows.length - 1
-                  ? "border-b border-gray-outline-200"
-                  : "",
+                "row-span-1 row-start-1",
+                "col-span-2 col-start-4",
+                "lg:row-span-1 lg:row-start-1",
+                "lg:col-span-1 lg:col-start-3",
+                "ml-[.5rem] lg:ml-0",
+                "lg:mr-[.5rem]",
               )}
-            >
-              {row.cells.map((cell) => {
-                const columnId = cell.column.id;
-                let cellClassName = "border-none";
-                switch (columnId) {
-                  case "type":
-                    cellClassName +=
-                      " w-[9.875rem] h-[4.5rem] pt-[0.75rem] pb-[0.75rem] pl-[1.125rem]";
-                    break;
-                  case "agency":
-                    cellClassName +=
-                      " w-[6.75rem] h-[4.5rem] pt-[0.75rem] pb-[0.75rem] pl-[1.125rem]";
-                    break;
-                  case "titleAndContent":
-                    cellClassName +=
-                      " w-[51.5rem] h-[4.5rem] pt-[0.75rem] pb-[0.75rem] pl-[1.125rem]";
-                    break;
-                  case "attachments":
-                    cellClassName +=
-                      " w-[3.375rem] h-[4.5rem] pt-[0.75rem] pb-[0.75rem] pl-[1.125rem]";
-                    break;
-                  case "date":
-                    cellClassName +=
-                      " w-[8.5rem] h-[4.5rem] pt-[0.75rem] pb-[0.75rem] pl-[1.125rem] pr-[1.125rem]";
-                    break;
-                  default:
-                    break;
-                }
+            />
+          )}
+          <ViewTitle
+            title={pressRelease.title}
+            classNames={{
+              container: cn(
+                "row-span-1 row-start-2",
+                "col-start-1",
+                hasAttachment(pressRelease) ? "col-span-4" : "col-span-full",
+                "lg:row-span-1 lg:row-start-1",
+                "lg:col-span-1 lg:col-start-4",
+              ),
+            }}
+          />
+          <ViewContent
+            content={pressRelease.content.plain}
+            classNames={{
+              container: cn(
+                "hidden lg:block",
+                "lg:row-span-1 lg:row-start-2",
+                "lg:col-span-2 lg:col-start-3",
+              ),
+            }}
+          />
+          <ViewAttachment
+            count={pressRelease.attachments?.length ?? 0}
+            className={cn(
+              "row-span-1 row-start-2",
+              "col-span-1 col-start-5",
+              "lg:row-span-full",
+              "lg:col-start-5",
+              "flex flex-row",
+              "items-center justify-end lg:justify-center",
+              "ml-[.5rem] lg:ml-0",
+              "lg:ml-[1.125rem]",
+            )}
+          />
+          <Separator
+            type="bullet"
+            className={cn(
+              "lg:hidden",
+              "row-span-1 row-start-1",
+              "col-span-1 col-start-2",
+              "mx-[.375rem]",
+            )}
+          />
+          <ViewDate
+            date={pressRelease.date_published}
+            classNames={{
+              container: cn(
+                "row-span-1 row-start-1",
+                "col-span-1 col-start-3",
+                "lg:row-span-full",
+                "lg:col-start-6",
+                "lg:ml-[1.125rem]",
+              ),
+            }}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
 
-                return (
-                  <td
-                    {...cell.getCellProps()}
-                    key={cell.getCellProps().key}
-                    className={cellClassName}
-                  >
-                    {cell.render("Cell")}
-                  </td>
-                );
-              })}
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+function ViewType({
+  type,
+  className,
+}: {
+  type: PressReleaseType;
+  className?: string;
+}) {
+  return (
+    <div className={cn("hidden lg:block", "place-content-center", className)}>
+      <PressReleaseTag
+        type={type}
+        className={cn("flex flex-row items-center justify-center")}
+      />
+    </div>
+  );
+}
+
+function ViewAgency({
+  acronym,
+  className,
+}: {
+  acronym: string;
+  className?: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "flex flex-row items-center justify-center",
+        "text-sm lg:text-base",
+        "text-gray-dim-500",
+        "font-medium",
+        className,
+      )}
+    >
+      {acronym}
+    </div>
+  );
+}
+
+function ViewTitle({
+  title,
+  classNames,
+}: {
+  title: string;
+  className?: string;
+  classNames?: {
+    container?: string;
+    title?: string;
+  };
+}) {
+  return (
+    <div className={cn("flex flex-row items-center", classNames?.container)}>
+      <p
+        className={cn(
+          "w-fit",
+          "text-black-900",
+          "font-semibold",
+          "line-clamp-2 lg:line-clamp-1",
+          "truncate text-wrap",
+          "break-words lg:break-all",
+          classNames?.title,
+        )}
+      >
+        {title}
+      </p>
+    </div>
+  );
+}
+
+function ViewContent({
+  content,
+  classNames,
+}: {
+  content?: string;
+  classNames?: {
+    container?: string;
+    content?: string;
+  };
+}) {
+  return (
+    <div
+      className={cn(
+        "flex-rows flex items-center justify-center",
+        classNames?.container,
+      )}
+    >
+      <p
+        className={cn(
+          "text-sm",
+          "text-black-700",
+          "line-clamp-1 truncate text-wrap break-all",
+          classNames?.content,
+        )}
+      >
+        {content}
+      </p>
+    </div>
+  );
+}
+
+function ViewAttachment({
+  count,
+  className,
+}: {
+  count: number;
+  className?: string;
+}) {
+  if (count === 0) {
+    return null;
+  }
+
+  return (
+    <div className={cn(className)}>
+      <div
+        className={cn(
+          "size-fit",
+          "rounded-[.375rem]",
+          "border border-gray-outline-200",
+          "flex flex-row items-center gap-x-[.125rem]",
+          "py-[.125rem] pl-[.25rem] pr-[.375rem]",
+        )}
+      >
+        <Clipper className={cn("stroke-current", "text-black-900")} />
+        <span className={cn("text-xs text-black-700", "font-medium")}>
+          {count}
+        </span>
+      </div>
+    </div>
+  );
+}
+
+function ViewDate({
+  date,
+  classNames,
+}: {
+  date?: string;
+  className?: string;
+  classNames?: {
+    container?: string;
+    date?: string;
+  };
+}) {
+  if (!date) {
+    return null;
+  }
+
+  const formattedDate = format(parseISO(date), "d MMM yyyy");
+  const time = parseISO(date);
+  const formatttedTime = format(time, "h:mm a");
+  const isStartOfDay = time.getHours() === 0 && time.getMinutes() === 0;
+
+  return (
+    <div
+      className={cn(
+        "flex flex-col items-start justify-center",
+        classNames?.container,
+      )}
+    >
+      <div
+        className={cn(
+          "w-fit",
+          "flex lg:flex-col lg:items-end",
+          "text-sm text-gray-dim-500",
+          "font-normal",
+          classNames?.date,
+        )}
+      >
+        <span>
+          {formattedDate}
+          {!isStartOfDay && <span className={cn("mr-[.5ch] lg:mr-0")}>,</span>}
+        </span>
+        {!isStartOfDay && <span>{formatttedTime}</span>}
+      </div>
+    </div>
   );
 }

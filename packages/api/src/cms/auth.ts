@@ -7,6 +7,13 @@ type Session = {
 
 let session: Session | null = null;
 
+function mapSession(session: Session) {
+  return {
+    token: session.token,
+    exp: session.exp * 1000,
+  };
+}
+
 export async function getToken() {
   const now = Date.now();
 
@@ -32,7 +39,7 @@ export async function login(): Promise<Session> {
       }
     );
 
-    return { exp: Date.now(), token };
+    return mapSession({ exp, token });
   } catch (e) {
     if (e instanceof CMSFetchError) {
       console.error(
@@ -60,7 +67,7 @@ export async function refreshToken(token: string): Promise<Session> {
       },
     });
 
-    return { exp, token: refreshedToken };
+    return mapSession({ exp, token: refreshedToken });
   } catch (e) {
     if (e instanceof CMSFetchError) {
       console.error(

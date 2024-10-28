@@ -41,7 +41,7 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
           flags: "--platform=managed --min-instances=0 --allow-unauthenticated"
-          # Update to the appropriate source folder
+          # Use the appropriate source folder
           source: ./apps/cms
           env_vars: |-
             DATABASE_URI=${{ env.DATABASE_URI }}

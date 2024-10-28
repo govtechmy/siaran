@@ -1,17 +1,23 @@
 import type { AppRouter } from "@repo/api/trpc-router";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
 
-const url = process.env.TRPC_HTTP_BATCH_LINK_URL;
+function getServerUrl() {
+  if (typeof window !== "undefined") {
+    throw new Error("This function should not be called on the client");
+  }
 
-if (typeof window !== "undefined") {
-  throw new Error("This file should not be imported on the client");
-}
+  const url = process.env.TRPC_HTTP_BATCH_LINK_URL;
 
-if (!url) {
-  throw new Error("TRPC_HTTP_BATCH_LINK_URL is not set");
+  if (!url) {
+    throw new Error("TRPC_HTTP_BATCH_LINK_URL is not set");
+  }
+
+  return url;
 }
 
 // TODO: Deprecated
-export const trpc = createTRPCProxyClient<AppRouter>({
-  links: [httpBatchLink({ url: process.env.TRPC_HTTP_BATCH_LINK_URL! })],
-});
+export function getTrpcServerClient() {
+  return createTRPCProxyClient<AppRouter>({
+    links: [httpBatchLink({ url: getServerUrl()! })],
+  });
+}
