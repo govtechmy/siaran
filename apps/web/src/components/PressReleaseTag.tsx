@@ -20,6 +20,8 @@ export default function PressReleaseTag({ type, className }: Props) {
           : type === "ucapan"
             ? "text-warning-700"
             : "text-black-700",
+        "break-words",
+        "truncate",
         className,
       )}
     >

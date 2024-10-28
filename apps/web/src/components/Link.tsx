@@ -10,7 +10,7 @@ const Link = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<"a">>(
           "active:translate-y-[.0625rem]",
           className,
         )}
-        href={href || "#"}
+        href={href}
         target={target || "_self"}
         rel={rel}
         ref={ref}

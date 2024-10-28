@@ -1,10 +1,10 @@
+import Clipper from "@/components/icons/clipper";
+import PressReleaseTag from "@/components/PressReleaseTag";
+import Separator from "@/components/Separator";
+import UrgentTag from "@/components/UrgentTag";
 import { cn } from "@/lib/ui/utils";
 import type { PressRelease, PressReleaseType } from "@repo/api/cms/types";
 import { format, parseISO } from "date-fns";
-import { useTranslations } from "next-intl";
-import PressReleaseTag from "./PressReleaseTag";
-import Clipper from "./icons/clipper";
-import UrgentTag from "./UrgentTag";
 
 type Props = {
   data: PressRelease[];
@@ -97,7 +97,8 @@ export default function PressReleaseListView({ data }: Props) {
               "lg:ml-[1.125rem]",
             )}
           />
-          <ViewSeparator
+          <Separator
+            type="bullet"
             className={cn(
               "lg:hidden",
               "row-span-1 row-start-1",
@@ -250,20 +251,6 @@ function ViewAttachment({
           {count}
         </span>
       </div>
-    </div>
-  );
-}
-
-function ViewSeparator({ className }: { className?: string }) {
-  return (
-    <div
-      className={cn(
-        "flex flex-row items-center",
-        "text-xs text-gray-outline-300",
-        className,
-      )}
-    >
-      •
     </div>
   );
 }
