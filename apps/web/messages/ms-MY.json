@@ -33,6 +33,14 @@
         "urgent": "Penting!"
       }
     },
+    "readingTime": {
+      "labels": {
+        "minutes": "Bacaan {minutes, plural, =0 {0 minit} =1 {1 minit} other {# minit}}"
+      }
+    },
+    "labels": {
+      "read": "Baca"
+    },
     "filters": {
       "types": {
         "all": "Semua",

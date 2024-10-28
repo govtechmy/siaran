@@ -33,6 +33,14 @@
         "urgent": "Urgent!"
       }
     },
+    "readingTime": {
+      "labels": {
+        "minutes": "{minutes, plural, =0 {0 minutes} =1 {1 minute} other {# minutes}} read"
+      }
+    },
+    "labels": {
+      "read": "Read"
+    },
     "filters": {
       "types": {
         "all": "All",
