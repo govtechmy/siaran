@@ -34,6 +34,7 @@ export default function Pagination({
         (n) =>
           n !== smallest && (
             <Page
+              key={n}
               variant={n === current ? "theme" : "default"}
               onClick={() => notifyPageChange(n)}
             >
@@ -48,7 +49,7 @@ export default function Pagination({
   const pages = [
     // 1 or the local minima relative to the current page
     <Page
-      tabIndex={0}
+      key={smallest}
       variant={smallest === current ? "theme" : "default"}
       onClick={() => notifyPageChange(smallest)}
     >
@@ -58,7 +59,9 @@ export default function Pagination({
       <PageEllipsis />
     ),
     mid,
-    <Page onClick={() => notifyPageChange(largest)}>{largest}</Page>,
+    <Page key={largest} onClick={() => notifyPageChange(largest)}>
+      {largest}
+    </Page>,
   ];
 
   function notifyPageChange(page: number) {
@@ -78,7 +81,6 @@ export default function Pagination({
       )}
     >
       <Page
-        tabIndex={0}
         variant="outline"
         shadow="button"
         disabled={current === 1}
@@ -89,7 +91,6 @@ export default function Pagination({
       </Page>
       {...pages}
       <Page
-        tabIndex={0}
         variant="outline"
         shadow="button"
         disabled={current === total}
@@ -139,7 +140,6 @@ const variants = cva(
 function Page({
   children,
   disabled,
-  tabIndex,
   onClick,
   className,
   variant,
@@ -147,7 +147,6 @@ function Page({
 }: {
   children: ReactNode;
   disabled?: boolean;
-  tabIndex?: number;
   onClick?: () => void;
   className?: string;
   variant?: "outline" | "theme" | "ellipsis" | "default";
@@ -155,7 +154,6 @@ function Page({
 }) {
   return (
     <button
-      tabIndex={tabIndex}
       disabled={disabled}
       className={cn(
         "shrink-0",
