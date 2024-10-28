@@ -19,7 +19,7 @@ export function SegmentControl({ active, items, onSegment, className }: Props) {
   }
 
   return (
-    <div className={cn("flex flex-row items-center", className)}>
+    <div className={cn("flex flex-row items-center gap-x-[.25rem]", className)}>
       {items.map((item, i) => (
         <button
           key={i}
@@ -30,6 +30,7 @@ export function SegmentControl({ active, items, onSegment, className }: Props) {
               ? cn("border-gray-outline-200", "bg-gray-outline-200")
               : cn("border-transparent", "bg-transparent"),
             "px-[0.625rem] py-[0.375rem]",
+            !isActive(item) && "hover:bg-washed-100",
           )}
           onClick={() => onSegment?.(item)}
         >
