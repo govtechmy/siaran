@@ -19,8 +19,11 @@ export default function GovBadge({ className }: Props) {
       className={cn(
         "rounded-full",
         "bg-white-force_white",
-        "py-[.375rem] pl-[.6875rem] pr-[1rem]",
-        "flex flex-row items-center gap-[.5rem]",
+        "py-[.375rem]",
+        "pl-[.6875rem] pr-[1rem]",
+        "transition-all",
+        "origin-bottom-left",
+        "flex flex-row items-center justify-start gap-[.5rem]",
         "select-none",
         className,
       )}
@@ -56,7 +59,7 @@ export default function GovBadge({ className }: Props) {
             </span>
           }
         </div>
-        <div className={cn("text-black-900", "text-sm", "font-semibold")}>
+        <div className={cn("text-black-900", "text-sm", "font-medium")}>
           {t("components.GovBadge.labels.governmentOfMalaysia")}
         </div>
       </div>
