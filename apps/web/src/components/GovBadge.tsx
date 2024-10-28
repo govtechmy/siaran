@@ -18,12 +18,13 @@ export default function GovBadge({ className }: Props) {
     <Link
       className={cn(
         "rounded-full",
-        "bg-white-force_white",
+        "border border-transparent",
         "py-[.375rem]",
         "pl-[.6875rem] pr-[1rem]",
-        "transition-all",
-        "origin-bottom-left",
+        "bg-white-force_white",
+        "hover:border-gray-dim-500",
         "flex flex-row items-center justify-start gap-[.5rem]",
+        "transition-all",
         "select-none",
         className,
       )}
@@ -65,12 +66,12 @@ export default function GovBadge({ className }: Props) {
       </div>
       <NewTab
         className={cn(
-          "size-[.75rem]",
           "text-gray-dim-500",
           "stroke-current",
           "transition-all duration-300 ease-in-out",
+          "size-0 opacity-0",
           {
-            "size-0": !isHovering,
+            "size-[.75rem] opacity-100": isHovering,
           },
         )}
       />
