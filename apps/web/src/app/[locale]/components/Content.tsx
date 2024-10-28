@@ -40,7 +40,7 @@ export default function Content({ initialSegment }: Props) {
   const isSearching = !!params.query;
 
   if (!data) {
-    return <></>;
+    return null;
   }
 
   return (
