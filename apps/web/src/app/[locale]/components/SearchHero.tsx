@@ -51,7 +51,7 @@ export default function SearchHero({ agencies, className }: Props) {
         className={cn(
           "container",
           "relative",
-          "h-[17.5rem] w-full lg:h-[15rem]",
+          "h-[17.5rem] w-full md:h-[15rem]",
           "px-[1.5rem] py-[3rem]",
           "flex flex-col items-center",
         )}
