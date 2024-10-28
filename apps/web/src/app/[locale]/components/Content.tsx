@@ -10,7 +10,7 @@ import {
   SegmentControl,
   type Item as SegmentControlItem,
 } from "@/components/SegmentControl";
-import Pagination from "@/components/base/pagination";
+import Pagination from "@/components/Pagination";
 import { Skeleton } from "@/components/base/skeleton";
 import { type Segment, useViewSegment } from "@/components/hooks/view-segment";
 import {
@@ -135,11 +135,14 @@ function Data({
     <section className={cn("w-full", "flex flex-col")}>
       <PressReleaseView segment={segment} data={data.docs} />
       {data.totalDocs > 0 && (
-        <Pagination
-          currentPage={data.page}
-          totalPages={data.totalPages}
-          onPage={(page) => onPageChange?.(page)}
-        />
+        <>
+          <Pagination
+            current={data.page}
+            total={data.totalPages}
+            onPageChange={(page) => onPageChange?.(page)}
+            className={cn("mt-[1.5rem]")}
+          />
+        </>
       )}
     </section>
   );
