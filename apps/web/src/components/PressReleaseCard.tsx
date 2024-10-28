@@ -80,7 +80,7 @@ export default function PressReleaseCard({ data }: Props) {
         </div>
         <Separator type="bullet" />
         {data.date_published && (
-          <div className={"text-gray-dim-500"}>
+          <div className={cn("shrink-1", "text-gray-dim-500", "truncate")}>
             {format(date, isStartOfDay ? "d MMM yyyy" : "d MMM yyyy, h:mm a")}
           </div>
         )}
@@ -91,10 +91,10 @@ export default function PressReleaseCard({ data }: Props) {
             "flex flex-row items-center gap-x-[.5rem]",
             "text-brand-600",
             "overflow-hidden",
-            "translate-y-[3rem]",
+            "translate-y-[3rem] opacity-0",
             "transition-all duration-300 ease-in-out",
             {
-              [cn("translate-y-0")]: isHovering,
+              [cn("translate-y-0 opacity-100")]: isHovering,
             },
           )}
         >
