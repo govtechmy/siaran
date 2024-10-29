@@ -53,7 +53,7 @@ export default function PressReleaseCard({ data }: Props) {
       <div
         className={cn(
           "text-base font-semibold text-black-900",
-          "line-clamp-1 lg:line-clamp-2",
+          "line-clamp-3 md:line-clamp-1 lg:line-clamp-2",
         )}
       >
         {data.title}
