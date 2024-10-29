@@ -1,14 +1,14 @@
-import { cn } from "@/lib/ui/utils";
-import type { PressRelease } from "@repo/api/cms/types";
-import { format, parseISO } from "date-fns";
-import { useTranslations } from "next-intl";
-import PressReleaseTag from "@/components/PressReleaseTag";
-import { useHover } from "@uidotdev/usehooks";
 import { Link } from "@/components/Link";
-import UrgentTag from "@/components/UrgentTag";
+import PressReleaseTag from "@/components/PressReleaseTag";
 import ReadingTime from "@/components/ReadingTime";
 import Separator from "@/components/Separator";
+import UrgentTag from "@/components/UrgentTag";
 import NewTab from "@/icons/new-tab";
+import { cn } from "@/lib/ui/utils";
+import type { PressRelease } from "@repo/api/cms/types";
+import { useHover } from "@uidotdev/usehooks";
+import { format, parseISO } from "date-fns";
+import { useTranslations } from "next-intl";
 import stripMarkdown from "remove-markdown";
 
 type Props = {
@@ -80,13 +80,14 @@ export default function PressReleaseCard({ data }: Props) {
         </div>
         <Separator type="bullet" />
         {data.date_published && (
-          <div className={cn("shrink-1", "text-gray-dim-500", "truncate")}>
+          <div className={cn("flex-1", "text-gray-dim-500", "truncate")}>
             {format(date, isStartOfDay ? "d MMM yyyy" : "d MMM yyyy, h:mm a")}
           </div>
         )}
         <div
           className={cn(
-            "shrink-0",
+            "w-0",
+            "flex-0",
             "ml-auto",
             "flex flex-row items-center gap-x-[.5rem]",
             "text-brand-600",
@@ -94,7 +95,7 @@ export default function PressReleaseCard({ data }: Props) {
             "translate-y-[3rem] opacity-0",
             "transition-all duration-300 ease-in-out",
             {
-              [cn("translate-y-0 opacity-100")]: isHovering,
+              [cn("w-fit", "translate-y-0 opacity-100")]: isHovering,
             },
           )}
         >
