@@ -7,7 +7,6 @@ import { useEffectMounted } from "@/components/hooks/mounted";
 import { paramsAtom } from "@/components/stores/press-releases";
 import { cn } from "@/lib/ui/utils";
 import type { Agency } from "@repo/api/cms/types";
-import { useHover } from "@uidotdev/usehooks";
 import { useAtom } from "jotai";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
@@ -23,8 +22,6 @@ export default function SearchHero({ agencies, className }: Props) {
   const [, setParams] = useAtom(paramsAtom);
   const [query, setQuery] = useState<string>();
   const [filters, setFilters] = useState<Filters>();
-
-  const [ref, isHovering] = useHover<HTMLDivElement>();
 
   useEffectMounted(
     function clearParamsIfQueryIsEmpty() {
@@ -51,7 +48,7 @@ export default function SearchHero({ agencies, className }: Props) {
         className={cn(
           "container",
           "relative",
-          "h-[17.5rem] w-full md:h-[15rem]",
+          "min-h-[17.5rem] w-full md:min-h-[15rem]",
           "px-[1.5rem] py-[3rem]",
           "flex flex-col items-center",
         )}
