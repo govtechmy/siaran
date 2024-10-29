@@ -15,6 +15,10 @@ export default function PressReleaseListView({ data }: Props) {
     return pressRelease.attachments && pressRelease.attachments.length > 0;
   }
 
+  function isHighPriority(pressRelease: PressRelease) {
+    return pressRelease.priority === "high";
+  }
+
   return (
     <div className={cn("w-full")}>
       {data.map((pressRelease, index) => (
@@ -38,25 +42,25 @@ export default function PressReleaseListView({ data }: Props) {
             className={cn(
               "hidden lg:block",
               "lg:row-span-full",
-              "lg:col-span-1 lg:col-start-1",
+              "lg:col-start-1 lg:col-end-2",
             )}
           />
           <ViewAgency
             acronym={pressRelease.relatedAgency.acronym}
             className={cn(
-              "row-span-1 row-start-1",
-              "col-span-1 col-start-1",
+              "row-start-1 row-end-2",
+              "col-start-1 col-end-2",
               "lg:row-span-full",
-              "lg:col-span-1 lg:col-start-2",
+              "lg:col-start-2 lg:col-end-3",
             )}
           />
-          {pressRelease.priority === "high" && (
+          {isHighPriority(pressRelease) && (
             <UrgentTag
               className={cn(
-                "row-span-1 row-start-1",
-                "col-span-2 col-start-4",
-                "lg:row-span-1 lg:row-start-1",
-                "lg:col-span-1 lg:col-start-3",
+                "row-start-1 row-end-2",
+                "col-start-4 col-end-6",
+                "lg:row-start-1 lg:row-end-2",
+                "lg:col-start-3 lg:col-end-4",
                 "ml-[.5rem] lg:ml-0",
                 "lg:mr-[.5rem]",
               )}
@@ -66,11 +70,11 @@ export default function PressReleaseListView({ data }: Props) {
             title={pressRelease.title}
             classNames={{
               container: cn(
-                "row-span-1 row-start-2",
+                "row-start-2 row-end-3",
                 "col-start-1",
-                hasAttachment(pressRelease) ? "col-span-4" : "col-span-full",
-                "lg:row-span-1 lg:row-start-1",
-                "lg:col-span-1 lg:col-start-4",
+                hasAttachment(pressRelease) ? "col-end-5" : "col-span-full",
+                "lg:row-start-1 lg:row-end-2",
+                "lg:col-start-4 lg:col-end-5",
               ),
             }}
           />
@@ -79,16 +83,16 @@ export default function PressReleaseListView({ data }: Props) {
             classNames={{
               container: cn(
                 "hidden lg:block",
-                "lg:row-span-1 lg:row-start-2",
-                "lg:col-span-2 lg:col-start-3",
+                "lg:row-start-2 lg:row-end-3",
+                "lg:col-start-3 lg:col-end-5",
               ),
             }}
           />
           <ViewAttachment
             count={pressRelease.attachments?.length ?? 0}
             className={cn(
-              "row-span-1 row-start-2",
-              "col-span-1 col-start-5",
+              "row-start-2 row-end-3",
+              "col-start-5 col-end-6",
               "lg:row-span-full",
               "lg:col-start-5",
               "flex flex-row",
@@ -101,8 +105,8 @@ export default function PressReleaseListView({ data }: Props) {
             type="bullet"
             className={cn(
               "lg:hidden",
-              "row-span-1 row-start-1",
-              "col-span-1 col-start-2",
+              "row-start-1 row-end-2",
+              "col-start-2 col-end-3",
               "mx-[.375rem]",
             )}
           />
@@ -110,11 +114,14 @@ export default function PressReleaseListView({ data }: Props) {
             date={pressRelease.date_published}
             classNames={{
               container: cn(
-                "row-span-1 row-start-1",
-                "col-span-1 col-start-3",
+                "row-start-1 row-end-2",
+                "col-start-3",
+                {
+                  "col-end-4": isHighPriority(pressRelease),
+                  "col-end-6": !isHighPriority(pressRelease),
+                },
                 "lg:row-span-full",
-                "lg:col-start-6",
-                "lg:ml-[1.125rem]",
+                "lg:col-start-6 lg:col-end-7",
               ),
             }}
           />
@@ -271,8 +278,8 @@ function ViewDate({
   }
 
   const formattedDate = format(parseISO(date), "d MMM yyyy");
+  const formattedDateTime = format(parseISO(date), "d MMM yyyy h:mm a");
   const time = parseISO(date);
-  const formatttedTime = format(time, "h:mm a");
   const isStartOfDay = time.getHours() === 0 && time.getMinutes() === 0;
 
   return (
@@ -284,18 +291,15 @@ function ViewDate({
     >
       <div
         className={cn(
-          "w-fit",
+          "flex-1",
           "flex lg:flex-col lg:items-end",
           "text-sm text-gray-dim-500",
           "font-normal",
+          "line-clamp-1",
           classNames?.date,
         )}
       >
-        <span>
-          {formattedDate}
-          {!isStartOfDay && <span className={cn("mr-[.5ch] lg:mr-0")}>,</span>}
-        </span>
-        {!isStartOfDay && <span>{formatttedTime}</span>}
+        <span>{isStartOfDay ? formattedDate : formattedDateTime}</span>
       </div>
     </div>
   );
