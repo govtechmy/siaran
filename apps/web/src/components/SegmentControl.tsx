@@ -24,7 +24,6 @@ export function SegmentControl({ active, items, onSegment, className }: Props) {
         <button
           key={i}
           className={cn(
-            "shrink-0",
             "rounded-full border-b-[2px]",
             isActive(item)
               ? cn("border-gray-outline-200", "bg-gray-outline-200")
@@ -37,6 +36,7 @@ export function SegmentControl({ active, items, onSegment, className }: Props) {
           <span
             className={cn(
               "text-base font-medium",
+              "line-clamp-1 truncate",
               isActive(item) ? "text-black-900" : "text-gray-dim-500",
             )}
           >

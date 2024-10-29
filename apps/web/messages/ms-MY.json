@@ -70,8 +70,14 @@
         "notFound": "Maaf, kami tidak dapat menemukan hasil pencarian. Sila cuba lagi dengan menggunakan bilah pencarian di atas."
       },
       "view": {
-        "list": "Paparan Senarai",
-        "card": "Paparan Kad"
+        "list": {
+          "short": "Senarai",
+          "long": "Paparan Senarai"
+        },
+        "card": {
+          "short": "Kad",
+          "long": "Paparan Kad"
+        }
       },
       "titles": {
         "hero": "Siaran dan Pengumuman Kerajaan Satu Henti"

@@ -1,4 +1,5 @@
 import { type Item as SegmentControlItem } from "@/components/SegmentControl";
+import { useMediaQuery } from "@uidotdev/usehooks";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
 
@@ -8,14 +9,24 @@ const defaultSegment = "card" satisfies Segment;
 
 export function useViewSegment(initialSegment?: Segment) {
   const t = useTranslations();
+  const isSmallScreen = useMediaQuery("only screen and (max-width : 385px)");
+
   const segmentsById = {
     card: {
       id: "card",
-      label: t("pages.index.view.card"),
+      label: t(
+        isSmallScreen
+          ? "pages.index.view.card.short"
+          : "pages.index.view.card.long",
+      ),
     },
     list: {
       id: "list",
-      label: t("pages.index.view.list"),
+      label: t(
+        isSmallScreen
+          ? "pages.index.view.list.short"
+          : "pages.index.view.list.long",
+      ),
     },
   } satisfies Record<Segment, SegmentControlItem>;
   const [active, setActive] = useState<SegmentControlItem>(
