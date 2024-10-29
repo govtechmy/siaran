@@ -5,12 +5,12 @@ import {
   type ListPressReleaseParams,
   useTRPCQuery,
 } from "@/api/hooks/query";
+import Pagination from "@/components/Pagination";
 import PressReleaseView from "@/components/PressReleaseView";
 import {
   SegmentControl,
   type Item as SegmentControlItem,
 } from "@/components/SegmentControl";
-import Pagination from "@/components/Pagination";
 import { Skeleton } from "@/components/base/skeleton";
 import { type Segment, useViewSegment } from "@/components/hooks/view-segment";
 import {

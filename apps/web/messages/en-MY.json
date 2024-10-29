@@ -70,8 +70,14 @@
         "notFound": "Sorry, we couldn't find any results for your search. Please try again using the search bar above."
       },
       "view": {
-        "list": "List View",
-        "card": "Card View"
+        "list": {
+          "short": "List",
+          "long": "List View"
+        },
+        "card": {
+          "short": "Card",
+          "long": "Card View"
+        }
       },
       "titles": {
         "hero": "One Stop Government Press Releases & Announcements"
