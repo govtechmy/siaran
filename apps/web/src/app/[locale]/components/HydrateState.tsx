@@ -8,7 +8,7 @@ import {
   dataAtom,
   isInitialDataAtom,
   paramsAtom,
-} from "@/components/stores/press-releases";
+} from "../stores/press-releases";
 import { useHydrateAtoms } from "jotai/utils";
 import { ReactNode } from "react";
 
@@ -20,7 +20,6 @@ type Props = {
   children: ReactNode;
 };
 
-// The purpose of this component is to hydrate the state using server side data
 export default function HydrateState({
   state: { initialData, initialParams },
   children,

@@ -1,18 +1,12 @@
 import { Metadata } from "next";
 
-export type MetadataProps = {
-  params: { locale: string };
-};
-
-type PageMetadataOptions = {
+export function getPageMetadata(options: {
   title: string;
   description: string;
   url?: string;
   imageUrl: string;
   siteName: string;
-};
-
-export function getPageMetadata(options: PageMetadataOptions): Metadata {
+}): Metadata {
   return {
     title: options.title,
     description: options.description,

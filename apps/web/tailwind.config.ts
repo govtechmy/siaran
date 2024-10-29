@@ -108,6 +108,7 @@ const config: Config = {
           ["text_only"]: "rgb(var(--success-text_only) / <alpha-value>)",
         },
         black: {
+          ["500"]: "rgb(var(--black-500) / <alpha-value>)",
           ["700"]: "rgb(var(--black-700) / <alpha-value>)",
           ["800"]: "rgb(var(--black-800) / <alpha-value>)",
           ["900"]: "rgb(var(--black-900) / <alpha-value>)",

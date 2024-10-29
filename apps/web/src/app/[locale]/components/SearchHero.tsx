@@ -1,16 +1,15 @@
 "use client";
 
 import GovBadge from "@/components/GovBadge";
-import { Filters } from "@/components/SearchFilterList";
+import SearchFilterList, { Filters } from "@/components/SearchFilterList";
 import SearchSuggestion from "@/components/SearchSuggestion";
 import { useEffectMounted } from "@/components/hooks/mounted";
-import { paramsAtom } from "@/components/stores/press-releases";
 import { cn } from "@/lib/ui/utils";
 import type { Agency } from "@repo/api/cms/types";
 import { useAtom } from "jotai";
 import { useTranslations } from "next-intl";
 import { useState } from "react";
-import SearchFilterListProxy from "./SearchFilterListProxy";
+import { isLoadingAtom, paramsAtom } from "../stores/press-releases";
 
 type Props = {
   agencies: Agency[];
@@ -20,6 +19,7 @@ type Props = {
 export default function SearchHero({ agencies, className }: Props) {
   const t = useTranslations();
   const [, setParams] = useAtom(paramsAtom);
+  const [isLoading] = useAtom(isLoadingAtom);
   const [query, setQuery] = useState<string>();
   const [filters, setFilters] = useState<Filters>();
 
@@ -74,8 +74,9 @@ export default function SearchHero({ agencies, className }: Props) {
           className={cn("mt-[1.5rem]")}
           onClearQuery={() => setQuery("")}
           onSubmitQuery={setQuery}
+          isLoading={isLoading}
         />
-        <SearchFilterListProxy
+        <SearchFilterList
           agencies={agencies}
           onFiltersChange={setFilters}
           className={cn("mt-[.75rem]")}

@@ -24,19 +24,19 @@ import {
   CommandList,
 } from "@/components/base/command";
 import { cn } from "@/lib/ui/utils";
-import { useAtom } from "jotai";
 import { LoaderCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
 import PressToSearch from "./PressToSearch";
-import { isLoadingAtom } from "./stores/press-releases";
 
 type Props = {
+  isLoading: boolean;
   onSubmitQuery?: (query: string) => void;
   onClearQuery?: () => void;
   className?: string;
 };
 
 export default function SearchSuggestion({
+  isLoading,
   className,
   onSubmitQuery,
   onClearQuery,
@@ -48,8 +48,6 @@ export default function SearchSuggestion({
   );
   const searchInputRef: MutableRefObject<HTMLDivElement | null> = useRef(null);
   const searchResultListRef = useRef<HTMLDivElement>(null);
-
-  const [isLoading] = useAtom(isLoadingAtom);
 
   function closeSearchResults() {
     searchResultListRef.current?.blur();
@@ -297,9 +295,10 @@ function SearchResultDropdown({
   const t = useTranslations();
   const debouncedQuery = useDebounce(query, 300);
   const { data } = useTRPCQuery({
-    type: "search",
-    queryKey: [debouncedQuery],
-    queryFn: async (trpc) => await trpc.searchAll.query({ q: debouncedQuery }),
+    route: "search",
+    method: "all",
+    params: { q: debouncedQuery },
+    queryFn: async (trpc) => trpc.query({ q: debouncedQuery }),
   });
 
   return (
