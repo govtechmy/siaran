@@ -278,7 +278,7 @@ function ViewDate({
   }
 
   const formattedDate = format(parseISO(date), "d MMM yyyy");
-  const formattedDateTime = format(parseISO(date), "d MMM yyyy h:mm a");
+  const formattedTime = format(parseISO(date), "h:mm a");
   const time = parseISO(date);
   const isStartOfDay = time.getHours() === 0 && time.getMinutes() === 0;
 
@@ -291,15 +291,20 @@ function ViewDate({
     >
       <div
         className={cn(
+          "lg:ml-[1.125rem]",
           "flex-1",
-          "flex lg:flex-col lg:items-end",
+          "flex flex-row lg:flex-col lg:items-end",
           "text-sm text-gray-dim-500",
           "font-normal",
-          "line-clamp-1",
+          "max-md:line-clamp-1",
           classNames?.date,
         )}
       >
-        <span>{isStartOfDay ? formattedDate : formattedDateTime}</span>
+        <span>
+          {formattedDate}
+          {!isStartOfDay && <span className={cn("mr-[.5ch] lg:mr-0")}>,</span>}
+        </span>
+        {!isStartOfDay && <span>{formattedTime}</span>}
       </div>
     </div>
   );
