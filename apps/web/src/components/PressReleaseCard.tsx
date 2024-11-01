@@ -1,3 +1,4 @@
+import { useLocaleURL } from "@/components/hooks/url";
 import { Link } from "@/components/Link";
 import PressReleaseTag from "@/components/PressReleaseTag";
 import ReadingTime from "@/components/ReadingTime";
@@ -20,10 +21,12 @@ export default function PressReleaseCard({ data }: Props) {
   const [ref, isHovering] = useHover<HTMLAnchorElement>();
   const date = parseISO(data.date_published);
   const isStartOfDay = data && date.getHours() === 0 && date.getMinutes() === 0;
+  const { url } = useLocaleURL();
 
   return (
     <Link
       ref={ref}
+      href={url("press-releases", data.id)}
       className={cn(
         "rounded-[0.75rem]",
         "border border-gray-outline-200 hover:border-gray-outline-300",

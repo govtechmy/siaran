@@ -10,5 +10,12 @@ export function useMergeSearchParams() {
     mergeSearchParams(records: Record<string, string>) {
       router.replace(mergePathname(pathname, searchParams, records));
     },
+    mergeSearchParamsHistory(records: Record<string, string>) {
+      window.history.pushState(
+        {},
+        "",
+        mergePathname(pathname, searchParams, records),
+      );
+    },
   };
 }

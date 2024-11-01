@@ -3,6 +3,23 @@ import { publicProcedure } from "#trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
+export const getById = publicProcedure
+  .input(
+    z.object({
+      id: z.string(),
+    }),
+  )
+  .query(async ({ input }) => {
+    try {
+      return await cms.getById(input);
+    } catch (e) {
+      throw new TRPCError({
+        code: "INTERNAL_SERVER_ERROR",
+        message: (e as Error).message,
+      });
+    }
+  });
+
 export const list = publicProcedure
   .input(
     z.object({

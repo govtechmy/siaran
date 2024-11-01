@@ -5,12 +5,15 @@ import UrgentTag from "@/components/UrgentTag";
 import { cn } from "@/lib/ui/utils";
 import type { PressRelease, PressReleaseType } from "@repo/api/cms/types";
 import { format, parseISO } from "date-fns";
+import { Link } from "@/components/Link";
+import { useLocaleURL } from "@/components/hooks/url";
 
 type Props = {
   data: PressRelease[];
 };
 
 export default function PressReleaseListView({ data }: Props) {
+  const { url } = useLocaleURL();
   function hasAttachment(pressRelease: PressRelease) {
     return pressRelease.attachments && pressRelease.attachments.length > 0;
   }
@@ -20,10 +23,11 @@ export default function PressReleaseListView({ data }: Props) {
   }
 
   return (
-    <div className={cn("w-full")}>
+    <>
       {data.map((pressRelease, index) => (
-        <div
+        <Link
           key={index}
+          href={url("press-releases", pressRelease.id)}
           className={cn(
             "w-full",
             "gap-y-[.25rem]",
@@ -125,9 +129,9 @@ export default function PressReleaseListView({ data }: Props) {
               ),
             }}
           />
-        </div>
+        </Link>
       ))}
-    </div>
+    </>
   );
 }
 

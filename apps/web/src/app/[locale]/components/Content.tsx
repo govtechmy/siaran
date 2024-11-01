@@ -18,7 +18,7 @@ import {
   isInitialDataAtom,
   isLoadingAtom,
   paramsAtom,
-} from "@/components/stores/press-releases";
+} from "../stores/press-releases";
 import { cn } from "@/lib/ui/utils";
 import type { PaginatedResponse, PressRelease } from "@repo/api/cms/types";
 import { useAtom } from "jotai";
@@ -31,8 +31,7 @@ type Props = {
 
 export default function Content({ initialSegment }: Props) {
   const t = useTranslations();
-  const { segments, active, onSegment } = useViewSegment(initialSegment);
-
+  const viewSegment = useViewSegment(initialSegment);
   const [data, setData] = useAtom(dataAtom);
   const isInitialData = useAtom(isInitialDataAtom);
   const [params, setParams] = useAtom(paramsAtom);
@@ -69,11 +68,11 @@ export default function Content({ initialSegment }: Props) {
               </p>
             )}
           </div>
-          {data.totalDocs > 0 && !isLoading && (
+          {data.totalDocs > 0 && !isLoading && viewSegment != null && (
             <SegmentControl
-              items={segments}
-              active={active}
-              onSegment={onSegment}
+              items={viewSegment.segments}
+              active={viewSegment.active}
+              onSegment={viewSegment.onSegment}
             />
           )}
         </section>
@@ -82,7 +81,7 @@ export default function Content({ initialSegment }: Props) {
         <Data
           initialData={isInitialData && data}
           params={params}
-          segment={active}
+          segment={viewSegment.active}
           onDataChange={setData}
           onPageChange={(page) => setParams({ page })}
         />
@@ -117,16 +116,17 @@ function Data({
   onPageChange,
 }: {
   initialData: PaginatedResponse<PressRelease>;
-  params?: ListPressReleaseParams;
+  params: ListPressReleaseParams;
   segment: SegmentControlItem;
   onDataChange?: (data: ListPressReleaseData) => void;
   onPageChange?: (page: number) => void;
 }) {
   const { data } = useTRPCQuery({
-    type: "pressRelease",
+    route: "pressRelease",
+    method: "list",
     initialData,
     params,
-    queryFn: async (trpc, { params }) => trpc.list.query(params),
+    queryFn: async (trpc, { params }) => trpc.query(params),
   });
 
   useEffect(() => onDataChange?.(data), [onDataChange, data]);
