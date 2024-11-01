@@ -8,6 +8,24 @@ import type {
 import { cmsFetch, CMSFetchError } from "#http";
 import { type SinglePossibleClause, whereClause } from "#cms/utils";
 
+export async function getById({ id }: { id: string }) {
+  try {
+    return await cmsFetch<PressRelease>(`/api/press-releases/${id}`, {
+      method: "GET",
+      headers: {
+        ["Authorization"]: `Bearer ${await getToken()}`,
+      },
+    });
+  } catch (e) {
+    if (e instanceof CMSFetchError) {
+      console.error(
+        `Failed to fetch press release [${e.response?.url}]: ${e.name ?? ""} ${e.statusCode ?? ""}`,
+      );
+    }
+    throw e;
+  }
+}
+
 export async function list({
   page,
   limit,

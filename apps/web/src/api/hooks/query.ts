@@ -11,6 +11,10 @@ import { QueryKey, useSuspenseQuery } from "@tanstack/react-query";
 import { useState } from "react";
 import { ProxyClient, useTRPCProxy } from "../trpc/proxy/client";
 
+export type GetPressReleaseData = PressRelease;
+export type GetPressReleaseParams = { id: string };
+
+export type ListPressReleaseData = PaginatedResponse<PressRelease>;
 export type ListPressReleaseParams = {
   page?: number;
   limit?: number;
@@ -22,55 +26,59 @@ export type ListPressReleaseParams = {
   endDate?: string;
 };
 
-export type ListPressReleaseData = PaginatedResponse<PressRelease>;
+type Method<Params, Data> = {
+  params: Params;
+  data: Data;
+};
 
-export type QueryMap = {
+export type Query = {
   ["pressRelease"]: {
-    params: ListPressReleaseParams;
-    data: ListPressReleaseData;
+    ["getById"]: Method<GetPressReleaseParams, GetPressReleaseData>;
+    ["list"]: Method<ListPressReleaseParams, ListPressReleaseData>;
   };
   ["search"]: {
-    params: {
-      page: number;
-    };
-    data: PaginatedSearchResponse;
+    ["all"]: Method<{ page: number }, PaginatedSearchResponse>;
   };
   ["agency"]: {
-    params: {
-      page: number;
-    };
-    data: Agency[];
+    ["list"]: Method<{ page: number }, Agency[]>;
   };
 };
 
-export function useTRPCQuery<T extends keyof QueryMap>({
-  type,
+export function useTRPCQuery<
+  Route extends keyof Query,
+  Method extends keyof Query[Route],
+  Data = Query[Route][Method] extends { data: infer T } ? T : never,
+  Params = Query[Route][Method] extends { params: infer T } ? T : never,
+>({
+  route,
+  method,
   initialData,
   params,
   queryKey = [],
   queryFn,
 }: {
-  type: T;
-  initialData?: QueryMap[T]["data"];
-  params?: QueryMap[T]["params"];
+  route: Route;
+  method: Method;
+  initialData?: Data;
+  params: Params;
   queryKey?: QueryKey;
   queryFn: (
-    trpc: ProxyClient[T],
-    options: { params: QueryMap[T]["params"] },
-  ) => Promise<QueryMap[T]["data"]>;
+    trpc: ProxyClient[Route][Method],
+    options: { params: Params },
+  ) => Promise<Data>;
 }) {
-  const [currentParams, setCurrentParams] = useState(params ?? { page: 1 });
+  const [currentParams, setCurrentParams] = useState(params);
   const trpc = useTRPCProxy();
   const [shouldShowInitialData, setShouldShowInitialData] = useState(true);
-  const { data, isLoading } = useSuspenseQuery<QueryMap[T]["data"]>({
+  const { data, isLoading } = useSuspenseQuery<Data>({
     queryKey: [...queryKey, currentParams],
-    queryFn: () => queryFn(trpc[type], { params: currentParams }),
+    queryFn: () => queryFn(trpc[route][method], { params: currentParams }),
     initialData: initialData && shouldShowInitialData ? initialData : undefined,
   });
 
   useEffectMounted(
     function updateParamsAndTriggerRefetch() {
-      setCurrentParams(params ?? { page: 1 });
+      setCurrentParams(params);
       setShouldShowInitialData(
         JSON.stringify(params) === JSON.stringify(currentParams),
       );
@@ -78,26 +86,8 @@ export function useTRPCQuery<T extends keyof QueryMap>({
     [params],
   );
 
-  // function saveParams(params: QueryMap[T]["params"]) {
-  //   // Keep params in the URL but don't re-render the page
-  //   window.history.pushState(
-  //     {},
-  //     "",
-  //     mergePathname(
-  //       pathname,
-  //       searchParams,
-  //       Object.entries(params).reduce((acc, [key, value]) => {
-  //         if (Array.isArray(value)) {
-  //           return { ...acc, [key]: value.join("|") };
-  //         }
-  //         return { ...acc, [key]: `${value}` };
-  //       }, {}),
-  //     ),
-  //   );
-  // }
-
   return {
-    data: data || initialData,
+    data,
     isLoading,
   };
 }

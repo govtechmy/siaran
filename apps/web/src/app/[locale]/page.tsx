@@ -2,7 +2,7 @@ import type { ListPressReleaseParams } from "@/api/hooks/query";
 import { getTrpcServerClient } from "@/api/trpc/proxy/server";
 import Container from "@/components/Container";
 import { Locale } from "@/i18n/routing";
-import { getPageMetadata, MetadataProps } from "@/lib/page/utils";
+import { getPageMetadata } from "@/lib/page/utils";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Content from "./components/Content";
@@ -16,7 +16,9 @@ type Props = {
 
 export async function generateMetadata({
   params: { locale },
-}: MetadataProps): Promise<Metadata> {
+}: {
+  params: Props["params"];
+}): Promise<Metadata> {
   const t = await getTranslations({ locale });
 
   return getPageMetadata({

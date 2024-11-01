@@ -3,7 +3,7 @@ import { publicProcedure } from "#trpc";
 import { TRPCError } from "@trpc/server";
 import { z } from "zod";
 
-export const searchAll = publicProcedure
+export const all = publicProcedure
   .input(
     z.object({
       page: z.number().min(1).default(1),

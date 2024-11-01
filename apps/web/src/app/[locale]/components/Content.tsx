@@ -18,7 +18,7 @@ import {
   isInitialDataAtom,
   isLoadingAtom,
   paramsAtom,
-} from "@/components/stores/press-releases";
+} from "../stores/press-releases";
 import { cn } from "@/lib/ui/utils";
 import type { PaginatedResponse, PressRelease } from "@repo/api/cms/types";
 import { useAtom } from "jotai";
@@ -116,16 +116,17 @@ function Data({
   onPageChange,
 }: {
   initialData: PaginatedResponse<PressRelease>;
-  params?: ListPressReleaseParams;
+  params: ListPressReleaseParams;
   segment: SegmentControlItem;
   onDataChange?: (data: ListPressReleaseData) => void;
   onPageChange?: (page: number) => void;
 }) {
   const { data } = useTRPCQuery({
-    type: "pressRelease",
+    route: "pressRelease",
+    method: "list",
     initialData,
     params,
-    queryFn: async (trpc, { params }) => trpc.list.query(params),
+    queryFn: async (trpc, { params }) => trpc.query(params),
   });
 
   useEffect(() => onDataChange?.(data), [onDataChange, data]);
