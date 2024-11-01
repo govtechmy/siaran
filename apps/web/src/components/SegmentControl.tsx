@@ -1,4 +1,5 @@
 import { cn } from "@/lib/ui/utils";
+import { ReactNode } from "react";
 
 type Props = {
   items: Item[];
@@ -9,8 +10,7 @@ type Props = {
 
 export type Item = {
   id: string;
-  label: string;
-  [key: string]: unknown;
+  getLabel: ({ isActive }: { isActive: boolean }) => ReactNode;
 };
 
 export function SegmentControl({ active, items, onSegment, className }: Props) {
@@ -33,15 +33,7 @@ export function SegmentControl({ active, items, onSegment, className }: Props) {
           )}
           onClick={() => onSegment?.(item)}
         >
-          <span
-            className={cn(
-              "text-base font-medium",
-              "line-clamp-1 truncate",
-              isActive(item) ? "text-black-900" : "text-gray-dim-500",
-            )}
-          >
-            {item.label}
-          </span>
+          {item.getLabel({ isActive: isActive(item) })}
         </button>
       ))}
     </div>
