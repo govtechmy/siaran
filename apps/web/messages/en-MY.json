@@ -6,7 +6,7 @@
       "openGraph": {
         "images": {
           "1": {
-            "url": "https://i.imgur.com/EfRVASR.png",
+            "url": "https://i.imgur.com/eMZumEA.png",
             "alt": "One stop Government Press Releases & Announcements"
           }
         }
@@ -26,9 +26,20 @@
     "pressRelease": {
       "types": {
         "mediaRelease": "Media Release",
-        "speech": "Speech",
+        "speech": "Speech Collection",
         "other": "Other"
+      },
+      "labels": {
+        "urgent": "Urgent!"
       }
+    },
+    "readingTime": {
+      "labels": {
+        "minutes": "{minutes, plural, =0 {0 minutes} =1 {1 minute} other {# minutes}} read"
+      }
+    },
+    "labels": {
+      "read": "Read"
     },
     "filters": {
       "types": {
@@ -59,8 +70,14 @@
         "notFound": "Sorry, we couldn't find any results for your search. Please try again using the search bar above."
       },
       "view": {
-        "list": "List View",
-        "card": "Card View"
+        "list": {
+          "short": "List",
+          "long": "List View"
+        },
+        "card": {
+          "short": "Card",
+          "long": "Card View"
+        }
       },
       "titles": {
         "hero": "One Stop Government Press Releases & Announcements"

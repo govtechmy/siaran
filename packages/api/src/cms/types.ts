@@ -25,14 +25,20 @@ export type PressRelease = {
   id: string;
   language: string;
   title: string;
+  // TODO: make optional
   date_published: string;
   type: PressReleaseType;
   content: Content;
   attachments?: Attachment[];
+  priority?: "high" | "normal" | "low";
   relatedAgency: Agency;
 };
 
 export type PressReleaseType = "kenyataan_media" | "ucapan" | "other";
+
+export type Sort = {
+  pressReleases: "asc" | "desc";
+};
 
 export type PaginationParams = {
   page: number;

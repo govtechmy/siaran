@@ -1,4 +1,4 @@
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 
 const Link = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<"a">>(
@@ -10,7 +10,7 @@ const Link = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<"a">>(
           "active:translate-y-[.0625rem]",
           className,
         )}
-        href={href || "#"}
+        href={href}
         target={target || "_self"}
         rel={rel}
         ref={ref}

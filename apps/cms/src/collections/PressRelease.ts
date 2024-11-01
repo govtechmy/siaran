@@ -34,6 +34,26 @@ const PressRelease: CollectionConfig = {
       required: true,
     },
     {
+      name: "priority",
+      type: "select",
+      required: true,
+      options: [
+        {
+          label: "High",
+          value: "high",
+        },
+        {
+          label: "Normal",
+          value: "normal",
+        },
+        {
+          label: "Low",
+          value: "low",
+        },
+      ],
+      defaultValue: "normal",
+    },
+    {
       name: "content",
       type: "group",
       fields: [

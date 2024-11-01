@@ -6,7 +6,7 @@
       "openGraph": {
         "images": {
           "1": {
-            "url": "https://i.imgur.com/EfRVASR.png",
+            "url": "https://i.imgur.com/eMZumEA.png",
             "alt": "Pusat Sumber Siaran Akhbar dan Pengumuman Kerajaan"
           }
         }
@@ -28,7 +28,18 @@
         "mediaRelease": "Kenyataan Media",
         "speech": "Ucapan",
         "other": "Other"
+      },
+      "labels": {
+        "urgent": "Penting!"
       }
+    },
+    "readingTime": {
+      "labels": {
+        "minutes": "Bacaan {minutes, plural, =0 {0 minit} =1 {1 minit} other {# minit}}"
+      }
+    },
+    "labels": {
+      "read": "Baca"
     },
     "filters": {
       "types": {
@@ -59,8 +70,14 @@
         "notFound": "Maaf, kami tidak dapat menemukan hasil pencarian. Sila cuba lagi dengan menggunakan bilah pencarian di atas."
       },
       "view": {
-        "list": "Senarai",
-        "card": "Kad"
+        "list": {
+          "short": "Senarai",
+          "long": "Paparan Senarai"
+        },
+        "card": {
+          "short": "Kad",
+          "long": "Paparan Kad"
+        }
       },
       "titles": {
         "hero": "Siaran dan Pengumuman Kerajaan Satu Henti"
@@ -76,7 +93,7 @@
     "GovBadge": {
       "labels": {
         "visitPortal": "Kunjungi portal kami",
-        "sponsor": "Dibawakan kepada anda oleh",
+        "sponsor": "Dibawakan oleh",
         "governmentOfMalaysia": "Kerajaan Malaysia"
       }
     },

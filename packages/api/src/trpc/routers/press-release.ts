@@ -1,4 +1,4 @@
 import { router as baseRouter } from "#trpc";
-import { list } from "#trpc/procedures/press-releases";
+import { list, getById } from "#trpc/procedures/press-releases";
 
-export const router = baseRouter({ list });
+export const router = baseRouter({ list, getById });
