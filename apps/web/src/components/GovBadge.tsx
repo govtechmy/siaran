@@ -2,7 +2,7 @@
 
 import { Link } from "@/components/Link";
 import NewTab from "@/icons/new-tab";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { useHover } from "@uidotdev/usehooks";
 import { useTranslations } from "next-intl";
 
@@ -18,9 +18,13 @@ export default function GovBadge({ className }: Props) {
     <Link
       className={cn(
         "rounded-full",
+        "border border-transparent",
+        "py-[.375rem]",
+        "pl-[.6875rem] pr-[1rem]",
         "bg-white-force_white",
-        "py-[.375rem] pl-[.6875rem] pr-[1rem]",
-        "flex flex-row items-center gap-[.5rem]",
+        "hover:border-gray-dim-500",
+        "flex flex-row items-center justify-start gap-[.5rem]",
+        "transition-all",
         "select-none",
         className,
       )}
@@ -56,18 +60,18 @@ export default function GovBadge({ className }: Props) {
             </span>
           }
         </div>
-        <div className={cn("text-black-900", "text-sm", "font-semibold")}>
+        <div className={cn("text-black-900", "text-sm", "font-medium")}>
           {t("components.GovBadge.labels.governmentOfMalaysia")}
         </div>
       </div>
       <NewTab
         className={cn(
-          "size-[.75rem]",
           "text-gray-dim-500",
           "stroke-current",
           "transition-all duration-300 ease-in-out",
+          "size-0 opacity-0",
           {
-            "size-0": !isHovering,
+            "size-[.75rem] opacity-100": isHovering,
           },
         )}
       />

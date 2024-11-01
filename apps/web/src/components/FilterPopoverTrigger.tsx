@@ -1,5 +1,5 @@
 import ChevronDown from "@/icons/chevron-down";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 
 type Props = {
   label: string;

@@ -1,6 +1,6 @@
-import { Button } from "@/components/base/button";
+import { Button } from "@/components/Button";
 import * as Base from "@/components/base/popover";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { PopoverContentProps } from "@radix-ui/react-popover";
 import { forwardRef, ReactNode, useImperativeHandle, useState } from "react";
 
@@ -43,13 +43,17 @@ const Popover = forwardRef<Ref, Props>(
       >
         <Base.PopoverTrigger asChild>
           <Button
-            variant="outline"
+            variant="secondary"
             role="combobox"
-            className={`max-w[10.3125rem] h-[2rem] w-fit justify-between gap-[0.375rem] rounded-[0.5rem] px-[0.625rem] py-[0.375rem] ${
+            className={cn(
+              "rounded-[0.5rem]",
+              "h-[2rem] w-fit",
+              "px-[0.625rem] py-[0.375rem]",
+              "justify-between gap-[0.375rem]",
               isOpen
                 ? "ring-[0.1875rem] ring-theme-600 ring-opacity-20 ring-offset-theme-600"
-                : "border border-gray-outline-200"
-            }`}
+                : "border border-gray-outline-200",
+            )}
           >
             {trigger}
           </Button>

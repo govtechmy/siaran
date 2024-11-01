@@ -1,12 +1,13 @@
 import type { ListPressReleaseParams } from "@/api/hooks/query";
 import { getTrpcServerClient } from "@/api/trpc/proxy/server";
 import Container from "@/components/Container";
-import SearchHero from "@/components/SearchHero";
 import { Locale } from "@/i18n/routing";
-import { getPageMetadata, MetadataProps } from "@/lib/page/utils";
+import { getPageMetadata } from "@/lib/page/utils";
 import { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import Content from "./components/Content";
+import HydrateState from "./components/HydrateState";
+import SearchHero from "./components/SearchHero";
 
 type Props = {
   params: { locale: Locale };
@@ -15,7 +16,9 @@ type Props = {
 
 export async function generateMetadata({
   params: { locale },
-}: MetadataProps): Promise<Metadata> {
+}: {
+  params: Props["params"];
+}): Promise<Metadata> {
   const t = await getTranslations({ locale });
 
   return getPageMetadata({
@@ -36,12 +39,19 @@ export default async function PageIndex({
   const agencies = await trpc.agency.list.query();
 
   return (
-    <main className="flex flex-col">
-      <SearchHero locale={locale} agencies={agencies} />
-      <Container>
-        <Content initialParams={params} initialData={data} />
-      </Container>
-    </main>
+    <HydrateState
+      state={{
+        initialParams: params,
+        initialData: data,
+      }}
+    >
+      <main className="flex flex-col">
+        <SearchHero agencies={agencies} />
+        <Container>
+          <Content />
+        </Container>
+      </main>
+    </HydrateState>
   );
 }
 

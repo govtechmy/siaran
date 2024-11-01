@@ -3,27 +3,29 @@
 import * as FilterDate from "@/components/FilterDate";
 import * as FilterMultiple from "@/components/FilterMultiple";
 import * as FilterOneOf from "@/components/FilterOneOf";
+import { useEffectMounted } from "@/components/hooks/mounted";
 import CrossX from "@/components/icons/cross-x";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import type { Agency, PressReleaseType } from "@repo/api/cms/types";
 import { format } from "date-fns";
 import { useTranslations } from "next-intl";
-import { useEffect, useRef, useState } from "react";
-import { usePressReleasesStore } from "./stores/search-results";
-import { useEffectMounted } from "./hooks/mounted";
+import { useRef, useState } from "react";
 
 interface FilterTypeOption
   extends FilterOneOf.Option<Exclude<PressReleaseType, "other"> | "all"> {}
 
+export type Filters = {
+  agencies?: string[];
+  type?: PressReleaseType;
+  startDate?: string;
+  endDate?: string;
+};
+
 type Props = {
   agencies: Agency[];
-  params?: {
-    agencies?: string[];
-    type?: FilterTypeOption;
-    startDate?: string;
-    endDate?: string;
-  };
+  filters?: Filters;
   className?: string;
+  onFiltersChange?: (filters: Filters) => void;
 };
 
 type FilterArg =
@@ -32,7 +34,11 @@ type FilterArg =
   | { type: "startDate"; value?: Date }
   | { type: "endDate"; value?: Date };
 
-export default function SearchFilterList({ agencies, className }: Props) {
+export default function SearchFilterList({
+  agencies,
+  onFiltersChange,
+  className,
+}: Props) {
   const t = useTranslations();
   const allAgencies = agencies.map(function mapAgency(agency: Agency) {
     return {
@@ -64,8 +70,6 @@ export default function SearchFilterList({ agencies, className }: Props) {
   const startDateRef = useRef<FilterDate.Ref>(null);
   const endDateRef = useRef<FilterDate.Ref>(null);
 
-  const setLocalParams = usePressReleasesStore((state) => state.setParams);
-
   const isFilterApplied =
     selectedAgencies.length !== allAgencies.length ||
     selectedPostType.id !== defaultPostType.id ||
@@ -93,9 +97,9 @@ export default function SearchFilterList({ agencies, className }: Props) {
           setEndDate(undefined);
         }
 
-        if (!endDate || isEndDateOutOfRange) {
-          openEndDatePopover();
-        }
+        // if (!endDate || isEndDateOutOfRange) {
+        //   openEndDatePopover();
+        // }
 
         break;
       case "endDate":
@@ -126,7 +130,7 @@ export default function SearchFilterList({ agencies, className }: Props) {
 
   useEffectMounted(
     function updateParams() {
-      setLocalParams({
+      onFiltersChange?.({
         agencies: selectedAgencies.map((current) => current.id),
         type: selectedPostType.id === "all" ? undefined : selectedPostType.id,
         startDate: startDate && format(startDate, "yyyy-MM-dd"),

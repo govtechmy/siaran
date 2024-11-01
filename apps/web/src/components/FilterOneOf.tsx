@@ -5,7 +5,7 @@ import FilterPopoverItem from "@/components/FilterPopoverItem";
 import FilterPopoverText from "@/components/FilterPopoverText";
 import FilterTrigger from "@/components/FilterPopoverTrigger";
 import CheckCircle from "@/icons/check-circle";
-import { cn } from "@/lib/utils";
+import { cn } from "@/lib/ui/utils";
 import { useTranslations } from "next-intl";
 
 export interface Option<Id extends string> {
