@@ -15,6 +15,7 @@ import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { VariantProps } from "class-variance-authority";
 import { useTranslations } from "next-intl";
 import { ReactNode, Suspense, useState } from "react";
+import { useLocaleURL } from "./hooks/url";
 
 type NavItem = {
   href: string;
@@ -33,11 +34,12 @@ export function Header({ locale }: { locale: string }) {
   ];
 
   const [showMenu, setMenu] = useState<boolean>(false);
+  const { url } = useLocaleURL();
 
   return (
     <header className="sticky top-0 z-50 bg-background lg:border-b lg:bg-background/80 lg:backdrop-blur-[30px]">
-      <div className="container flex w-full items-center justify-between gap-3 bg-background py-3 max-lg:border-b lg:gap-4 lg:bg-transparent xl:px-0">
-        <a href="#" className="flex h-full flex-none items-center">
+      <div className="max-lg:border-b container flex w-full items-center justify-between gap-3 bg-background py-3 lg:gap-4 lg:bg-transparent xl:px-0">
+        <a href={url("index")} className="flex h-full flex-none items-center">
           <img
             width={32}
             height={32}
@@ -66,7 +68,7 @@ export function Header({ locale }: { locale: string }) {
                       variant,
                       size: "md",
                     }),
-                    "w-full justify-start gap-x-[0.5rem] text-[1rem] leading-[1.5rem] lg:data-[state=open]:bg-washed-100"
+                    "w-full justify-start gap-x-[0.5rem] text-[1rem] leading-[1.5rem] lg:data-[state=open]:bg-washed-100",
                   )}
                 >
                   {component}
@@ -90,7 +92,7 @@ export function Header({ locale }: { locale: string }) {
                     data-state={isActive(href) ? "open" : "close"}
                     className={cn(
                       buttonVariants({ variant: "tertiary" }),
-                      "w-max bg-transparent transition-colors data-[state=open]:bg-washed-100"
+                      "w-max bg-transparent transition-colors data-[state=open]:bg-washed-100",
                     )}
                   >
                     {component}
