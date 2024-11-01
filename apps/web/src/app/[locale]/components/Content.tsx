@@ -31,8 +31,7 @@ type Props = {
 
 export default function Content({ initialSegment }: Props) {
   const t = useTranslations();
-  const { segments, active, onSegment } = useViewSegment(initialSegment);
-
+  const viewSegment = useViewSegment(initialSegment);
   const [data, setData] = useAtom(dataAtom);
   const isInitialData = useAtom(isInitialDataAtom);
   const [params, setParams] = useAtom(paramsAtom);
@@ -69,11 +68,11 @@ export default function Content({ initialSegment }: Props) {
               </p>
             )}
           </div>
-          {data.totalDocs > 0 && !isLoading && (
+          {data.totalDocs > 0 && !isLoading && viewSegment != null && (
             <SegmentControl
-              items={segments}
-              active={active}
-              onSegment={onSegment}
+              items={viewSegment.segments}
+              active={viewSegment.active}
+              onSegment={viewSegment.onSegment}
             />
           )}
         </section>
@@ -82,7 +81,7 @@ export default function Content({ initialSegment }: Props) {
         <Data
           initialData={isInitialData && data}
           params={params}
-          segment={active}
+          segment={viewSegment.active}
           onDataChange={setData}
           onPageChange={(page) => setParams({ page })}
         />
