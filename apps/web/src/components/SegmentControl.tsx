@@ -1,20 +1,25 @@
 import { cn } from "@/lib/ui/utils";
 import { ReactNode } from "react";
 
-type Props = {
-  items: Item[];
-  active: Item;
-  onSegment?: (id: Item) => void;
+type Props<Id extends string> = {
+  items: Item<Id>[];
+  active: Item<Id>;
+  onSegment?: (id: Item<Id>) => void;
   className?: string;
 };
 
-export type Item = {
-  id: string;
+export interface Item<Id extends string> {
+  id: Id;
   getLabel: ({ isActive }: { isActive: boolean }) => ReactNode;
-};
+}
 
-export function SegmentControl({ active, items, onSegment, className }: Props) {
-  function isActive(item: Item) {
+export function SegmentControl<Id extends string>({
+  active,
+  items,
+  onSegment,
+  className,
+}: Props<Id>) {
+  function isActive(item: Item<Id>) {
     return item.id === active.id;
   }
 
