@@ -281,7 +281,7 @@ function ViewDate({
     return null;
   }
 
-  const formattedDate = format(parseISO(date), "d MMM yyyy");
+  const formattedDate = format(parseISO(date), "dd MMM yyyy");
   const formattedTime = format(parseISO(date), "h:mm a");
   const time = parseISO(date);
   const isStartOfDay = time.getHours() === 0 && time.getMinutes() === 0;
