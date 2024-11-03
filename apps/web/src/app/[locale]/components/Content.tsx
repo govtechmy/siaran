@@ -13,17 +13,18 @@ import {
 } from "@/components/SegmentControl";
 import { Skeleton } from "@/components/base/skeleton";
 import { type Segment, useViewSegment } from "@/components/hooks/view-segment";
+import { cn } from "@/lib/ui/utils";
+import type { PaginatedResponse, PressRelease } from "@repo/api/cms/types";
+import { useAtom } from "jotai";
+import { useTranslations } from "next-intl";
+import { Suspense, useEffect } from "react";
 import {
   dataAtom,
   isInitialDataAtom,
   isLoadingAtom,
   paramsAtom,
 } from "../stores/press-releases";
-import { cn } from "@/lib/ui/utils";
-import type { PaginatedResponse, PressRelease } from "@repo/api/cms/types";
-import { useAtom } from "jotai";
-import { useTranslations } from "next-intl";
-import { Suspense, useEffect } from "react";
+import { segmentAtom } from "../stores/segment";
 
 type Props = {
   initialSegment?: Segment;
@@ -31,12 +32,22 @@ type Props = {
 
 export default function Content({ initialSegment }: Props) {
   const t = useTranslations();
-  const viewSegment = useViewSegment(initialSegment);
+  const [segment, setSegment] = useAtom(segmentAtom);
+  const viewSegment = useViewSegment(initialSegment || segment);
   const [data, setData] = useAtom(dataAtom);
   const isInitialData = useAtom(isInitialDataAtom);
   const [params, setParams] = useAtom(paramsAtom);
   const [isLoading] = useAtom(isLoadingAtom);
   const isSearching = !!params.query;
+
+  useEffect(
+    function persistInitialSegment() {
+      if (initialSegment || viewSegment.active) {
+        setSegment(initialSegment || viewSegment.active.id);
+      }
+    },
+    [initialSegment, viewSegment.active],
+  );
 
   if (!data) {
     return null;
@@ -117,7 +128,7 @@ function Data({
 }: {
   initialData: PaginatedResponse<PressRelease>;
   params: ListPressReleaseParams;
-  segment: SegmentControlItem;
+  segment: SegmentControlItem<Segment>;
   onDataChange?: (data: ListPressReleaseData) => void;
   onPageChange?: (page: number) => void;
 }) {
