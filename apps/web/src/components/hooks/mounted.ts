@@ -1,6 +1,22 @@
-import { DependencyList, EffectCallback, useEffect, useRef } from "react";
+import {
+  DependencyList,
+  EffectCallback,
+  useEffect,
+  useRef,
+  useState,
+} from "react";
 
-function useMounted() {
+export function useMountedState() {
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(function onMount() {
+    setIsMounted(true);
+  }, []);
+
+  return isMounted;
+}
+
+function useMountedRef() {
   const isMounted = useRef(false);
 
   useEffect(function onMount() {
@@ -14,7 +30,7 @@ export function useEffectMounted(
   callback: EffectCallback,
   dependencyList: DependencyList,
 ) {
-  const isMounted = useMounted();
+  const isMounted = useMountedRef();
 
   useEffect(function skipCallbackBeforeMounted() {
     if (!isMounted) {
