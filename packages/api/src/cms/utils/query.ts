@@ -10,13 +10,17 @@ type ConditionOperator =
   | "not_in"
   | "exists";
 
-type ConditionField =
+type ConditionFieldPressRelease =
   | "relatedAgency"
   | "type"
   | "date_published"
   | "title"
-  | "content.plaintext"
+  | "content.plain"
   | "content.markdown";
+
+type ConditionFieldUser = "email";
+
+type ConditionField = ConditionFieldPressRelease | ConditionFieldUser;
 
 type ConditionValueBasedOnField<T> = T extends "relatedAgency"
   ? string[]

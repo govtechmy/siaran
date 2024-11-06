@@ -3,23 +3,43 @@
   "main": "./src/trpc/trpc.ts",
   "version": "0.0.0",
   "imports": {
+    "#logging/*": "./src/logging/*.ts",
+    "#cms/schema/*": "./src/cms/schema/*.ts",
+    "#cms/utils/*": "./src/cms/utils/*.ts",
+    "#cms/types": "./src/cms/types.ts",
     "#cms/*": "./src/cms/*.ts",
     "#trpc": "./src/trpc/index.ts",
+    "#trpc/procedures/*": "./src/trpc/procedures/*.ts",
+    "#trpc/routers/*": "./src/trpc/routers/*.ts",
     "#trpc/*": "./src/trpc/*.ts",
-    "#http": "./src/http.ts"
+    "#http": "./src/http.ts",
+    "#aws/*": "./src/aws/*.ts",
+    "#extensions/*": "./src/extensions/*.ts"
   },
   "exports": {
+    "./logging/logger": "./src/logging/logger.ts",
     "./trpc": "./src/trpc/index.ts",
     "./trpc-router": "./src/trpc/routers/app.ts",
-    "./cms/types": "./src/cms/types.ts"
+    "./cms/utils/attachment": "./src/cms/utils/attachment.ts",
+    "./cms/schema/*": "./src/cms/schema/*.ts",
+    "./cms/types": "./src/cms/types.ts",
+    "./cms/press-releases": "./src/cms/press-releases.ts",
+    "./cms/users": "./src/cms/users.ts",
+    "./http": "./src/http.ts",
+    "./aws/region": "./src/aws/region.ts",
+    "./aws/s3": "./src/aws/s3.ts",
+    "./aws/sts": "./src/aws/sts.ts",
+    "./extensions/zod": "./src/extensions/zod.ts"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^7.2.0",
     "@trpc/server": "^11.0.0-rc.553",
     "consola": "^3.2.3",
     "ofetch": "^1.4.0",
+    "winston": "^3.17.0",
     "zod": "^3.23.8"
   }
 }
