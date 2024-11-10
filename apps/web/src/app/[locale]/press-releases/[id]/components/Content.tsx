@@ -6,6 +6,7 @@ import { cn } from "@/lib/ui/utils";
 import type { PressRelease } from "@repo/api/cms/types";
 import { format, parseISO } from "date-fns";
 import { useAtom } from "jotai";
+import { ComponentProps } from "react";
 import Markdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
@@ -22,81 +23,66 @@ export default function Content() {
   return <Data initialData={data} />;
 }
 
-type MarkdownItem = {
-  type: "process" | "ignore" | "chunk";
-  content: string;
-};
+function splitCombineMarkdown(markdown: string): string {
+  const split = markdown
+    .replaceAll(/[“”]/g, '"')
+    .split(/(?=(?:\n|^)\|)|(?<=\n\n)/g)
+    .map((item) => {
+      const pre = item.trim();
 
-function createChunk(content: string) {
-  return {
-    type: "chunk",
-    content,
-  } as MarkdownItem;
-}
-
-function chunkMarkdown(markdown: string): string {
-  const replaced = markdown
-    .replaceAll("\n\n\n", "\n\n")
-    // Replace all '\n' with '\n\n'
-    .replaceAll(/(?<!\n)\n(?!\n)/g, "\n\n");
-
-  // Split the markdown and label each pre-processed markdown
-  const split = replaced.split("\n\n").map((item) => ({
-    type: item.startsWith("**") || item.startsWith("#") ? "ignore" : "process",
-    content: item.trim(),
-    length: item.trim().length,
-  })) satisfies MarkdownItem[];
-
-  // Chunk all short paragraphs into a single paragraph
-  const chunked = split.reduce<MarkdownItem[]>((acc, current) => {
-    if (acc.length === 0) {
-      return [current];
-    }
-
-    if (current.type === "process") {
-      const prevIndex = acc.length - 1;
-      const prev = acc[prevIndex];
-
-      if (prev.type === "chunk") {
-        // Combine with the previous chunk
-        const chunked = createChunk(prev.content + "  \n" + current.content);
-
-        if (prevIndex === 0) {
-          return [chunked];
-        }
-
-        return [...acc.slice(0, prevIndex), chunked];
+      if (pre.startsWith("|")) {
+        return pre;
       }
 
-      return [
-        ...acc,
-        // Start a new chunk with current content
-        createChunk(current.content),
-      ];
+      // Split into sentences.
+      const split = pre.split(
+        // Don't split strings like "Mr.", "Dr.", "1.", "2.", etc.
+        /((?<![A-Z][a-z](?=\.))(?<!\d(?=\.))(?<=[\S])([.!?])(?=\s|\z))/g,
+      );
+
+      let quoting = false;
+
+      return split.reduce((acc, item) => {
+        const pre = item.trim();
+
+        if (pre === ".") {
+          // the end of a sentence
+          return acc + pre;
+        }
+
+        // // add a quotation mark to the beginning of each quoted sentence
+        const isQuotationStart = pre.startsWith('"');
+        const isQuotationEnd = pre.indexOf('"') > 0;
+
+        if (isQuotationStart && !quoting) {
+          quoting = true;
+        } else if (quoting && isQuotationEnd) {
+          quoting = false;
+        }
+
+        const prefix =
+          (quoting && !isQuotationStart) || isQuotationEnd ? '"' : "";
+
+        return acc + "\n\n" + prefix + pre;
+      }, "");
+    })
+    .flat()
+    .map((item) => item.trim());
+
+  const reduced = split.reduce((acc, item) => {
+    if (item.startsWith("|")) {
+      // add a newline character to re-create the row
+      return acc + item + "\n";
     }
 
-    return [...acc, current];
-  }, []);
+    return acc + item + "\n\n";
+  }, "");
 
-  console.log(chunked);
-
-  // re-combine all chunks
-  return chunked.map((item) => item.content).join("  \n\n");
-}
-
-function processMarkdown(markdown: string): string {
-  return chunkMarkdown(markdown);
+  return reduced;
 }
 
 function Data({ initialData }: { initialData: PressRelease }) {
-  function getContentArray(content: string) {
-    const result = content
-      // Match the start and the end of table markdown
-      .split(/(\|(?:.*\|[\r\n]*)+)/g)
-      .map((item) => (item.startsWith("|") ? item : processMarkdown(item)));
-
-    return result;
-  }
+  const chunked = splitCombineMarkdown(initialData.content.markdown);
 
   return (
     <div
@@ -149,124 +135,98 @@ function Data({ initialData }: { initialData: PressRelease }) {
           "text-[1rem] leading-[1.75rem] text-black-700",
           "font-body font-normal",
           "[&_*]:w-full",
-          "mt-[.75rem] [&_h1]:font-semibold",
-          "mt-[.75rem] [&_h2]:font-semibold",
-          "mt-[.75rem] [&_h3]:font-semibold",
-          "mt-[.75rem] [&_h4]:font-semibold",
-          "mt-[.75rem] [&_h5]:font-semibold",
-          "mt-[.75rem] [&_h6]:font-semibold",
         )}
       >
-        {/* {JSON.stringify(initialData.content.markdown)} */}
-        {initialData.content.markdown
-          ? getContentArray(initialData.content.markdown).map(
-              (content, index) => (
-                <Markdown
-                  key={index}
-                  className={cn("mt-[1.125rem]")}
-                  remarkPlugins={[remarkGfm, remarkBreaks]}
-                  components={{
-                    h1: ({ node, ...props }) => (
-                      <h1 className={cn("font-body")} {...props} />
-                    ),
-                    h2: ({ node, ...props }) => (
-                      <h2 className={cn("font-body")} {...props} />
-                    ),
-                    h3: ({ node, ...props }) => (
-                      <h3 className={cn("font-body")} {...props} />
-                    ),
-                    h4: ({ node, ...props }) => (
-                      <h4 className={cn("font-body")} {...props} />
-                    ),
-                    h5: ({ node, ...props }) => (
-                      <h5 className={cn("font-body")} {...props} />
-                    ),
-                    h6: ({ node, ...props }) => (
-                      <h6 className={cn("font-body")} {...props} />
-                    ),
-                    table: ({ node, ...props }) => (
-                      <table
-                        className="min-w-full border-collapse border border-gray-outline-200"
-                        {...props}
-                      />
-                    ),
-                    tbody: ({ node, ...props }) => (
-                      <tbody
-                        className="divide-y divide-gray-outline-200"
-                        {...props}
-                      />
-                    ),
-                    th: ({ node, ...props }) => (
-                      <th
-                        className={cn(
-                          "px-[1rem] py-[.5rem]",
-                          "border border-gray-outline-200",
-                          "text-start",
-                        )}
-                        {...props}
-                      />
-                    ),
-                    td: ({ node, ...props }) => (
-                      <td
-                        className={cn(
-                          "px-[1rem] py-[.5rem]",
-                          "border border-gray-outline-200",
-                          "text-start",
-                        )}
-                        {...props}
-                      />
-                    ),
-                    a: ({ node, ...props }) => (
-                      <a
-                        {...props}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className={cn(props.className, "text-brand-600")}
-                      />
-                    ),
-                    ol: ({ children, ...props }) => (
-                      <ol
-                        className={cn(
-                          "mt-[1.5rem]",
-                          "list-decimal space-y-2 pl-8",
-                        )}
-                        {...props}
-                      >
-                        {children}
-                      </ol>
-                    ),
-                    ul: ({ children, ...props }) => (
-                      <ul
-                        className={cn(
-                          "mt-[1.5rem]",
-                          "list-disc space-y-2 pl-8",
-                        )}
-                        {...props}
-                      >
-                        {children}
-                      </ul>
-                    ),
-                    li: ({ children, ...props }) => (
-                      <li className={cn("pl-2")} {...props}>
-                        {children}
-                      </li>
-                    ),
-                    p: ({ children, ...props }) => (
-                      <p
-                        className={cn("mt-[1.5rem]", "text-justify")}
-                        {...props}
-                      >
-                        {children}
-                      </p>
-                    ),
-                  }}
-                >
-                  {content}
-                </Markdown>
-              ),
-            )
-          : initialData.content.plain}
+        {initialData.content.markdown ? (
+          <Markdown
+            className={cn("mt-[1.125rem]")}
+            remarkPlugins={[remarkGfm, remarkBreaks]}
+            components={Components}
+          >
+            {chunked}
+          </Markdown>
+        ) : (
+          initialData.content.plain
+        )}
       </div>
     </div>
   );
 }
+
+const Components: ComponentProps<typeof Markdown>["components"] = {
+  h1: ({ node, ...props }) => (
+    <h1 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+  ),
+  h2: ({ node, ...props }) => (
+    <h2 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+  ),
+  h3: ({ node, ...props }) => (
+    <h3 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+  ),
+  h4: ({ node, ...props }) => (
+    <h4 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+  ),
+  h5: ({ node, ...props }) => (
+    <h5 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+  ),
+  h6: ({ node, ...props }) => (
+    <h6 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+  ),
+  table: ({ node, ...props }) => (
+    <table
+      className="min-w-full border-collapse border border-gray-outline-200"
+      {...props}
+    />
+  ),
+  tbody: ({ node, ...props }) => (
+    <tbody className="divide-y divide-gray-outline-200" {...props} />
+  ),
+  th: ({ node, ...props }) => (
+    <th
+      className={cn(
+        "px-[1rem] py-[.5rem]",
+        "border border-gray-outline-200",
+        "text-start",
+      )}
+      {...props}
+    />
+  ),
+  td: ({ node, ...props }) => (
+    <td
+      className={cn(
+        "px-[1rem] py-[.5rem]",
+        "border border-gray-outline-200",
+        "text-start",
+      )}
+      {...props}
+    />
+  ),
+  a: ({ node, ...props }) => (
+    <a
+      {...props}
+      target="_blank"
+      rel="noopener noreferrer"
+      className={cn(props.className, "text-brand-600")}
+    />
+  ),
+  ol: ({ children, ...props }) => (
+    <ol className={cn("mt-[1.5rem]", "list-decimal space-y-2 pl-8")} {...props}>
+      {children}
+    </ol>
+  ),
+  ul: ({ children, ...props }) => (
+    <ul className={cn("mt-[1.5rem]", "list-disc space-y-2 pl-8")} {...props}>
+      {children}
+    </ul>
+  ),
+  li: ({ children, ...props }) => (
+    <li className={cn("pl-2")} {...props}>
+      {children}
+    </li>
+  ),
+  p: ({ children, ...props }) => (
+    <p className={cn("my-[1.5rem]", "text-justify")} {...props}>
+      {children}
+    </p>
+  ),
+};
