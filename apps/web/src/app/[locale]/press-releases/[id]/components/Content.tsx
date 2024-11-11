@@ -37,7 +37,7 @@ function splitCombineMarkdown(markdown: string): string {
       // Split into sentences.
       const split = pre.split(
         // Don't split strings like "Mr.", "Dr.", "1.", "2.", etc.
-        /((?<![A-Z][a-z](?=\.))(?<!\d(?=\.))(?<=[\S])([.!?])(?=\s|\z))/g,
+        /((?<![A-Z][a-z](?=\.))(?<!\d(?=\.))(?<=[\S])[.!?](?=\s|\z))/g,
       );
 
       let quoting = false;
@@ -45,8 +45,8 @@ function splitCombineMarkdown(markdown: string): string {
       return split.reduce((acc, item) => {
         const pre = item.trim();
 
-        if (pre === ".") {
-          // the end of a sentence
+        if ([".", "?", "!"].includes(pre)) {
+          // reconstruct the end of a sentence
           return acc + pre;
         }
 
