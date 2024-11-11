@@ -13,6 +13,8 @@ import remarkGfm from "remark-gfm";
 import stripMarkdown from "remove-markdown";
 import { dataAtom } from "../stores/press-release";
 
+const PUNCTUATIONS = [".", "?", "!"];
+
 export default function Content() {
   const [data] = useAtom(dataAtom);
 
@@ -23,10 +25,27 @@ export default function Content() {
   return <Data initialData={data} />;
 }
 
+function paragraphize(markdown: string, isParagraph: boolean): string {
+  return (
+    markdown
+      // Remove unwanted newlines: match an uncapitalized word after the newline
+      .replaceAll(/\n(?=[a-z])/g, " ")
+      .split(/(?<=\.)\n/g)
+      .map((item) => {
+        const pre = item.trim();
+        return isParagraph ? pre.replaceAll(/\n/g, " ") : pre;
+      })
+      .join("\n\n")
+  );
+}
+
 function splitCombineMarkdown(markdown: string): string {
   const split = markdown
     .replaceAll(/[“”]/g, '"')
-    .split(/(?=(?:\n|^)\|)|(?<=\n\n)/g)
+    .split(
+      // Split table markdown so they can be processed separately
+      /(?=(?:\n|^)\|)|(?<=\n\n)/g,
+    )
     .map((item) => {
       const pre = item.trim();
 
@@ -34,36 +53,32 @@ function splitCombineMarkdown(markdown: string): string {
         return pre;
       }
 
-      // Split into sentences.
       const split = pre.split(
+        // Split into sentences.
         // Don't split strings like "Mr.", "Dr.", "1.", "2.", etc.
-        /((?<![A-Z][a-z](?=\.))(?<!\d(?=\.))(?<=[\S])[.!?](?=\s|\z))/g,
+        /((?<![|Dr|DR|Mr|MR|Mrs|MRS|Ts|TS|\d](?=\.))(?<=\S)[.!?](?=\s))/g,
       );
 
-      let quoting = false;
-
-      return split.reduce((acc, item) => {
+      return split.reduce((acc, item, index) => {
         const pre = item.trim();
 
-        if ([".", "?", "!"].includes(pre)) {
-          // reconstruct the end of a sentence
+        if (PUNCTUATIONS.includes(pre)) {
+          // reconstruct the end of the sentence
           return acc + pre;
         }
 
-        // // add a quotation mark to the beginning of each quoted sentence
-        const isQuotationStart = pre.startsWith('"');
-        const isQuotationEnd = pre.indexOf('"') > 0;
-
-        if (isQuotationStart && !quoting) {
-          quoting = true;
-        } else if (quoting && isQuotationEnd) {
-          quoting = false;
-        }
-
-        const prefix =
-          (quoting && !isQuotationStart) || isQuotationEnd ? '"' : "";
-
-        return acc + "\n\n" + prefix + pre;
+        // reconstruct into paragraphs
+        return (
+          acc +
+          "\n\n" +
+          paragraphize(
+            pre,
+            // If the  ends with a punctuation
+            (index < split.length - 1 &&
+              PUNCTUATIONS.includes(split[index + 1])) ||
+              pre.match(/\.$/) != null,
+          )
+        );
       }, "");
     })
     .flat()
@@ -82,7 +97,7 @@ function splitCombineMarkdown(markdown: string): string {
 }
 
 function Data({ initialData }: { initialData: PressRelease }) {
-  const chunked = splitCombineMarkdown(initialData.content.markdown);
+  const markdown = splitCombineMarkdown(initialData.content.markdown);
 
   return (
     <div
@@ -143,7 +158,7 @@ function Data({ initialData }: { initialData: PressRelease }) {
             remarkPlugins={[remarkGfm, remarkBreaks]}
             components={Components}
           >
-            {chunked}
+            {markdown}
           </Markdown>
         ) : (
           initialData.content.plain
