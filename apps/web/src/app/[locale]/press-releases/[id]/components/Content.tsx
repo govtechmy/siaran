@@ -56,7 +56,7 @@ function splitCombineMarkdown(markdown: string): string {
       const split = pre.split(
         // Split into sentences.
         // Don't split strings like "Mr.", "Dr.", "1.", "2.", etc.
-        /((?<![|Dr|DR|Mr|MR|Mrs|MRS|Ts|TS|\d](?=\.))(?<=\S)[.!?](?=\s))/g,
+        /((?<![|dr|mr|mrs|ts|i|ii|iii|iv|v|\d](?=\.))(?<=\S)[.!?](?=\s))/gi,
       );
 
       return split.reduce((acc, item, index) => {
