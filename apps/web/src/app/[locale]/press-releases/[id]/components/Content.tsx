@@ -103,7 +103,7 @@ function Data({ initialData }: { initialData: PressRelease }) {
     <div
       className={cn(
         "mx-auto",
-        "w-[20.8125rem] md:w-[40rem]",
+        "w-[20.8125rem] max-w-full md:w-[40rem]",
         "flex flex-col items-stretch",
       )}
     >
