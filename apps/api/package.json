@@ -1,34 +1,49 @@
 {
   "name": "api",
   "type": "module",
-  "main": "./dist/index.js",
+  "main": "./dist/index.cjs",
   "scripts": {
     "dev": "NODE_ENV=development nodemon --watch ../../packages/api --watch ./src --exec tsx src/index.ts",
     "build": "tsup",
-    "start": "node dist/index.js",
+    "start": "node dist/index.cjs",
     "clean": "rm -rf dist"
   },
   "imports": {
-    "#logging/*": "./src/logging/*",
-    "#env": "./src/env.ts"
+    "#env": "./src/env.ts",
+    "#webhook/router": "./src/webhook/routers/index.ts",
+    "#webhook/routers/press-releases/*": "./src/webhook/routers/press-releases/*.ts",
+    "#webhook/routers/users/*": "./src/webhook/routers/users/*.ts",
+    "#webhook/routers/*": "./src/webhook/routers/*.ts",
+    "#webhook/openapi": "./src/webhook/openapi/index.ts",
+    "#middlewares/*": "./src/middlewares/*",
+    "#aws/*": "./src/aws/*",
+    "#extensions/*": "./src/extensions/*"
   },
   "dependencies": {
+    "@asteasolutions/zod-to-openapi": "^7.2.0",
+    "@aws-sdk/client-s3": "^3.685.0",
+    "@aws-sdk/client-sts": "^3.682.0",
+    "@aws-sdk/s3-request-presigner": "^3.685.0",
     "@hono/node-server": "^1.12.2",
     "@hono/trpc-server": "^0.3.2",
     "@repo/api": "*",
     "@trpc/server": "^11.0.0-rc.553",
+    "@types/swagger-ui-express": "^4.1.7",
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^5.0.0",
     "helmet": "^8.0.0",
     "hono": "^4.6.1",
+    "jwt-decode": "^4.0.0",
+    "swagger-ui-express": "^5.0.1",
     "tsup": "^8.3.0",
-    "winston": "^3.14.2"
+    "zod": "^3.23.8"
   },
   "devDependencies": {
-    "@types/express": "^5.0.0",
+    "@types/express": "^4.1.7",
     "@types/node": "^20.11.17",
     "nodemon": "^3.1.7",
+    "ts-to-zod": "^3.13.0",
     "tsx": "^4.7.1"
   }
 }

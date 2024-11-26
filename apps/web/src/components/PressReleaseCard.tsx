@@ -5,12 +5,12 @@ import ReadingTime from "@/components/ReadingTime";
 import Separator from "@/components/Separator";
 import UrgentTag from "@/components/UrgentTag";
 import NewTab from "@/icons/new-tab";
+import { getContent } from "@/lib/data/press-release";
 import { cn } from "@/lib/ui/utils";
 import type { PressRelease } from "@repo/api/cms/types";
 import { useHover } from "@uidotdev/usehooks";
 import { format, parseISO } from "date-fns";
 import { useTranslations } from "next-intl";
-import stripMarkdown from "remove-markdown";
 
 type Props = {
   data: PressRelease;
@@ -22,6 +22,7 @@ export default function PressReleaseCard({ data }: Props) {
   const date = parseISO(data.date_published);
   const isStartOfDay = data && date.getHours() === 0 && date.getMinutes() === 0;
   const { url } = useLocaleURL();
+  const content = getContent(data);
 
   return (
     <Link
@@ -49,7 +50,7 @@ export default function PressReleaseCard({ data }: Props) {
           })}
         >
           <Separator type="pipe" />
-          <ReadingTime text={data.content.plain || data.content.markdown} />
+          <ReadingTime text={content} />
         </div>
         {data.priority === "high" && <UrgentTag className="ml-auto" />}
       </div>
@@ -67,7 +68,7 @@ export default function PressReleaseCard({ data }: Props) {
           "line-clamp-2 lg:line-clamp-3",
         )}
       >
-        {data.content.plain || stripMarkdown(data.content.markdown)}
+        {content}
       </p>
       <div
         className={cn(

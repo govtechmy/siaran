@@ -1,11 +1,26 @@
+import { APIError } from "payload/errors";
 import { CollectionConfig } from "payload/types";
 
 const PressRelease: CollectionConfig = {
   slug: "press-releases",
+  hooks: {
+    beforeChange: [
+      async function beforeChange({ req, operation, data }) {
+        if (operation === "update" && !data.relatedAgency) {
+          throw new APIError("Please specify the agency", 400);
+        }
+
+        return {
+          ...data,
+          relatedAgency: data.relatedAgency || req.user.relatedAgency,
+        };
+      },
+    ],
+  },
   admin: {
     listSearchableFields: [
       "title",
-      "content.plaintext",
+      "content.plain",
       "content.markdown",
       "type",
       "attachments.file_name",
@@ -58,7 +73,7 @@ const PressRelease: CollectionConfig = {
       type: "group",
       fields: [
         {
-          name: "plaintext",
+          name: "plain",
           type: "textarea",
           required: false,
         },
@@ -98,14 +113,29 @@ const PressRelease: CollectionConfig = {
           type: "number", //bytes
           required: false,
         },
+        {
+          name: "storage",
+          type: "group",
+          hidden: true,
+          fields: [
+            {
+              name: "domain",
+              type: "text",
+              required: false,
+            },
+            {
+              name: "key",
+              type: "text",
+              required: false,
+            },
+          ],
+        },
       ],
-      required: false,
     },
     {
       name: "relatedAgency",
       type: "relationship",
       relationTo: "agencies",
-      required: true,
     },
   ],
 };

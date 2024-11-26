@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "baseUrl": ".",
     "paths": {
-      "#cms/*": ["src/cms/*.ts"],
-      "#trpc": ["src/trpc/index.ts"],
-      "#trpc/*": ["src/trpc/*"],
-      "#http": ["src/http.ts"]
+      "#logging/*": ["./src/logging/*"],
+      "#cms/*": ["./src/cms/*"],
+      "#trpc": ["./src/trpc/index.ts"],
+      "#trpc/*": ["./src/trpc/*"],
+      "#http": ["./src/http.ts"],
+      "#aws/*": ["./src/aws/*"],
+      "#extensions/*": ["./src/extensions/*"]
     },
     "strict": true,
     "skipLibCheck": true

@@ -12,6 +12,10 @@ export default function ReadingTime({
 }) {
   const t = useTranslations();
 
+  if (text == "") {
+    return null;
+  }
+
   return (
     <div
       className={cn(

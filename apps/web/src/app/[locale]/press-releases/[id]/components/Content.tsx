@@ -2,6 +2,7 @@
 
 import ReadingTime from "@/components/ReadingTime";
 import Separator from "@/components/Separator";
+import { getContent } from "@/lib/data/press-release";
 import { cn } from "@/lib/ui/utils";
 import type { PressRelease } from "@repo/api/cms/types";
 import { format, parseISO } from "date-fns";
@@ -10,7 +11,6 @@ import { ComponentProps } from "react";
 import Markdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
-import stripMarkdown from "remove-markdown";
 import { dataAtom } from "../stores/press-release";
 
 const PUNCTUATIONS = [".", "?", "!"];
@@ -97,8 +97,6 @@ function splitCombineMarkdown(markdown: string): string {
 }
 
 function Data({ initialData }: { initialData: PressRelease }) {
-  const markdown = splitCombineMarkdown(initialData.content.markdown);
-
   return (
     <div
       className={cn(
@@ -134,12 +132,7 @@ function Data({ initialData }: { initialData: PressRelease }) {
           "font-normal",
         )}
       >
-        <ReadingTime
-          text={
-            initialData.content.plain ||
-            stripMarkdown(initialData.content.markdown)
-          }
-        />
+        <ReadingTime text={getContent(initialData)} />
         <Separator type="bullet" className={cn("mx-[.5rem]")} />
         {format(parseISO(initialData.date_published), "d MMM yyyy h:mm a")}
       </div>
@@ -158,7 +151,7 @@ function Data({ initialData }: { initialData: PressRelease }) {
             remarkPlugins={[remarkGfm, remarkBreaks]}
             components={Components}
           >
-            {markdown}
+            {splitCombineMarkdown(initialData.content.markdown)}
           </Markdown>
         ) : (
           initialData.content.plain
