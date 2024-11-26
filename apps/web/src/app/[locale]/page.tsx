@@ -8,6 +8,7 @@ import { getTranslations } from "next-intl/server";
 import Content from "./components/Content";
 import HydrateState from "./components/HydrateState";
 import SearchHero from "./components/SearchHero";
+import ClientOnly from "@/components/ClientOnly";
 
 type Props = {
   params: { locale: Locale };
@@ -48,7 +49,9 @@ export default async function PageIndex({
       <main className="flex flex-col">
         <SearchHero agencies={agencies} />
         <Container>
-          <Content />
+          <ClientOnly>
+            <Content />
+          </ClientOnly>
         </Container>
       </main>
     </HydrateState>

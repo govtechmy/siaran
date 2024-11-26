@@ -1,40 +1,19 @@
-export type Attachment = {
-  url: string;
-  alt: string;
-  // TODO: use consistent naming convention (e.g. fileName instead of file_name)
-  file_name: string;
-  file_type: string;
-  file_size: number;
-};
+// TODO: remove
+import { type Agency as _Agency } from "#cms/schema/agency";
+import { type User as _User } from "#cms/schema/user";
+import {
+  type Content as _Content,
+  type Attachment as _Attachment,
+  type PressRelease as _PressRelease,
+  type Type as _Type,
+} from "#cms/schema/press-release";
 
-export type Content = {
-  plain: string;
-  html: string;
-  markdown: string;
-};
-
-export type Agency = {
-  id: string;
-  name: string;
-  acronym: string;
-  email: string;
-  socialMedia: string[];
-};
-
-export type PressRelease = {
-  id: string;
-  language: string;
-  title: string;
-  // TODO: make optional
-  date_published: string;
-  type: PressReleaseType;
-  content: Content;
-  attachments?: Attachment[];
-  priority?: "high" | "normal" | "low";
-  relatedAgency: Agency;
-};
-
-export type PressReleaseType = "kenyataan_media" | "ucapan" | "other";
+export type Attachment = _Attachment;
+export type Content = _Content;
+export type Agency = _Agency;
+export type User = _User;
+export type PressRelease = _PressRelease;
+export type PressReleaseType = _Type;
 
 export type Sort = {
   pressReleases: "asc" | "desc";

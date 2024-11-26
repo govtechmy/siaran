@@ -47,6 +47,11 @@ const Users: CollectionConfig = {
       ],
       defaultValue: "admin",
     },
+    {
+      name: "agency",
+      type: "relationship",
+      relationTo: "agencies",
+    },
     // Email added by default
     // Add more fields as needed
   ],

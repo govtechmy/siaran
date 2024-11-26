@@ -8,7 +8,13 @@ export function useLocaleURL() {
 
   return {
     url(route: Route, ...components: string[]) {
-      return path.join(locale, route, ...components);
+      const root = path.join("/", locale);
+
+      if (route === "index") {
+        return root;
+      }
+
+      return path.join(root, route, ...components);
     },
   };
 }

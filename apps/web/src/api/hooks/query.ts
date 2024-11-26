@@ -1,5 +1,5 @@
 import { useEffectMounted } from "@/components/hooks/mounted";
-import {
+import type {
   Agency,
   PaginatedResponse,
   PaginatedSearchResponse,

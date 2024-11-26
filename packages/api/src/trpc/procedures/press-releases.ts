@@ -1,17 +1,13 @@
+import { getToken } from "#cms/auth";
 import * as cms from "#cms/press-releases";
 import { publicProcedure } from "#trpc";
 import { TRPCError } from "@trpc/server";
-import { z } from "zod";
 
 export const getById = publicProcedure
-  .input(
-    z.object({
-      id: z.string(),
-    }),
-  )
+  .input(cms.input.getById)
   .query(async ({ input }) => {
     try {
-      return await cms.getById(input);
+      return await cms.getById(input, { token: await getToken() });
     } catch (e) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",
@@ -21,21 +17,10 @@ export const getById = publicProcedure
   });
 
 export const list = publicProcedure
-  .input(
-    z.object({
-      page: z.number().min(1).optional().default(1),
-      limit: z.number().min(1).optional().default(12),
-      type: z.enum(["kenyataan_media", "ucapan", "other"]).optional(),
-      sort: z.enum(["asc", "desc"]).optional(),
-      agencies: z.array(z.string()).optional(),
-      startDate: z.string().date().optional(),
-      endDate: z.string().date().optional(),
-      query: z.string().optional(),
-    }),
-  )
+  .input(cms.input.list)
   .query(async ({ input }) => {
     try {
-      return await cms.list(input);
+      return await cms.list(input, { token: await getToken() });
     } catch (e) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",

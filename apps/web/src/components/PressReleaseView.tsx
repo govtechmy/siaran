@@ -1,5 +1,6 @@
 "use client";
 
+import { Segment } from "@/components/hooks/view-segment";
 import PressReleaseCardView from "@/components/PressReleaseCardView";
 import PressReleaseListView from "@/components/PressReleaseListView";
 import { Item } from "@/components/SegmentControl";
@@ -9,7 +10,7 @@ export default function PressReleaseView({
   segment,
   data,
 }: {
-  segment: Item;
+  segment: Item<Segment>;
   data: PressRelease[];
 }) {
   switch (segment.id) {
