@@ -2,6 +2,21 @@ import { CollectionConfig } from "payload/types";
 
 const Agency: CollectionConfig = {
   slug: "agencies",
+  auth: true,
+  access: {
+    create({ req: { user } }) {
+      return user?.role === "superadmin";
+    },
+    read: ({ req: { user } }) => {
+      return user != null;
+    },
+    update({ req: { user } }) {
+      return user?.role === "superadmin";
+    },
+    delete({ req: { user } }) {
+      return user?.role === "superadmin";
+    },
+  },
   admin: {
     listSearchableFields: [
       "id",

@@ -1,8 +1,12 @@
 import express from "express";
 import payload from "payload";
+import path from "path";
 
 require("dotenv").config();
 const app = express();
+
+// Serve assets
+app.use("/assets", express.static(path.resolve(__dirname, "./assets")));
 
 app.get("/", (_, res) => {
   res.redirect("/admin");
