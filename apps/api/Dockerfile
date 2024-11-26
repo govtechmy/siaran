@@ -25,4 +25,4 @@ USER express
 EXPOSE $PORT
 ENV HOST=0.0.0.0
 
-CMD ["node", "./apps/api/dist/index.js"]
+CMD ["npm", "start", "--workspace=api"]

@@ -2,8 +2,8 @@ import { defineConfig } from "tsup";
 
 export default defineConfig({
   entry: ["./src/index.ts"],
-  format: ["esm"],
-  noExternal: ["@repo"],
+  format: ["cjs"],
+  noExternal: ["@repo/api"],
   splitting: false,
   bundle: true,
   outDir: "./dist",

@@ -10,8 +10,13 @@
     "outDir": "./dist",
     "baseUrl": ".",
     "paths": {
-      "#logging/*": ["src/logging/*"],
-      "#env": ["src/env.ts"]
+      "#env": ["src/env.ts"],
+      "#webhook/router": ["src/webhook/routers/index.ts"],
+      "#webhook/routers/*": ["src/webhook/routers/*"],
+      "#webhook/openapi": ["src/webhook/openapi/index.ts"],
+      "#middlewares/*": ["src/middlewares/*"],
+      "#aws/*": ["src/aws/*"],
+      "#extensions/*": ["src/extensions/*"]
     }
   }
 }

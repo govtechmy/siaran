@@ -30,7 +30,7 @@ export async function searchAll(req: Request, res: Response) {
             },
           },
           {
-            ["content.plaintext"]: {
+            ["content.plain"]: {
               contains: query,
             },
           },

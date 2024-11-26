@@ -28,9 +28,9 @@ export function useViewSegment(initialSegment?: Segment) {
         return <List isActive={isActive} />;
       },
     },
-  } satisfies Record<Segment, SegmentControlItem>;
+  } satisfies Record<Segment, SegmentControlItem<Segment>>;
 
-  const [active, setActive] = useState<SegmentControlItem>(
+  const [active, setActive] = useState<SegmentControlItem<Segment>>(
     // use provided segment
     (initialSegment && segmentsById[initialSegment]) ||
       // or, use search param segment
@@ -42,9 +42,9 @@ export function useViewSegment(initialSegment?: Segment) {
   return {
     segments: Object.values(
       Object.values(segmentsById),
-    ) as SegmentControlItem[],
+    ) as SegmentControlItem<Segment>[],
     active,
-    onSegment(segment: SegmentControlItem) {
+    onSegment(segment: SegmentControlItem<Segment>) {
       setActive(segment);
     },
   };
