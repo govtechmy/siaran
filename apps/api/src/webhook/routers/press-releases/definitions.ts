@@ -71,7 +71,7 @@ const definitions = [
       method: "get",
       path: "/webhook/press-releases/{id}",
       params: {
-        id: cms.schema.id,
+        id: z.string(),
       },
     },
     responses: [
@@ -109,7 +109,7 @@ const definitions = [
       },
       {
         status: 404,
-        description: "Forbidden",
+        description: "Not found",
         body: getErrorSchema({
           code: z.enum(["not_found"]),
           message: z.string(),
@@ -133,7 +133,7 @@ const definitions = [
       method: "delete",
       path: "/webhook/press-releases/{id}",
       params: {
-        id: cms.schema.id,
+        id: z.string(),
       },
     },
     responses: [
@@ -190,11 +190,74 @@ const definitions = [
     tags: [TAG],
     auth: true,
     request: {
+      description: "Commit pre-uploaded files as press releases attachments",
+      method: "post",
+      path: "/webhook/press-releases/{id}/pre-upload/{sessionId}/commit/attachments",
+      params: {
+        sessionId: z.string(),
+        id: z.string(),
+      },
+    },
+    responses: [
+      {
+        status: 200,
+        description: "OK",
+        body: cms.output.commitPreUploadPressReleaseAttachment,
+      },
+      {
+        status: 400,
+        description: "Bad Request",
+        body: getValidationErrorSchema(),
+      },
+      {
+        status: 401,
+        description: "Unauthorized",
+        body: getErrorSchema({
+          code: z.enum([
+            "missing_token",
+            "invalid_token",
+            "token_expired",
+            "invalid_credential",
+            "invalid_user",
+          ]),
+          message: z.string(),
+        }),
+      },
+      {
+        status: 403,
+        description: "Forbidden",
+        body: getErrorSchema({
+          code: z.enum(["access_denied"]),
+          message: z.string(),
+        }),
+      },
+      {
+        status: 404,
+        description: "Not Found",
+        body: getErrorSchema({
+          code: z.enum(["not_found"]),
+          message: z.string(),
+        }),
+      },
+      {
+        status: 500,
+        description: "Internal Server Error",
+        body: getErrorSchema({
+          code: z.enum(["internal_server_error"]),
+          message: z.string(),
+        }),
+      },
+    ],
+  },
+  {
+    tags: [TAG],
+    auth: true,
+    request: {
       description: "Generate a presigned URL for uploading an attachment",
       method: "post",
       path: "/webhook/press-releases/{id}/attachment/upload",
       params: {
-        id: cms.schema.id,
+        id: z.string(),
       },
       body: cms.input.upload,
     },
@@ -253,11 +316,74 @@ const definitions = [
     tags: [TAG],
     auth: true,
     request: {
+      description:
+        "Call this endpoint after uploading an attachment to record the uploaded file",
+      method: "post",
+      path: "/webhook/press-releases/{id}/attachment/upload/complete",
+      params: {
+        id: z.string(),
+      },
+    },
+    responses: [
+      {
+        status: 204,
+        description: "No Content",
+      },
+      {
+        status: 400,
+        description: "Bad Request",
+        body: getValidationErrorSchema(),
+      },
+      {
+        status: 401,
+        description: "Unauthorized",
+        body: getErrorSchema({
+          code: z.enum([
+            "missing_token",
+            "invalid_token",
+            "token_expired",
+            "invalid_credential",
+            "invalid_user",
+          ]),
+          message: z.string(),
+        }),
+      },
+      {
+        status: 403,
+        description: "Forbidden",
+        body: getErrorSchema({
+          code: z.enum(["access_denied", "agency_mismatch"]),
+          message: z.string(),
+        }),
+      },
+      {
+        status: 404,
+        description: "Not Found",
+        body: getErrorSchema({
+          code: z.enum(["invalid_press_release"]),
+          message: z.string(),
+        }),
+      },
+      {
+        status: 500,
+        description: "Internal Server Error",
+        body: getErrorSchema({
+          code: z.enum(["internal_server_error"]),
+          message: z.string(),
+        }),
+      },
+    ],
+  },
+  {
+    tags: [TAG],
+    auth: true,
+    request: {
       description: "Delete an attachment",
       method: "delete",
       path: "/webhook/press-releases/{id}/attachment/{filename}",
       params: {
-        id: cms.schema.id,
+        id: z.string(),
+        filename: z.string(),
       },
     },
     responses: [
@@ -314,14 +440,12 @@ const definitions = [
     tags: [TAG],
     auth: true,
     request: {
-      description:
-        "Call this endpoint after uploading an attachment to record the uploaded file",
-      method: "post",
-      path: "/webhook/press-releases/{id}/attachment/upload/complete",
+      description: "Delete all attachments",
+      method: "delete",
+      path: "/webhook/press-releases/{id}/attachments",
       params: {
-        id: cms.schema.id,
+        id: z.string(),
       },
-      body: cms.input.upload,
     },
     responses: [
       {
@@ -359,7 +483,7 @@ const definitions = [
         status: 404,
         description: "Not Found",
         body: getErrorSchema({
-          code: z.enum(["invalid_press_release"]),
+          code: z.enum(["invalid_press_release", "not_found"]),
           message: z.string(),
         }),
       },

@@ -1,5 +1,12 @@
 import { ValidatedRequest } from "#middlewares/authenticate";
 import validateWithSchema from "#middlewares/validate-body";
+import {
+  accessDenied,
+  internalServerError,
+  invalidCredential,
+  invalidToken,
+  notFound,
+} from "#webhook/responses/errors";
 import { ResponseError } from "#webhook/routers/errors";
 import type { Session } from "@repo/api/cms/schema/session";
 import * as cms from "@repo/api/cms/users";
@@ -25,36 +32,20 @@ router.post(
 
         switch (e.message) {
           case "invalid_credential":
-            res.status(401).send({
-              code: "invalid_credential",
-              message: "Unauthorized: Invalid credential",
-            });
-
+            res.status(401).send(invalidCredential);
             return;
           case "access_denied":
-            res.status(403).send({
-              code: "access_denied",
-              message: "Forbidden: Access denied",
-            });
-
+            res.status(403).send(accessDenied);
             return;
           case "not_found":
-            res.status(404).send({
-              code: "not_found",
-              message: "Not Found",
-            });
-
+            res.status(404).send(notFound);
             return;
           default:
             break;
         }
       }
 
-      res.status(500).send({
-        code: "internal_server_error",
-        message: "Internal Server Error",
-      });
-
+      res.status(500).send(internalServerError);
       return;
     }
 
@@ -82,29 +73,17 @@ router.post(
 
         switch (e.message) {
           case "invalid_token":
-            res.status(401).send({
-              code: "invalid_token",
-              message: "Unauthorized: Invalid token or the token has expired",
-            });
-
+            res.status(401).send(invalidToken);
             return;
           case "access_denied":
-            res.status(403).send({
-              code: "access_denied",
-              message: "Forbidden: Access denied",
-            });
-
+            res.status(403).send(accessDenied);
             return;
           default:
             break;
         }
       }
 
-      res.status(500).send({
-        code: "internal_server_error",
-        message: "Internal Server Error",
-      });
-
+      res.status(500).send(internalServerError);
       return;
     }
 

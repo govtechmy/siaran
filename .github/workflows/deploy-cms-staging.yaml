@@ -15,6 +15,7 @@ env:
   DATABASE_URI: "${{ secrets.STAGING_DATABASE_URI }}"
   PAYLOAD_SECRET: "${{ secrets.STAGING_PAYLOAD_SECRET }}"
   WIF_PROVIDER: "${{ secrets.STAGING_WIF_PROVIDER }}"
+  PAYLOAD_PUBLIC_WEBHOOK_API_HOST: "${{ vars.STAGING_PAYLOAD_PUBLIC_WEBHOOK_API_HOST }}"
 
 jobs:
   deploy:
@@ -46,3 +47,4 @@ jobs:
           env_vars: |-
             DATABASE_URI=${{ env.DATABASE_URI }}
             PAYLOAD_SECRET=${{ env.PAYLOAD_SECRET }}
+            PAYLOAD_PUBLIC_WEBHOOK_API_HOST=${{ env.PAYLOAD_PUBLIC_WEBHOOK_API_HOST }}

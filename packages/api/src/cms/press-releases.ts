@@ -1,11 +1,12 @@
+import { acceptedFileTypes, agencies, filename } from "#cms/schema/common";
 import { pressRelease as pressReleaseSchema } from "#cms/schema/press-release";
 import type { SessionTokenOnly as SessionWithTokenOnly } from "#cms/schema/session";
 import type { PaginatedResponse, PressRelease } from "#cms/types";
+import { mapLocale } from "#cms/utils/locale";
 import { type SinglePossibleClause, whereClause } from "#cms/utils/query";
 import { z } from "#extensions/zod";
 import { cmsFetch, CMSFetchError } from "#http";
 import { logger } from "#logging/logger";
-import { mapLocale } from "./utils/locale";
 
 type MappedParams = Pick<
   PressRelease,
@@ -74,6 +75,8 @@ async function create(
   params: z.infer<typeof input.create>,
   { token }: SessionWithTokenOnly,
 ) {
+  const body = mapParams<typeof params>(params);
+
   try {
     return await cmsFetch<z.infer<typeof output.create>>(
       "/api/press-releases",
@@ -82,12 +85,13 @@ async function create(
         headers: {
           ["Authorization"]: `Bearer ${token}`,
         },
-        body: JSON.stringify(mapParams<typeof params>(params)),
+        body: JSON.stringify(body),
       },
     );
   } catch (e) {
     if (e instanceof CMSFetchError) {
-      logger.error(`Failed to login: ${e.message ?? ""} ${e.statusCode ?? ""}`);
+      logger.error(e.stack);
+      logger.error(JSON.stringify({ body }, null, 2));
 
       switch (e.statusCode) {
         case 400:
@@ -107,15 +111,21 @@ async function update(
   { id, params }: z.infer<typeof input.update>,
   { token }: SessionWithTokenOnly,
 ) {
+  const body = mapParams<typeof params>(params);
+
   try {
     return await cmsFetch<void>(`/api/press-releases/${id}`, {
       method: "PATCH",
       headers: {
         ["Authorization"]: `Bearer ${token}`,
       },
-      body: JSON.stringify(mapParams<typeof params>(params)),
+      body: JSON.stringify(body),
     });
   } catch (e) {
+    if (e instanceof CMSFetchError) {
+      logger.error(e.stack);
+      logger.error(JSON.stringify({ body }, null, 2));
+    }
     throw e;
   }
 }
@@ -133,9 +143,8 @@ async function deleteById(
     });
   } catch (e) {
     if (e instanceof CMSFetchError) {
-      logger.error(
-        `Failed to fetch press release [${e.response?.url}]: ${e.name ?? ""} ${e.statusCode ?? ""}`,
-      );
+      logger.error(e.stack);
+      logger.error(JSON.stringify({ id }, null, 2));
 
       if (e.statusCode === 404) {
         return null;
@@ -159,9 +168,8 @@ async function getById(
     });
   } catch (e) {
     if (e instanceof CMSFetchError) {
-      logger.error(
-        `Failed to fetch press release [${e.response?.url}]: ${e.name ?? ""} ${e.statusCode ?? ""}`,
-      );
+      logger.error(e.stack);
+      logger.error(JSON.stringify({ id }, null, 2));
 
       switch (e.statusCode) {
         case 401:
@@ -270,6 +278,7 @@ async function list(
         `Failed to fetch press releases [${e.response?.url}]: ${e.name ?? ""} ${e.statusCode ?? ""}`,
       );
     }
+
     throw e;
   }
 }
@@ -280,65 +289,11 @@ const schema = {
   }),
   attachment: {
     file: {
-      name: z.string().openapi({
-        example: "Merdeka_1957_tunku_abdul_rahman.jpg",
-      }),
-      type: z.enum([
-        "image/png",
-        "image/jpeg",
-        "text/plain",
-        "text/markdown",
-        "application/pdf",
-        "application/vnd.ms-powerpoint", // .ppt
-        "application/vnd.openxmlformats-officedocument.presentationml.presentation", // .pptx
-        "application/vnd.ms-excel", // .xls
-        "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", // .xlsx
-        "application/msword", // .doc
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document", // .docx
-      ]),
+      name: filename,
+      type: acceptedFileTypes,
     },
   },
-  relatedAgency: z.enum([
-    "ECC",
-    "JWP",
-    "KBS",
-    "KDN",
-    "KE",
-    "KKD",
-    "KKDW",
-    "KKR",
-    "KLN",
-    "KPDN",
-    "KPKT",
-    "KPN",
-    "KPWKM",
-    "KWP",
-    "MACC",
-    "MAFS",
-    "MCMC",
-    "MECD",
-    "MINDEF",
-    "MITI",
-    "MOE",
-    "MOF",
-    "MOH",
-    "MOHE",
-    "MOHR",
-    "MOSTI",
-    "MOT",
-    "MOTAC",
-    "MPIC",
-    "MYCC",
-    "NRECC",
-    "NRES",
-    "PETRA",
-    "PMO",
-    "SPP",
-    "SSM",
-  ]),
-};
-
-const propTypes = {
+  relatedAgency: agencies,
   body: {
     language: z.enum(["en-MY", "ms-MY"]).openapi({
       description: "Press release language",
@@ -368,9 +323,7 @@ const propTypes = {
     priority: z.enum(["high", "medium", "low"]).openapi({
       example: "high",
     }),
-    relatedAgency: schema.relatedAgency.openapi({
-      example: "PMO",
-    }),
+    relatedAgency: agencies,
     attachments: z
       .array(
         z.object({
@@ -382,8 +335,8 @@ const propTypes = {
             example: `Tunku Abdul Rahman chanting "freedom!" when signing the Malayan Declaration of Independence in 1957.`,
           }),
           file: z.object({
-            name: schema.attachment.file.name,
-            type: schema.attachment.file.type.openapi({
+            name: filename,
+            type: acceptedFileTypes.openapi({
               description:
                 "File type (images, PDFs, text and office documents)",
               example: "image/jpeg",
@@ -403,18 +356,18 @@ const propTypes = {
 };
 
 const input = {
-  create: z.object(propTypes.body),
+  create: z.object(schema.body),
   update: z.object({
     id: schema.id,
-    params: z.object(propTypes.body).partial(),
+    params: z.object(schema.body).partial(),
   }),
   upload: z.object({
     filename: z.string().openapi({
-      description: "Attachment file name",
+      description: "File name",
       example: "attachment.pdf",
     }),
     contentType: schema.attachment.file.type.openapi({
-      description: "Attachment file type",
+      description: "File type",
       example: "application/pdf",
     }),
   }),
@@ -438,7 +391,12 @@ const output = {
       id: z.string(),
     }),
   }),
-  upload: z.string().url(),
+  upload: z.object({
+    url: z.string().url(),
+  }),
+  commitPreUploadPressReleaseAttachment: z.object({
+    url: z.string().url(),
+  }),
   getById: pressReleaseSchema,
 };
 
