@@ -11,6 +11,7 @@ import {
   deletePreUploadedFile,
   getPreUploadFileUrl,
 } from "../../../../../api";
+import { useTranslation } from "react-i18next";
 import "./index.css";
 
 type FormAttachment = {
@@ -28,8 +29,8 @@ type PreUploadAttachment = {
   uploadProgress?: number;
 };
 
-const ERR_UPLOAD_FAILED = "Upload failed. Please try again.";
-const ERR_DELETE_ATTACHMENT_FAILED = "Delete failed. Please try again.";
+const ERR_UPLOAD_FAILED = "preUpload:uploadFailed";
+const ERR_DELETE_ATTACHMENT_FAILED = "pressRelease:deleteAttachmentFailed";
 
 function getRandomString() {
   const randomIntegers = window.crypto.getRandomValues(new Uint32Array(4));
@@ -89,10 +90,13 @@ async function preUploadAttachment({
     uploadUrl = result.url;
     previewUrl = result.previewUrl;
   } catch (e) {
-    throw new Error(e);
+    throw new Error(ERR_UPLOAD_FAILED);
   }
 
   return new Promise((resolve, reject) => {
+    // reject(new Error(ERR_UPLOAD_FAILED));
+    // return;
+
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", uploadUrl, true);
     xhr.setRequestHeader("Content-Type", file.type);
@@ -121,6 +125,7 @@ export function Field({ path }: Props) {
   const sessionId = useMemo(() => getRandomString(), []);
   const ref = useRef<HTMLInputElement>(null);
 
+  const { t } = useTranslation();
   const doc = useDocumentInfo();
   const form = useForm();
   const { formAttachments, setFormAttachments } = useFormAttachments(); // Current attachments
@@ -217,7 +222,7 @@ export function Field({ path }: Props) {
 
   return (
     <>
-      <h3>Upload Attachment</h3>
+      <h3>{t("pressRelease:attachments")}</h3>
       {/* Current attachments */}
       {doc.id &&
         formAttachments.map((attachment) => (
@@ -240,7 +245,7 @@ export function Field({ path }: Props) {
                 );
               }}
             >
-              Delete
+              {t("general:delete")}
             </button>
             <div className="attachment__label">
               <a
@@ -290,15 +295,17 @@ export function Field({ path }: Props) {
             )}
             {attachment.uploadProgress < 100 &&
               ` (${attachment.uploadProgress}%)`}{" "}
-            [Unpublished]
+            [{t("pressRelease:attachmentUnpublished")}]
           </div>
         </div>
       ))}
       <input
+        id="upload-attachment"
         ref={ref}
         className="attachment-input"
         required={false}
         type="file"
+        aria-label={t("pressRelease:uploadAttachment")}
         multiple={false}
         accept="image/*,application/pdf"
         onChange={async function createNewAttachment(e) {
@@ -356,7 +363,7 @@ export function Field({ path }: Props) {
           clearFileInput();
         }}
       />
-      <div className="error">{deleteError ?? uploadError ?? ""}</div>
+      <div className="error">{t(deleteError) ?? t(uploadError) ?? ""}</div>
     </>
   );
 }

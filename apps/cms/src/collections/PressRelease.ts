@@ -96,39 +96,90 @@ const PressRelease: CollectionConfig = {
   fields: [
     {
       name: "language",
-      type: "text",
-      required: false,
+      label: {
+        ["en-MY"]: "Language",
+        ["ms-MY"]: "Bahasa",
+      },
+      type: "select",
+      required: true,
+      options: [
+        {
+          label: "English",
+          value: "en-MY",
+        },
+        {
+          label: "Bahasa Melayu",
+          value: "ms-MY",
+        },
+      ],
+      defaultValue: "ms-MY",
     },
     {
       name: "title",
+      label: {
+        ["en-MY"]: "Title",
+        ["ms-MY"]: "Tajuk",
+      },
       type: "text",
       required: true,
     },
     {
       name: "date_published",
+      label: {
+        ["en-MY"]: "Date Published",
+        ["ms-MY"]: "Tarikh Diterbitkan",
+      },
       type: "date",
       required: true,
     },
     {
       name: "type",
-      type: "text",
-      required: true,
-    },
-    {
-      name: "priority",
+      label: {
+        ["en-MY"]: "Type",
+        ["ms-MY"]: "Jenis",
+      },
       type: "select",
       required: true,
       options: [
         {
-          label: "High",
+          label: "Press Release",
+          value: "kenyataan_media",
+        },
+        {
+          label: "Speech",
+          value: "ucapan",
+        },
+      ],
+      defaultValue: "kenyataan_media",
+    },
+    {
+      name: "priority",
+      label: {
+        ["en-MY"]: "Priority",
+        ["ms-MY"]: "Keutamaan",
+      },
+      type: "select",
+      required: true,
+      options: [
+        {
+          label: {
+            ["en-MY"]: "High",
+            ["ms-MY"]: "Tinggi",
+          },
           value: "high",
         },
         {
-          label: "Normal",
+          label: {
+            ["en-MY"]: "Normal",
+            ["ms-MY"]: "Biasa",
+          },
           value: "normal",
         },
         {
-          label: "Low",
+          label: {
+            ["en-MY"]: "Low",
+            ["ms-MY"]: "Rendah",
+          },
           value: "low",
         },
       ],
@@ -136,27 +187,31 @@ const PressRelease: CollectionConfig = {
     },
     {
       name: "content",
+      label: {
+        ["en-MY"]: "Content",
+        ["ms-MY"]: "Kandungan",
+      },
       type: "group",
       fields: [
         {
           name: "plain",
-          type: "textarea",
-          required: false,
-        },
-        {
-          name: "html",
+          label: {
+            ["en-MY"]: "Text",
+            ["ms-MY"]: "Teks",
+          },
           type: "textarea",
           required: false,
         },
         {
           name: "markdown",
+          label: "Markdown",
           type: "textarea",
           required: false,
         },
       ],
     },
     {
-      name: "draftAttachments",
+      name: "uploadAttachments",
       label: "Attachments",
       type: "ui",
       admin: {
@@ -173,7 +228,6 @@ const PressRelease: CollectionConfig = {
       fields: [
         {
           name: "url",
-          label: "URL",
           type: "text",
           required: true,
         },
@@ -192,29 +246,15 @@ const PressRelease: CollectionConfig = {
           type: "number", //bytes
           required: false,
         },
-        {
-          name: "storage",
-          type: "group",
-          hidden: true,
-          fields: [
-            {
-              name: "domain",
-              type: "text",
-              required: false,
-            },
-            {
-              name: "key",
-              type: "text",
-              required: false,
-            },
-          ],
-        },
       ],
     },
     {
       name: "relatedAgency",
       type: "relationship",
       relationTo: "agencies",
+      admin: {
+        hidden: true,
+      },
     },
   ],
 };
