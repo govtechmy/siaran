@@ -1,12 +1,13 @@
 import path from "path";
 
-import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { payloadCloud } from "@payloadcms/plugin-cloud";
 import search from "@payloadcms/plugin-search";
 import { slateEditor } from "@payloadcms/richtext-slate";
 import { buildConfig } from "payload/config";
 
+import { webpackBundler } from "@payloadcms/bundler-webpack";
+import { Logo } from "./admin/components/Logo";
 import Agency from "./collections/Agency";
 import PressRelease from "./collections/PressRelease";
 import Users from "./collections/Users";
@@ -16,6 +17,15 @@ export default buildConfig({
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
+    meta: {
+      titleSuffix: "- SiaranGovMY",
+      favicon: "/assets/logo.svg",
+    },
+    components: {
+      graphics: {
+        Logo,
+      },
+    },
   },
   editor: slateEditor({}),
   collections: [Users, Agency, PressRelease],
@@ -31,6 +41,9 @@ export default buildConfig({
     search({
       searchOverrides: {
         slug: "search-collections",
+        admin: {
+          hidden: true,
+        },
         access: {
           read: ({ req: { user } }) => {
             return user != null;

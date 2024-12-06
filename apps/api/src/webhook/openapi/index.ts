@@ -1,3 +1,4 @@
+import { definitions as preUploadDefinitions } from "#webhook/routers/pre-upload/definitions";
 import { definitions as pressReleaseDefinitions } from "#webhook/routers/press-releases/definitions";
 import { definitions as userDefinitions } from "#webhook/routers/users/definitions";
 import {
@@ -15,6 +16,7 @@ registry.registerComponent("securitySchemes", "bearerAuth", {
 });
 
 registerDefinition(registry, userDefinitions);
+registerDefinition(registry, preUploadDefinitions);
 registerDefinition(registry, pressReleaseDefinitions);
 
 const generator = new OpenApiGeneratorV3(registry.definitions);
@@ -29,9 +31,9 @@ type Definition = {
     body?: z.Schema;
     headers?: z.AnyZodObject;
     query?: z.AnyZodObject;
-    params?: {
+    params?: Partial<{
       [key: string]: z.ZodType;
-    };
+    }>;
   };
   responses: {
     status: HTTPStatusCode;
