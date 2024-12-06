@@ -1,5 +1,4 @@
-import { User } from "payload/dist/auth";
-import { CollectionConfig, PayloadRequest } from "payload/types";
+import { CollectionConfig } from "payload/types";
 
 const Users: CollectionConfig = {
   slug: "users",
