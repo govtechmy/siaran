@@ -7,7 +7,7 @@ import { z } from "zod";
 type Payload = { exp: number; email: string };
 
 interface ValidatedRequest<
-  Body extends z.Schema,
+  Body extends z.Schema = z.ZodAny,
   Params = unknown,
   Query = qs.ParsedQs,
 > extends Request<Params, unknown, z.infer<Body>, Query> {}

@@ -13,8 +13,10 @@
     "#webhook/router": "./src/webhook/routers/index.ts",
     "#webhook/routers/press-releases/*": "./src/webhook/routers/press-releases/*.ts",
     "#webhook/routers/users/*": "./src/webhook/routers/users/*.ts",
+    "#webhook/routers/pre-upload/*": "./src/webhook/routers/pre-upload/*.ts",
     "#webhook/routers/*": "./src/webhook/routers/*.ts",
     "#webhook/openapi": "./src/webhook/openapi/index.ts",
+    "#webhook/responses/*": "./src/webhook/responses/*.ts",
     "#middlewares/*": "./src/middlewares/*",
     "#aws/*": "./src/aws/*",
     "#extensions/*": "./src/extensions/*"

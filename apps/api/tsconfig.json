@@ -11,6 +11,7 @@
     "baseUrl": ".",
     "paths": {
       "#env": ["src/env.ts"],
+      "#webhook/responses/*": ["src/webhook/responses/*"],
       "#webhook/router": ["src/webhook/routers/index.ts"],
       "#webhook/routers/*": ["src/webhook/routers/*"],
       "#webhook/openapi": ["src/webhook/openapi/index.ts"],

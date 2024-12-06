@@ -1,19 +1,85 @@
 import { APIError } from "payload/errors";
 import { CollectionConfig } from "payload/types";
+import { Field } from "../admin/components/press-releases/fields/Attachment";
+import { commitPreUploadedAttachments, deleteAllAttachments } from "../api";
 
 const PressRelease: CollectionConfig = {
   slug: "press-releases",
+  access: {
+    read: ({ req, data }) => {
+      return (
+        req.user &&
+        (req.user.role === "superadmin" ||
+          req.user.agency.id === data.relatedAgency)
+      );
+    },
+    update: ({ req, data }) => {
+      return (
+        req.user &&
+        (req.user.role === "superadmin" ||
+          req.user.agency.id === data.relatedAgency)
+      );
+    },
+    delete({ req, data }) {
+      return (
+        req.user &&
+        (req.user.role === "superadmin" ||
+          req.user.agency.id === data.relatedAgency)
+      );
+    },
+  },
   hooks: {
     beforeChange: [
-      async function beforeChange({ req, operation, data }) {
+      ({ req, operation, data, context }) => {
+        context.operation = operation;
+        context.sessionId = data.sessionId;
+        context.token = req.cookies["payload-token"];
+
+        if (data.isPreUploading) {
+          throw new APIError("Please wait for file(s) to be uploaded.", 400);
+        }
+
         if (operation === "update" && !data.relatedAgency) {
-          throw new APIError("Please specify the agency", 400);
+          throw new APIError("Agency cannot be changed", 400);
         }
 
         return {
           ...data,
-          relatedAgency: data.relatedAgency || req.user.relatedAgency,
+          relatedAgency: data.relatedAgency || req.user.agency.id,
         };
+      },
+    ],
+    afterChange: [
+      ({ doc, context }) => {
+        const { sessionId, token } = context as {
+          sessionId: string;
+          token: string;
+        };
+
+        if (sessionId && token) {
+          // Use timeout to let Payload commit the changes first
+          setTimeout(() => {
+            commitPreUploadedAttachments({
+              pressReleaseId: doc.id as string,
+              sessionId,
+              token,
+            });
+          }, 750);
+        }
+
+        return doc;
+      },
+    ],
+    beforeDelete: [
+      async ({ req, id, context }) => {
+        const token = req.cookies["payload-token"];
+
+        if (token) {
+          await deleteAllAttachments({
+            id: id as string,
+            token,
+          });
+        }
       },
     ],
   },
@@ -90,11 +156,24 @@ const PressRelease: CollectionConfig = {
       ],
     },
     {
+      name: "draftAttachments",
+      label: "Attachments",
+      type: "ui",
+      admin: {
+        position: "sidebar",
+        components: { Field },
+      },
+    },
+    {
       name: "attachments",
       type: "array",
+      admin: {
+        hidden: true,
+      },
       fields: [
         {
           name: "url",
+          label: "URL",
           type: "text",
           required: true,
         },

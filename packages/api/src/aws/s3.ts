@@ -1,7 +1,12 @@
 import { getRegion } from "#aws/region";
 import { logger } from "#logging/logger";
 import {
+  CopyObjectCommand,
+  CopyObjectCommandInput,
+  CopyObjectCommandOutput,
   DeleteObjectCommand,
+  DeleteObjectsCommand,
+  DeleteObjectsCommandOutput,
   GetObjectCommand,
   ListObjectsV2Command,
   ListObjectsV2CommandOutput,
@@ -48,6 +53,20 @@ function getBucket() {
   return bucket;
 }
 
+function getDomain() {
+  const domain = process.env.R2_URL;
+
+  if (!domain) {
+    throw new Error("missing_r2");
+  }
+
+  return domain;
+}
+
+function getObjectUrl(key: string) {
+  return new URL(key, getDomain()).href;
+}
+
 async function getUploadUrl({
   path,
   contentType,
@@ -70,11 +89,11 @@ async function getUploadUrl({
       logger.error(JSON.stringify({ path, contentType }));
     }
 
-    throw new Error("Unable to generate pre-signed URL");
+    throw new Error("get_upload_url_failed");
   }
 }
 
-async function getObjectUrl({ key }: { key: string }) {
+async function getSignedObjectUrl({ key }: { key: string }) {
   try {
     const client = await getClient();
     const command = new GetObjectCommand({
@@ -91,37 +110,95 @@ async function getObjectUrl({ key }: { key: string }) {
       logger.error(JSON.stringify({ key }));
     }
 
-    throw new Error("Unable to get object URL");
+    throw new Error("get_object_url_failed");
   }
 }
 
-async function listObjects({ path }: { path: string }) {
+async function copyObjects({
+  srcPrefix,
+  destPrefix,
+}: {
+  srcPrefix: string;
+  destPrefix: string;
+}) {
+  let files: Awaited<ReturnType<typeof listObjects>>;
+
+  try {
+    files = await listObjects({ prefix: srcPrefix });
+  } catch (e) {
+    if (e instanceof Error) {
+      logger.error(e.stack);
+      logger.error(JSON.stringify({ srcPrefix, destPrefix }));
+    }
+
+    throw new Error("move_failed");
+  }
+
+  if (!files || files.length === 0) {
+    throw new Error("not_found");
+  }
+
+  for (const file of files) {
+    let response: CopyObjectCommandOutput;
+
+    if (!file.key) {
+      continue;
+    }
+
+    try {
+      const client = await getClient();
+      const bucket = getBucket();
+      const command = new CopyObjectCommand({
+        Bucket: bucket,
+        CopySource: `${bucket}/${file.key}`,
+        Key: `${destPrefix}/${path.basename(file.key)}`,
+      });
+
+      response = await client.send(command);
+    } catch (e) {
+      if (e instanceof Error) {
+        logger.error(e.stack);
+        logger.error(JSON.stringify({ srcPrefix, destPrefix }));
+      }
+
+      throw new Error("copy_failed");
+    }
+  }
+}
+
+async function listObjects({ prefix }: { prefix: string }) {
   let response: ListObjectsV2CommandOutput;
 
   try {
     const client = await getClient();
     const command = new ListObjectsV2Command({
       Bucket: getBucket(),
-      Prefix: path,
+      Prefix: prefix,
     });
 
     response = await client.send(command);
   } catch (e) {
     if (e instanceof Error) {
       logger.error(e.stack);
-      logger.error(JSON.stringify({ path }));
+      logger.error(JSON.stringify({ prefix }));
     }
 
-    throw new Error("Unable to list objects");
+    throw new Error("list_failed");
   }
 
-  const files = response.Contents?.map((object) => ({
-    key: object.Key,
-    size: object.Size,
-    lastModified: object.LastModified,
-  }));
+  return (response.Contents ?? [])
+    .map((object) => {
+      if (!object.Key || !object.Size || !object.LastModified) {
+        return null;
+      }
 
-  return files;
+      return {
+        key: object.Key,
+        size: object.Size,
+        lastModified: object.LastModified,
+      };
+    })
+    .filter((obj) => obj !== null);
 }
 
 async function getObject({ key }: { key: string }) {
@@ -134,14 +211,8 @@ async function getObject({ key }: { key: string }) {
       }),
     );
 
-    const domain = process.env.R2_URL;
-
-    if (!domain) {
-      throw new Error("R2 URL not found");
-    }
-
     return {
-      url: path.join(domain, key),
+      url: getObjectUrl(key),
       name: path.basename(key),
       content: {
         type: response.ContentType,
@@ -154,7 +225,35 @@ async function getObject({ key }: { key: string }) {
       logger.error(JSON.stringify({ key }));
     }
 
-    throw new Error("Unable to get object");
+    throw new Error("get_failed");
+  }
+}
+
+async function deleteObjects({ keys }: { keys: string[] }) {
+  let response: DeleteObjectsCommandOutput;
+
+  try {
+    const client = await getClient();
+
+    response = await client.send(
+      new DeleteObjectsCommand({
+        Bucket: getBucket(),
+        Delete: {
+          Objects: keys.map((key) => ({ Key: key })),
+        },
+      }),
+    );
+  } catch (e) {
+    if (e instanceof Error) {
+      logger.error(e.stack);
+      logger.error(JSON.stringify({ keys }));
+    }
+
+    throw new Error("delete_failed");
+  }
+
+  if (response.Deleted && response.Deleted.length === 0) {
+    throw new Error("not_found");
   }
 }
 
@@ -173,8 +272,17 @@ async function deleteObject({ key }: { key: string }) {
       logger.error(JSON.stringify({ key }));
     }
 
-    throw new Error("Unable to delete object");
+    throw new Error("delete_failed");
   }
 }
 
-export { getUploadUrl, getObjectUrl, listObjects, getObject, deleteObject };
+export {
+  getUploadUrl,
+  getSignedObjectUrl,
+  listObjects,
+  copyObjects,
+  getObject,
+  getObjectUrl,
+  deleteObject,
+  deleteObjects,
+};
