@@ -12,8 +12,18 @@ import Agency from "./collections/Agency";
 import PressRelease from "./collections/PressRelease";
 import Users from "./collections/Users";
 import endpoints from "./endpoints/app";
+import enMY from "./i18n/resources/en-MY";
+import msMY from "./i18n/resources/ms-MY";
 
 export default buildConfig({
+  i18n: {
+    fallbackLng: "ms-MY",
+    supportedLngs: ["en-MY", "ms-MY"],
+    resources: {
+      ["en-MY"]: enMY,
+      ["ms-MY"]: msMY,
+    },
+  },
   admin: {
     user: Users.slug,
     bundler: webpackBundler(),
