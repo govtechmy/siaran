@@ -227,12 +227,22 @@ async function list(
   }
 
   if (endDate) {
+    // Make sure the date is not in the future
+    const date = Math.min(new Date(endDate).getTime(), Date.now());
+
     and.push({
       ["date_published"]: {
-        less_than_equal: endDate,
+        less_than_equal: new Date(date).toISOString(),
+      },
+    });
+  } else {
+    and.push({
+      ["date_published"]: {
+        less_than_equal: new Date(Date.now()).toISOString(),
       },
     });
   }
+  console.log(and);
 
   if (query) {
     and.push({

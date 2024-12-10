@@ -48,7 +48,7 @@ async function getPreUploadFileUrl({
   });
 
   if (!response.ok) {
-    throw new Error("Get pre-upload url failed");
+    throw new Error("Get pre-upload URL failed");
   }
 
   const { url, previewUrl } = await response.json();
