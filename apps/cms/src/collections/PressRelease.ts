@@ -1,7 +1,14 @@
+import { slateEditor } from "@payloadcms/richtext-slate";
 import { APIError } from "payload/errors";
 import { CollectionConfig } from "payload/types";
 import { Field } from "../admin/components/press-releases/fields/Attachment";
 import { commitPreUploadedAttachments, deleteAllAttachments } from "../api";
+import {
+  convertMarkdownToPlainText,
+  convertMarkdownToSlate,
+  convertSlateToMarkdown,
+} from "../serialization/slate";
+import { mapLocale } from "../utils/locale";
 
 const PressRelease: CollectionConfig = {
   slug: "press-releases",
@@ -29,18 +36,51 @@ const PressRelease: CollectionConfig = {
     },
   },
   hooks: {
-    beforeChange: [
-      ({ req, operation, data, context }) => {
-        context.operation = operation;
-        context.sessionId = data.sessionId;
-        context.token = req.cookies["payload-token"];
+    beforeValidate: [
+      async ({ operation, data }) => {
+        if (operation === "update" && !data.relatedAgency) {
+          throw new APIError("Agency cannot be changed", 400);
+        }
 
         if (data.isPreUploading) {
           throw new APIError("Please wait for file(s) to be uploaded.", 400);
         }
 
-        if (operation === "update" && !data.relatedAgency) {
-          throw new APIError("Agency cannot be changed", 400);
+        return data;
+      },
+    ],
+    beforeRead: [
+      async ({ doc }) => {
+        if (!doc.content.slate) {
+          if (doc.content.markdown) {
+            doc.content.slate = convertMarkdownToSlate(doc.content.markdown);
+          } else {
+            doc.content.slate = null;
+          }
+        }
+
+        doc.language = mapLocale(doc.language);
+
+        return doc;
+      },
+    ],
+    beforeChange: [
+      ({ req, operation, data, context }) => {
+        context.operation = operation;
+        context.sessionId = data.sessionId;
+        context.token = req.cookies["payload-token"];
+        context.shouldCommitUpload = data.shouldCommitUpload;
+
+        if (data.content.slate) {
+          if (Array.isArray(data.content.slate)) {
+            data.content.markdown = data.content.slate
+              .map(convertSlateToMarkdown)
+              .join("");
+
+            data.content.plain = convertMarkdownToPlainText(
+              data.content.markdown,
+            );
+          }
         }
 
         return {
@@ -51,12 +91,13 @@ const PressRelease: CollectionConfig = {
     ],
     afterChange: [
       ({ doc, context }) => {
-        const { sessionId, token } = context as {
+        const { sessionId, shouldCommitUpload, token } = context as {
           sessionId: string;
+          shouldCommitUpload: boolean;
           token: string;
         };
 
-        if (sessionId && token) {
+        if (sessionId && token && shouldCommitUpload) {
           // Use timeout to let Payload commit the changes first
           setTimeout(() => {
             commitPreUploadedAttachments({
@@ -71,7 +112,7 @@ const PressRelease: CollectionConfig = {
       },
     ],
     beforeDelete: [
-      async ({ req, id, context }) => {
+      async ({ req, id }) => {
         const token = req.cookies["payload-token"];
 
         if (token) {
@@ -195,17 +236,42 @@ const PressRelease: CollectionConfig = {
       fields: [
         {
           name: "plain",
-          label: {
-            ["en-MY"]: "Text",
-            ["ms-MY"]: "Teks",
-          },
-          type: "textarea",
+          type: "text",
           required: false,
+          admin: {
+            hidden: true,
+          },
         },
         {
           name: "markdown",
+          type: "text",
+          required: false,
+          admin: {
+            hidden: true,
+          },
+        },
+        {
+          name: "slate",
           label: "Markdown",
-          type: "textarea",
+          type: "richText",
+          editor: slateEditor({
+            admin: {
+              elements: [
+                "h1",
+                "h2",
+                "h3",
+                "h4",
+                "h5",
+                "h6",
+                "blockquote",
+                "link",
+                "ol",
+                "ul",
+                "indent",
+              ],
+              leaves: ["bold", "italic", "strikethrough"],
+            },
+          }),
           required: false,
         },
       ],
