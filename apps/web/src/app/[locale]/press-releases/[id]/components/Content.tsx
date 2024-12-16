@@ -13,8 +13,6 @@ import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import { dataAtom } from "../stores/press-release";
 
-const PUNCTUATIONS = [".", "?", "!"];
-
 export default function Content() {
   const [data] = useAtom(dataAtom);
 
@@ -23,77 +21,6 @@ export default function Content() {
   }
 
   return <Data initialData={data} />;
-}
-
-function paragraphize(markdown: string, isParagraph: boolean): string {
-  return (
-    markdown
-      // Remove unwanted newlines: match an uncapitalized word after the newline
-      .replaceAll(/\n(?=[a-z])/g, " ")
-      .split(/(?<=\.)\n/g)
-      .map((item) => {
-        const pre = item.trim();
-        return isParagraph ? pre.replaceAll(/\n/g, " ") : pre;
-      })
-      .join("\n\n")
-  );
-}
-
-function splitCombineMarkdown(markdown: string): string {
-  const split = markdown
-    .replaceAll(/[“”]/g, '"')
-    .split(
-      // Split table markdown so they can be processed separately
-      /(?=(?:\n|^)\|)|(?<=\n\n)/g,
-    )
-    .map((item) => {
-      const pre = item.trim();
-
-      if (pre.startsWith("|")) {
-        return pre;
-      }
-
-      const split = pre.split(
-        // Split into sentences.
-        // Don't split strings like "Mr.", "Dr.", "1.", "2.", etc.
-        /((?<![|dr|mr|mrs|ts|i|ii|iii|iv|v|\d](?=\.))(?<=\S)[.!?](?=\s))/gi,
-      );
-
-      return split.reduce((acc, item, index) => {
-        const pre = item.trim();
-
-        if (PUNCTUATIONS.includes(pre)) {
-          // reconstruct the end of the sentence
-          return acc + pre;
-        }
-
-        // reconstruct into paragraphs
-        return (
-          acc +
-          "\n\n" +
-          paragraphize(
-            pre,
-            // If the  ends with a punctuation
-            (index < split.length - 1 &&
-              PUNCTUATIONS.includes(split[index + 1])) ||
-              pre.match(/\.$/) != null,
-          )
-        );
-      }, "");
-    })
-    .flat()
-    .map((item) => item.trim());
-
-  const reduced = split.reduce((acc, item) => {
-    if (item.startsWith("|")) {
-      // add a newline character to re-create the row
-      return acc + item + "\n";
-    }
-
-    return acc + item + "\n\n";
-  }, "");
-
-  return reduced;
 }
 
 function Data({ initialData }: { initialData: PressRelease }) {
@@ -147,11 +74,10 @@ function Data({ initialData }: { initialData: PressRelease }) {
       >
         {initialData.content.markdown ? (
           <Markdown
-            className={cn("mt-[1.125rem]")}
             remarkPlugins={[remarkGfm, remarkBreaks]}
             components={Components}
           >
-            {splitCombineMarkdown(initialData.content.markdown)}
+            {initialData.content.markdown}
           </Markdown>
         ) : (
           initialData.content.plain
@@ -163,50 +89,60 @@ function Data({ initialData }: { initialData: PressRelease }) {
 
 const Components: ComponentProps<typeof Markdown>["components"] = {
   h1: ({ node, ...props }) => (
-    <h1 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+    <h1 {...props} className={cn("mt-[.75rem]", "font-body font-semibold")} />
   ),
   h2: ({ node, ...props }) => (
-    <h2 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+    <h2 {...props} className={cn("mt-[.75rem]", "font-body font-semibold")} />
   ),
   h3: ({ node, ...props }) => (
-    <h3 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+    <h3 {...props} className={cn("mt-[.75rem]", "font-body font-semibold")} />
   ),
   h4: ({ node, ...props }) => (
-    <h4 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+    <h4 {...props} className={cn("mt-[.75rem]", "font-body font-semibold")} />
   ),
   h5: ({ node, ...props }) => (
-    <h5 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+    <h5 {...props} className={cn("mt-[.75rem]", "font-body font-semibold")} />
   ),
   h6: ({ node, ...props }) => (
-    <h6 className={cn("mt-[.75rem]", "font-body font-semibold")} {...props} />
+    <h6 {...props} className={cn("mt-[.75rem]", "font-body font-semibold")} />
   ),
   table: ({ node, ...props }) => (
     <table
-      className="min-w-full border-collapse border border-gray-outline-200"
       {...props}
+      className="min-w-full border-collapse border border-gray-outline-200"
     />
   ),
   tbody: ({ node, ...props }) => (
-    <tbody className="divide-y divide-gray-outline-200" {...props} />
+    <tbody {...props} className="divide-y divide-gray-outline-200" />
   ),
   th: ({ node, ...props }) => (
     <th
+      {...props}
       className={cn(
         "px-[1rem] py-[.5rem]",
         "border border-gray-outline-200",
         "text-start",
       )}
-      {...props}
     />
   ),
   td: ({ node, ...props }) => (
     <td
+      {...props}
       className={cn(
         "px-[1rem] py-[.5rem]",
         "border border-gray-outline-200",
         "text-start",
       )}
+    />
+  ),
+  blockquote: ({ node, ...props }) => (
+    <blockquote
       {...props}
+      className={cn(
+        "my-[1.5rem]",
+        "border-l-[.25rem] border-gray-outline-200",
+        "px-[1rem]",
+      )}
     />
   ),
   a: ({ node, ...props }) => (
@@ -218,22 +154,44 @@ const Components: ComponentProps<typeof Markdown>["components"] = {
     />
   ),
   ol: ({ children, ...props }) => (
-    <ol className={cn("mt-[1.5rem]", "list-decimal space-y-2 pl-8")} {...props}>
+    <ol
+      {...props}
+      className={cn(
+        "[&:not(:first-child)]:mt-[1.5rem]",
+        "[&:not(:last-child)]:mb-[1.5rem]",
+        "pl-8",
+        "list-decimal space-y-2",
+      )}
+    >
       {children}
     </ol>
   ),
   ul: ({ children, ...props }) => (
-    <ul className={cn("mt-[1.5rem]", "list-disc space-y-2 pl-8")} {...props}>
+    <ul
+      {...props}
+      className={cn(
+        "[&:not(:first-child)]:mt-[1.5rem]",
+        "[&:not(:last-child)]:mb-[1.5rem]",
+        "list-disc space-y-2 pl-8",
+      )}
+    >
       {children}
     </ul>
   ),
   li: ({ children, ...props }) => (
-    <li className={cn("pl-2")} {...props}>
+    <li {...props} className={cn("pl-2")}>
       {children}
     </li>
   ),
   p: ({ children, ...props }) => (
-    <p className={cn("my-[1.5rem]", "text-justify")} {...props}>
+    <p
+      {...props}
+      className={cn(
+        "[&:not(:first-child)]:mt-[1.5rem]",
+        "[&:not(:last-child)]:mb-[1.5rem]",
+        "text-justify",
+      )}
+    >
       {children}
     </p>
   ),
