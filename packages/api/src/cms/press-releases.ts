@@ -242,7 +242,6 @@ async function list(
       },
     });
   }
-  console.log(and);
 
   if (query) {
     and.push({

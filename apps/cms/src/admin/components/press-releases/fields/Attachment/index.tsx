@@ -94,9 +94,6 @@ async function preUploadAttachment({
   }
 
   return new Promise((resolve, reject) => {
-    // reject(new Error(ERR_UPLOAD_FAILED));
-    // return;
-
     const xhr = new XMLHttpRequest();
     xhr.open("PUT", uploadUrl, true);
     xhr.setRequestHeader("Content-Type", file.type);
@@ -138,8 +135,11 @@ export function Field({ path }: Props) {
     useFieldType<string>({
       path: "sessionId",
     });
-  const { setValue: setToken } = useFieldType({ path: "token" });
-  const { setValue: setIsPreUploading } = useFieldType({
+  const { setValue: setFieldShouldCommitUpload } = useFieldType<string>({
+    path: "shouldCommitUpload",
+  });
+  const { setValue: setFieldToken } = useFieldType({ path: "token" });
+  const { setValue: setFieldIsUploading } = useFieldType({
     path: "isPreUploading",
   });
 
@@ -183,12 +183,13 @@ export function Field({ path }: Props) {
       setFieldSessionId(sessionId);
     }
 
-    setToken(token);
+    setFieldToken(token);
   }, []);
 
   useEffect(
-    function setPreUploadStatus() {
-      setIsPreUploading(attachments.some((a) => a.uploadProgress < 100));
+    function updateSessionContext() {
+      setFieldIsUploading(attachments.some((a) => a.uploadProgress < 100));
+      setFieldShouldCommitUpload(attachments.length > 0);
     },
     [attachments],
   );
