@@ -1,12 +1,12 @@
 import path from "path";
 
+import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { payloadCloud } from "@payloadcms/plugin-cloud";
 import search from "@payloadcms/plugin-search";
-import { slateEditor } from "@payloadcms/richtext-slate";
 import { buildConfig } from "payload/config";
 
-import { webpackBundler } from "@payloadcms/bundler-webpack";
+import { slateEditor } from "@payloadcms/richtext-slate";
 import { Logo } from "./admin/components/Logo";
 import Agency from "./collections/Agency";
 import PressRelease from "./collections/PressRelease";
@@ -37,6 +37,7 @@ export default buildConfig({
       },
     },
   },
+  // editor: lexicalEditor({ features }),
   editor: slateEditor({}),
   collections: [Users, Agency, PressRelease],
   typescript: {
