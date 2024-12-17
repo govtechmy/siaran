@@ -37,7 +37,7 @@ export default async function PagePressReleases({
   return (
     <HydrateState state={{ initialData: data, initialParams: { id } }}>
       <main className="flex flex-col">
-        <Container>
+        <Container className="py-0">
           <Content />
         </Container>
       </main>
