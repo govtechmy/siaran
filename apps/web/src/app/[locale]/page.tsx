@@ -49,9 +49,7 @@ export default async function PageIndex({
       <main className="flex flex-col">
         <SearchHero agencies={agencies} />
         <Container>
-          <ClientOnly>
-            <Content />
-          </ClientOnly>
+          <Content />
         </Container>
       </main>
     </HydrateState>
