@@ -7,10 +7,10 @@ export function useMergeSearchParams() {
   const searchParams = useSearchParams();
 
   return {
-    mergeSearchParams(records: Record<string, string>) {
+    mergeSearchParams(records: Record<string, string | undefined>) {
       router.replace(mergePathname(pathname, searchParams, records));
     },
-    mergeSearchParamsHistory(records: Record<string, string>) {
+    mergeSearchParamsHistory(records: Record<string, string | undefined>) {
       window.history.pushState(
         {},
         "",

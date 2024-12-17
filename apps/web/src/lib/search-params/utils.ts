@@ -1,12 +1,16 @@
 export function mergeSearchParams(
   searchParams: string,
-  records?: Record<string, string>,
+  records?: Record<string, string | undefined>,
 ) {
   const params = new URLSearchParams(searchParams);
 
   if (records) {
     for (const [key, value] of Object.entries(records)) {
-      params.set(key, value);
+      if (typeof value === "undefined") {
+        params.delete(key);
+      } else {
+        params.set(key, value);
+      }
     }
   }
 
@@ -23,7 +27,7 @@ export function mergeSearchParams(
 export function mergePathname(
   pathname: string,
   searchParams: URLSearchParams,
-  records?: Record<string, string>,
+  records?: Record<string, string | undefined>,
 ) {
   return `${pathname}?${mergeSearchParams(searchParams.toString(), records)}`;
 }
