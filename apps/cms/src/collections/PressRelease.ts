@@ -116,9 +116,11 @@ const PressRelease: CollectionConfig = {
         const token = req.cookies["payload-token"];
 
         if (token) {
-          await deleteAllAttachments({
+          deleteAllAttachments({
             id: id as string,
             token,
+          }).catch((e) => {
+            // Ignore error
           });
         }
       },
