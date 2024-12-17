@@ -37,7 +37,7 @@ export function Header({ locale }: { locale: string }) {
   const { url } = useLocaleURL();
 
   return (
-    <header className="sticky top-0 z-50 bg-background lg:border-b lg:bg-background/80 lg:backdrop-blur-[30px]">
+    <header className="sticky top-0 z-50 border-b bg-background lg:bg-background/80 lg:backdrop-blur-[30px]">
       <div className="max-lg:border-b container flex w-full items-center justify-between gap-3 bg-background py-3 lg:gap-4 lg:bg-transparent xl:px-0">
         <a href={url("index")} className="flex h-full flex-none items-center">
           <img
