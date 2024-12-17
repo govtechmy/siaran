@@ -29,5 +29,11 @@ export function mergePathname(
   searchParams: URLSearchParams,
   records?: Record<string, string | undefined>,
 ) {
-  return `${pathname}?${mergeSearchParams(searchParams.toString(), records)}`;
+  const params = mergeSearchParams(searchParams.toString(), records);
+
+  if (params.size === 0) {
+    return pathname;
+  }
+
+  return `${pathname}?${params}`;
 }

@@ -1,5 +1,6 @@
 "use client";
 
+import AttachmentList from "@/components/AttachmentList";
 import ReadingTime from "@/components/ReadingTime";
 import Separator from "@/components/Separator";
 import { getContent } from "@/lib/data/press-release";
@@ -27,17 +28,13 @@ function Data({ initialData }: { initialData: PressRelease }) {
   return (
     <div
       className={cn(
-        "mx-auto",
+        "mx-auto mb-[1.5rem] mt-[3rem] md:mb-[3rem]",
         "w-[20.8125rem] max-w-full md:w-[40rem]",
         "flex flex-col items-stretch",
       )}
     >
       <div
-        className={cn(
-          "mr-auto mt-[3rem]",
-          "text-sm text-gray-dim-500",
-          "font-medium",
-        )}
+        className={cn("mr-auto", "text-sm text-gray-dim-500", "font-medium")}
       >
         {initialData.relatedAgency.name} ({initialData.relatedAgency.acronym})
       </div>
@@ -65,7 +62,7 @@ function Data({ initialData }: { initialData: PressRelease }) {
       </div>
       <div
         className={cn(
-          "mb-[3.75rem] mt-[1.5rem]",
+          "mt-[1.5rem]",
           "flex flex-col items-start",
           "text-[1rem] leading-[1.75rem] text-black-700",
           "font-body font-normal",
@@ -83,6 +80,17 @@ function Data({ initialData }: { initialData: PressRelease }) {
           initialData.content.plain
         )}
       </div>
+      <div
+        className={cn(
+          "mt-[1.5rem] md:mt-[1.875rem]",
+          "border-t border-t-gray-outline-200",
+        )}
+      />
+      {initialData.attachments && initialData.attachments.length > 0 && (
+        <div className={cn("mt-[1.5rem] md:mt-[1.875rem]")}>
+          <AttachmentList attachments={initialData.attachments} />
+        </div>
+      )}
     </div>
   );
 }
