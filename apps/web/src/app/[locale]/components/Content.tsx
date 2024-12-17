@@ -12,6 +12,7 @@ import {
   type Item as SegmentControlItem,
 } from "@/components/SegmentControl";
 import { Skeleton } from "@/components/base/skeleton";
+import { useMergeSearchParams } from "@/components/hooks/search-params";
 import { type Segment, useViewSegment } from "@/components/hooks/view-segment";
 import { cn } from "@/lib/ui/utils";
 import type { PaginatedResponse, PressRelease } from "@repo/api/cms/types";
@@ -39,6 +40,7 @@ export default function Content({ initialSegment }: Props) {
   const [params, setParams] = useAtom(paramsAtom);
   const [isLoading] = useAtom(isLoadingAtom);
   const isSearching = !!params.query;
+  const { mergeSearchParamsHistory } = useMergeSearchParams();
 
   useEffect(
     function persistInitialSegment() {
@@ -47,6 +49,13 @@ export default function Content({ initialSegment }: Props) {
       }
     },
     [initialSegment, viewSegment.active],
+  );
+
+  useEffect(
+    function persistPage() {
+      mergeSearchParamsHistory({ page: params.page?.toString() });
+    },
+    [params.page],
   );
 
   if (!data) {
