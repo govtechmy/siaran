@@ -1,13 +1,17 @@
 "use client";
 
 import AttachmentList from "@/components/AttachmentList";
+import { Button } from "@/components/Button";
+import HorizontalRule from "@/components/HorizontalRule";
 import ReadingTime from "@/components/ReadingTime";
 import Separator from "@/components/Separator";
+import Printer from "@/icons/printer";
 import { getContent } from "@/lib/data/press-release";
 import { cn } from "@/lib/ui/utils";
 import type { PressRelease } from "@repo/api/cms/types";
 import { format, parseISO } from "date-fns";
 import { useAtom } from "jotai";
+import { useTranslations } from "next-intl";
 import { ComponentProps } from "react";
 import Markdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
@@ -28,8 +32,9 @@ function Data({ initialData }: { initialData: PressRelease }) {
   return (
     <div
       className={cn(
-        "mx-auto mb-[1.5rem] mt-[3rem] md:mb-[3rem]",
-        "w-[20.8125rem] max-w-full md:w-[40rem]",
+        "mx-auto mb-[1.5rem] mt-[3rem] md:mb-[3rem] print:mx-[1rem]",
+        "w-[20.8125rem] md:w-[44.75rem] lg:w-[50rem] print:w-full print:text-pretty",
+        "max-w-full",
         "flex flex-col items-stretch",
       )}
     >
@@ -48,21 +53,14 @@ function Data({ initialData }: { initialData: PressRelease }) {
       >
         {initialData.title}
       </div>
+      <RowMetadata
+        content={getContent(initialData)}
+        dateString={initialData.date_published}
+      />
+      <RowAction className={cn("mt-[1.125rem]", "no-print")} />
+      <HorizontalRule className={cn("my-[1.125rem]")} />
       <div
         className={cn(
-          "mt-[.75rem]",
-          "flex flex-row items-center justify-start",
-          "text-sm text-black-500",
-          "font-normal",
-        )}
-      >
-        <ReadingTime text={getContent(initialData)} />
-        <Separator type="bullet" className={cn("mx-[.5rem]")} />
-        {format(parseISO(initialData.date_published), "d MMM yyyy h:mm a")}
-      </div>
-      <div
-        className={cn(
-          "mt-[1.5rem]",
           "flex flex-col items-start",
           "text-[1rem] leading-[1.75rem] text-black-700",
           "font-body font-normal",
@@ -80,17 +78,52 @@ function Data({ initialData }: { initialData: PressRelease }) {
           initialData.content.plain
         )}
       </div>
-      <div
-        className={cn(
-          "mt-[1.5rem] md:mt-[1.875rem]",
-          "border-t border-t-gray-outline-200",
-        )}
-      />
+      <HorizontalRule className={cn("mt-[1.5rem] md:mt-[1.875rem]")} />
       {initialData.attachments && initialData.attachments.length > 0 && (
-        <div className={cn("mt-[1.5rem] md:mt-[1.875rem]")}>
+        <div className={cn("mt-[1.5rem] md:mt-[1.875rem]", "no-print")}>
           <AttachmentList attachments={initialData.attachments} />
         </div>
       )}
+    </div>
+  );
+}
+
+function RowMetadata({
+  content,
+  dateString,
+}: {
+  content: string;
+  dateString: string;
+}) {
+  return (
+    <div
+      className={cn(
+        "mt-[.75rem]",
+        "flex flex-row items-center justify-start",
+        "text-sm text-black-500",
+        "font-normal",
+      )}
+    >
+      <ReadingTime text={content} />
+      <Separator type="bullet" className={cn("mx-[.5rem]")} />
+      {format(parseISO(dateString), "d MMM yyyy h:mm a")}
+    </div>
+  );
+}
+
+function RowAction({ className }: { className?: string }) {
+  const t = useTranslations();
+
+  return (
+    <div className={cn(className)}>
+      <Button
+        onClick={function openPrintDialog() {
+          window.print();
+        }}
+      >
+        <Printer className={cn("mr-[.375rem]")} />
+        {t("common.labels.print")}
+      </Button>
     </div>
   );
 }
