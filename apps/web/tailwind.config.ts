@@ -11,7 +11,11 @@ const config: Config = {
     container: {
       center: true,
       screens: {
-        xl: "1280px",
+        sm: "40rem",
+        md: "48rem",
+        lg: "64rem",
+        xl: "80rem",
+        "2xl": "96rem",
       },
       padding: {
         DEFAULT: "18px",
@@ -139,17 +143,14 @@ const config: Config = {
         ["body"]: ["var(--font-inter)"],
       },
       fontSize: {
-        ["xs"]: ["12px", "18px"],
-        ["sm"]: ["14px", "20px"],
-        ["base"]: ["16px", "24px"],
-        ["lg"]: ["18px", "26px"],
-        ["xl"]: ["20px", "30px"],
-        ["2xl"]: ["24px", "32px"],
-        ["3xl"]: ["30px", "38px"],
+        ["xs"]: [".75rem", "1.125rem"],
+        ["sm"]: [".875rem", "1.25rem"],
+        ["base"]: ["1rem", "1.5rem"],
+        ["lg"]: ["1.125rem", "1.625rem"],
+        ["xl"]: ["1.25rem", "1.875rem"],
+        ["2xl"]: ["1.5rem", "2rem"],
+        ["3xl"]: ["1.875rem", "2.375rem"],
       },
-      // spacing: {
-      //   4.5: "18px",
-      // },
     },
   },
   darkMode: "selector",

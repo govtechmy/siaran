@@ -144,7 +144,7 @@ export default function SearchFilterList({
     <div
       className={cn(
         "h-fit w-fit",
-        "flex flex-row flex-wrap items-center gap-[.5rem] md:flex-nowrap",
+        "flex flex-row flex-wrap items-center gap-[.5rem] lg:flex-nowrap",
         className,
       )}
     >
