@@ -1,8 +1,9 @@
+import { Link } from "@/components/Link";
+import FileDocument from "@/icons/file-document";
+import FileImage from "@/icons/file-image";
+import FilePDF from "@/icons/file-pdf";
 import { cn } from "@/lib/ui/utils";
 import type { Attachment } from "@repo/api/cms/types";
-import FileDocument from "./icons/file-document";
-import FileImage from "./icons/file-image";
-import FilePDF from "./icons/file-pdf";
 
 type Props = {
   attachments: Attachment[];
@@ -29,7 +30,7 @@ export default function Attachments({ attachments, className }: Props) {
           },
           index,
         ) => (
-          <a
+          <Link
             key={index}
             href={url}
             target="_blank"
@@ -37,14 +38,14 @@ export default function Attachments({ attachments, className }: Props) {
             aria-label={fileName}
             rel="noopener noreferrer"
             className={cn(
-              "w-full lg:max-w-[12.5rem]",
+              "border border-gray-outline-200",
+              "rounded-[.5rem]",
+              "h-fit w-full lg:max-w-[12.5rem]",
               "p-[.5rem]",
               "flex items-center gap-[.375rem]",
-              "border border-gray-200 hover:bg-gray-100",
-              "rounded-[.5rem]",
             )}
           >
-            <Icon fileType={fileType} />
+            <Icon fileType={fileType} className="shrink-0" />
             <div
               className={cn(
                 "w-fit",
@@ -75,26 +76,32 @@ export default function Attachments({ attachments, className }: Props) {
                 </p>
               )}
             </div>
-          </a>
+          </Link>
         ),
       )}
     </div>
   );
 }
 
-function Icon({ fileType }: { fileType: string }) {
+function Icon({
+  fileType,
+  className,
+}: {
+  fileType: string;
+  className?: string;
+}) {
   switch (fileType) {
     case "application/pdf":
     case "pdf":
-      return <FilePDF />;
+      return <FilePDF className={className} />;
     case "image/jpeg":
     case "image/png":
     case "png":
     case "jpg":
     case "jpeg":
-      return <FileImage />;
+      return <FileImage className={className} />;
     default:
-      return <FileDocument />;
+      return <FileDocument className={className} />;
   }
 }
 

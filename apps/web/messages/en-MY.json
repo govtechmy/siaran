@@ -39,7 +39,8 @@
       }
     },
     "labels": {
-      "read": "Read"
+      "read": "Read",
+      "print": "Print"
     },
     "filters": {
       "types": {
