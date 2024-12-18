@@ -17,6 +17,9 @@
     "name": "SiaranGovMY"
   },
   "common": {
+    "http": {
+      "404": "404 Error"
+    },
     "errors": {
       "notFound": "Not found"
     },
@@ -64,6 +67,17 @@
     }
   },
   "pages": {
+    "notFound": {
+      "titles": {
+        "main": "Page Not Found"
+      },
+      "descriptions": {
+        "main": "It seems that the page you're looking for doesn't exist."
+      },
+      "labels": {
+        "return": "Return to Home"
+      }
+    },
     "index": {
       "latestReleases": "Latest Releases",
       "searchResults": {
