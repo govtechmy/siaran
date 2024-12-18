@@ -17,6 +17,9 @@
     "name": "SiaranGovMY"
   },
   "common": {
+    "http": {
+      "404": "404 Ralat"
+    },
     "errors": {
       "notFound": "Tidak ditemui"
     },
@@ -64,6 +67,17 @@
     }
   },
   "pages": {
+    "notFound": {
+      "titles": {
+        "main": "Halaman Tidak Dijumpai"
+      },
+      "descriptions": {
+        "main": "Halaman yang anda cari tidak wujud."
+      },
+      "labels": {
+        "return": "Kembali ke Laman Utama"
+      }
+    },
     "index": {
       "latestReleases": "Paparan Terkini",
       "searchResults": {

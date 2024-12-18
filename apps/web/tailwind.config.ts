@@ -145,6 +145,7 @@ const config: Config = {
         ["lg"]: ["18px", "26px"],
         ["xl"]: ["20px", "30px"],
         ["2xl"]: ["24px", "32px"],
+        ["3xl"]: ["30px", "38px"],
       },
       // spacing: {
       //   4.5: "18px",
