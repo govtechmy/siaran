@@ -17,10 +17,11 @@ export default function Masthead() {
   return (
     <div
       className={cn(
+        "no-print",
         "z-[99]",
         open
           ? "bg-gradient-to-b from-washed-100 from-[84.74%] to-outline-200 to-100%"
-          : "bg-washed-100"
+          : "bg-washed-100",
       )}
     >
       <div className="container xl:px-0">
@@ -44,7 +45,7 @@ export default function Masthead() {
           </div>
         </button>
         <Collapse isOpen={open}>
-          <div className="grid grid-cols-1 gap-4.5 pb-6 pt-4.5 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
+          <div className="gap-4.5 pt-4.5 grid grid-cols-1 pb-6 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
             <span className="static text-sm text-brand-700 sm:hidden">
               {t("howToIdentify")}
             </span>

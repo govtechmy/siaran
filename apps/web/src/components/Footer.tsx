@@ -22,10 +22,10 @@ export default function Footer(props: Props) {
   };
 
   return (
-    <div className="border-t bg-background-50 py-8 lg:py-16">
-      <div className="divide-y-outline-200 container divide-y max-sm:px-0">
-        <div className="flex flex-col gap-6 pb-8 max-sm:px-4.5 lg:flex-row lg:justify-between">
-          <div className="flex flex-col gap-4 lg:gap-4.5">
+    <footer className="border-t bg-background-50 py-8 lg:py-16">
+      <div className="divide-y-outline-200 max-sm:px-0 container divide-y">
+        <div className="max-sm:px-4.5 flex flex-col gap-6 pb-8 lg:flex-row lg:justify-between">
+          <div className="lg:gap-4.5 flex flex-col gap-4">
             <div className="flex items-center gap-x-2.5">
               <img
                 src="/jata-negara.png"
@@ -69,7 +69,7 @@ export default function Footer(props: Props) {
           </div>
         </div>
 
-        <div className="flex flex-col justify-between gap-6 pt-8 text-sm text-dim-500 max-sm:px-4.5 lg:flex-row">
+        <div className="max-sm:px-4.5 flex flex-col justify-between gap-6 pt-8 text-sm text-dim-500 lg:flex-row">
           <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
             <p>
               {t("components.Footer.copyright")} © {new Date().getFullYear()}
@@ -78,7 +78,7 @@ export default function Footer(props: Props) {
           {props.showLastUpdated && <LastUpdated />}
         </div>
       </div>
-    </div>
+    </footer>
   );
 }
 

@@ -39,7 +39,8 @@
       }
     },
     "labels": {
-      "read": "Baca"
+      "read": "Baca",
+      "print": "Cetak"
     },
     "filters": {
       "types": {

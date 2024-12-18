@@ -191,3 +191,21 @@
     }
   }
 }
+
+@media print {
+  header,
+  footer,
+  .no-print {
+    display: none;
+  }
+  
+  p {
+    page-break-inside: avoid;
+  }
+
+  @page { 
+    margin: 1cm 1cm 1cm 0.125cm;
+    padding: 0;
+    /* padding: 10mm 10mm 10mm 2.5mm; */
+  }
+}
