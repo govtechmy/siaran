@@ -343,7 +343,7 @@ function SearchResultDropdown({
               </div>
               <div className="flex items-center gap-1">
                 <span className="text-sm text-black-800">
-                  {pressRelease.relatedAgency.acronym.toUpperCase()}
+                  {pressRelease.relatedAgency.acronym}
                 </span>
                 <ChevronRight className="h-4 w-4 text-gray-400" />
               </div>

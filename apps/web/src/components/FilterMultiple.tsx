@@ -14,10 +14,12 @@ import FilterPopoverTrigger from "@/components/FilterPopoverTrigger";
 import { cn } from "@/lib/ui/utils";
 import { useTranslations } from "next-intl";
 import { useEffect, useState } from "react";
+import FilterPopoverSecondaryText from "./FilterPopoverSecondaryText";
 
 export type Option = {
   id: string;
   label: string;
+  info?: string;
 };
 
 type Props = {
@@ -128,6 +130,7 @@ export function Filter({
                 key={option.id}
                 id={option.id}
                 label={option.label}
+                info={option.info}
                 checked={hasChecked(option)}
                 onCheckedChange={function toggleCheck(checked) {
                   if (hasChecked(option)) {
@@ -150,11 +153,13 @@ export function Filter({
 function CheckboxItem({
   id,
   label,
+  info,
   checked,
   onCheckedChange,
 }: {
   id: string;
   label: string;
+  info?: string;
   checked: boolean;
   onCheckedChange?: (checked: boolean) => void;
 }) {
@@ -162,14 +167,20 @@ function CheckboxItem({
     <CommandItem value={id} asChild>
       <label htmlFor={id} className={cn("h-full w-full")}>
         <FilterPopoverItem
-          className={cn("flex flex-row items-center gap-[1ch]")}
+          className={cn("flex flex-row items-start gap-[1ch]")}
         >
           <Checkbox
             id={id}
             checked={checked}
             onCheckedChange={onCheckedChange}
+            className={cn("mt-[.175rem]")} // Small margin to align with the text
           />
-          <FilterPopoverText>{label}</FilterPopoverText>
+          <div className={cn("flex flex-col items-start")}>
+            <FilterPopoverText>{label}</FilterPopoverText>
+            {info && (
+              <FilterPopoverSecondaryText>{info}</FilterPopoverSecondaryText>
+            )}
+          </div>
         </FilterPopoverItem>
       </label>
     </CommandItem>
