@@ -29,6 +29,8 @@ export default function Content() {
 }
 
 function Data({ initialData }: { initialData: PressRelease }) {
+  const t = useTranslations();
+
   return (
     <div
       className={cn(
@@ -41,7 +43,10 @@ function Data({ initialData }: { initialData: PressRelease }) {
       <div
         className={cn("mr-auto", "text-sm text-gray-dim-500", "font-medium")}
       >
-        {initialData.relatedAgency.name} ({initialData.relatedAgency.acronym})
+        {t(
+          `common.agencies.${initialData.relatedAgency.acronym.toUpperCase()}`,
+        )}{" "}
+        ({initialData.relatedAgency.acronym})
       </div>
       <div
         className={cn(

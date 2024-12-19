@@ -62,10 +62,11 @@ const Popover = forwardRef<Ref, Props>(
           align={align}
           side={side}
           className={cn(
+            "rounded-[0.5rem]",
             "mt-[0.3rem]",
-            "h-fit w-fit",
+            "max-w-100vw h-fit w-auto",
             "p-[0.3125rem]",
-            "rounded-[0.5rem] bg-white-background-0",
+            "bg-white-background-0",
             className,
           )}
         >
