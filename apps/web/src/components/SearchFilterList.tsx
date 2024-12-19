@@ -44,9 +44,11 @@ export default function SearchFilterList({
     return {
       id: agency.id,
       label: agency.acronym,
+      info: t(`common.agencies.${agency.acronym}`),
     };
   }) satisfies FilterMultiple.Option[];
-  const [selectedAgencies, setSelectedAgencies] = useState(allAgencies);
+  const [selectedAgencies, setSelectedAgencies] =
+    useState<FilterMultiple.Option[]>(allAgencies);
 
   const allPostTypes = [
     {
