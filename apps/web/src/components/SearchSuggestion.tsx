@@ -23,9 +23,12 @@ import {
   CommandItem,
   CommandList,
 } from "@/components/base/command";
+import { Link } from "@/components/Link";
 import { cn } from "@/lib/ui/utils";
 import { LoaderCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
+import { useRouter } from "next/navigation";
+import { useLocaleURL } from "./hooks/url";
 import PressToSearch from "./PressToSearch";
 
 type Props = {
@@ -293,6 +296,8 @@ function SearchResultDropdown({
   searchResultListRef?: RefObject<HTMLDivElement>;
 }) {
   const t = useTranslations();
+  const router = useRouter();
+  const { url } = useLocaleURL();
   const debouncedQuery = useDebounce(query, 300);
   const { data } = useTRPCQuery({
     route: "search",
@@ -306,7 +311,7 @@ function SearchResultDropdown({
       {data.agencies.length === 0 && data.pressReleases.length === 0 && (
         <SearchResultNone />
       )}
-      {data.agencies.length > 0 && (
+      {/* {data.agencies.length > 0 && (
         <CommandGroup
           className={cn("mt-[.875rem]")}
           heading={
@@ -326,7 +331,7 @@ function SearchResultDropdown({
             </SearchSuggestionItem>
           ))}
         </CommandGroup>
-      )}
+      )} */}
       {data.pressReleases.length > 0 && (
         <CommandGroup
           className={cn("mb-[0.5rem] mt-[1rem]")}
@@ -338,9 +343,12 @@ function SearchResultDropdown({
         >
           {data.pressReleases.map((pressRelease, index) => (
             <SearchSuggestionItem key={index} value={pressRelease.id}>
-              <div className="min-w-0 flex-1 truncate">
+              <Link
+                className="min-w-0 flex-1 truncate"
+                href={url("press-releases", pressRelease.id)}
+              >
                 {highlightText(pressRelease.title, query)}
-              </div>
+              </Link>
               <div className="flex items-center gap-1">
                 <span className="text-sm text-black-800">
                   {pressRelease.relatedAgency.acronym}
@@ -377,13 +385,16 @@ function SearchResultNone() {
 
 function SearchSuggestionItem({
   value,
+  onSelect,
   children,
 }: {
   value: string;
+  onSelect?: (value: string) => void;
   children: ReactNode;
 }) {
   return (
     <CommandItem
+      onSelect={onSelect}
       tabIndex={0}
       value={value}
       className={cn(
