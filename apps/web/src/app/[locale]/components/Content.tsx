@@ -25,7 +25,6 @@ import {
   isLoadingAtom,
   paramsAtom,
 } from "../stores/press-releases";
-import { segmentAtom } from "../stores/segment";
 
 type Props = {
   initialSegment?: Segment;
@@ -33,8 +32,7 @@ type Props = {
 
 export default function Content({ initialSegment }: Props) {
   const t = useTranslations();
-  const [segment, setSegment] = useAtom(segmentAtom);
-  const viewSegment = useViewSegment(initialSegment || segment);
+  const viewSegment = useViewSegment(initialSegment);
   const [data, setData] = useAtom(dataAtom);
   const isInitialData = useAtom(isInitialDataAtom);
   const [params, setParams] = useAtom(paramsAtom);
@@ -44,11 +42,11 @@ export default function Content({ initialSegment }: Props) {
 
   useEffect(
     function persistInitialSegment() {
-      if (initialSegment || viewSegment.active) {
-        setSegment(initialSegment || viewSegment.active.id);
+      if (viewSegment.active) {
+        mergeSearchParamsHistory({ view: viewSegment.active.id });
       }
     },
-    [initialSegment, viewSegment.active],
+    [viewSegment.active],
   );
 
   useEffect(
