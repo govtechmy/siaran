@@ -11,11 +11,16 @@ import {
 } from "../stores/press-releases";
 import { useHydrateAtoms } from "jotai/utils";
 import { ReactNode } from "react";
+import { Segment } from "@/components/hooks/view-segment";
+
+export type InitialParams = ListPressReleaseParams & {
+  view?: Segment;
+};
 
 type Props = {
   state: {
     initialData: ListPressReleaseData;
-    initialParams?: ListPressReleaseParams;
+    initialParams?: InitialParams;
   };
   children: ReactNode;
 };

@@ -19,35 +19,20 @@ export default function Pagination({
 }: Props) {
   const smallest = Math.max(1, current - 13);
   const largest = Math.min(total, current + 13);
+  const adjacent = (
+    current === 1
+      ? [2, 3]
+      : current === total
+        ? [total - 2, total - 1]
+        : [current - 1, current, current + 1]
+  ).filter((n) => n > smallest && n < largest);
 
-  const size = 3;
-  const distanceFromCurrent = Math.floor(size / 2);
-
-  const midNumbers = new Array(size)
-    .fill(current - distanceFromCurrent)
-    .map((n, i) => n + i)
-    .filter((n) => n > 0);
-
-  const mid = (
-    <>
-      {midNumbers.map(
-        (n) =>
-          n !== smallest && (
-            <Page
-              key={n}
-              variant={n === current ? "theme" : "default"}
-              onClick={() => notifyPageChange(n)}
-            >
-              {n}
-            </Page>
-          ),
-      )}
-      <PageEllipsis />
-    </>
-  );
+  const gapPageOrOverflow = 1; // The number of pages allowed before overflowing (ellipsis)
+  const overflowMidSmallest = adjacent[0] - smallest > gapPageOrOverflow + 1;
+  const overflowMidLargest =
+    largest - adjacent[adjacent.length - 1] > gapPageOrOverflow + 1;
 
   const pages = [
-    // 1 or the local minima relative to the current page
     <Page
       key={smallest}
       variant={smallest === current ? "theme" : "default"}
@@ -55,13 +40,52 @@ export default function Pagination({
     >
       {smallest}
     </Page>,
-    midNumbers.length > 0 && midNumbers[0] - smallest > distanceFromCurrent && (
+    overflowMidSmallest ? (
       <PageEllipsis />
+    ) : (
+      adjacent.length > 0 &&
+      smallest + 1 === adjacent[0] - 1 && (
+        <Page
+          key={smallest + 1}
+          variant={smallest + 1 === current ? "theme" : "default"}
+          onClick={() => notifyPageChange(smallest + 1)}
+        >
+          {smallest + 1}
+        </Page>
+      )
     ),
-    mid,
-    <Page key={largest} onClick={() => notifyPageChange(largest)}>
-      {largest}
-    </Page>,
+    adjacent.map((n) => (
+      <Page
+        key={n}
+        variant={n === current ? "theme" : "default"}
+        onClick={() => notifyPageChange(n)}
+      >
+        {n}
+      </Page>
+    )),
+    overflowMidLargest ? (
+      <PageEllipsis />
+    ) : (
+      adjacent.length > 0 &&
+      largest - 1 === adjacent[adjacent.length - 1] + 1 && (
+        <Page
+          key={largest - 1}
+          variant={largest - 1 === current ? "theme" : "default"}
+          onClick={() => notifyPageChange(largest - 1)}
+        >
+          {largest - 1}
+        </Page>
+      )
+    ),
+    largest > smallest && ( // edge case when there's only 1 page (smallest)
+      <Page
+        key={largest}
+        variant={largest === current ? "theme" : "default"}
+        onClick={() => notifyPageChange(largest)}
+      >
+        {largest}
+      </Page>
+    ),
   ];
 
   function notifyPageChange(page: number) {
