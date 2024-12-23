@@ -2,7 +2,7 @@ import { cn } from "@/lib/ui/utils";
 import { ComponentPropsWithoutRef, forwardRef } from "react";
 
 const Link = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<"a">>(
-  ({ href, target, rel, className, children }, ref) => {
+  ({ href, target, rel, className, children, ...props }, ref) => {
     return (
       <a
         className={cn(
@@ -14,6 +14,7 @@ const Link = forwardRef<HTMLAnchorElement, ComponentPropsWithoutRef<"a">>(
         target={target || "_self"}
         rel={rel}
         ref={ref}
+        {...props}
       >
         {children}
       </a>

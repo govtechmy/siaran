@@ -25,14 +25,10 @@ export default function SearchHero({ agencies, className }: Props) {
 
   useEffectMounted(
     function clearParamsIfQueryIsEmpty() {
-      setParams(
-        query
-          ? {
-              query,
-              ...filters,
-            }
-          : {},
-      );
+      setParams({
+        query,
+        ...filters,
+      });
     },
     [filters, query],
   );

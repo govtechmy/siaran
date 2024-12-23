@@ -78,10 +78,14 @@ export function useTRPCQuery<
 
   useEffectMounted(
     function updateParamsAndTriggerRefetch() {
-      setCurrentParams(params);
-      setShouldShowInitialData(
-        JSON.stringify(params) === JSON.stringify(currentParams),
-      );
+      // Check content equality
+      const hasChanged =
+        JSON.stringify(params) !== JSON.stringify(currentParams);
+
+      if (hasChanged) {
+        setCurrentParams(params);
+        setShouldShowInitialData(false);
+      }
     },
     [params],
   );

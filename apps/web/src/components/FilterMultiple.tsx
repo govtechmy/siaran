@@ -13,7 +13,7 @@ import FilterPopoverText from "@/components/FilterPopoverText";
 import FilterPopoverTrigger from "@/components/FilterPopoverTrigger";
 import { cn } from "@/lib/ui/utils";
 import { useTranslations } from "next-intl";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import FilterPopoverSecondaryText from "./FilterPopoverSecondaryText";
 
 export type Option = {
@@ -54,25 +54,6 @@ export function Filter({
   function onOptions(value: Option[]) {
     onChange(value);
   }
-
-  useEffect(
-    function sortOptionsOnClose() {
-      if (isOpen) {
-        return;
-      }
-
-      // Set a timeout for the animation to finish before sorting
-      const timeout = setTimeout(function sortOptions() {
-        setSortedOptions((sortedOptions) => [
-          ...sortedOptions.filter(hasChecked).sort(sort),
-          ...sortedOptions.filter((current) => !hasChecked(current)).sort(sort),
-        ]);
-      }, 300);
-
-      return () => clearTimeout(timeout);
-    },
-    [isOpen],
-  );
 
   return (
     <FilterPopover
