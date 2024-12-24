@@ -68,13 +68,11 @@ export default function SearchSuggestion({
         isLoading={isLoading}
         onInputFocusChange={setIsDropdownOpen}
         onQueryClear={function clearParams() {
-          // setParams({ query });
           setCurrentQuery("");
           onClearQuery?.();
         }}
         onQueryChange={setCurrentQuery}
         onSubmit={function updateParamsAndCloseSearchResults() {
-          // setParams({ query: currentQuery });
           closeSearchResults();
           onSubmitQuery?.(currentQuery);
         }}
@@ -283,44 +281,42 @@ const SearchResultDropdown = forwardRef<
   const { url } = useLocaleURL();
 
   const debouncedQuery = useDebounce(query, 300);
-  const { data } = useTRPCQuery({
-    route: "search",
-    method: "all",
-    params: { q: debouncedQuery },
-    queryFn: async (trpc) => trpc.query({ q: debouncedQuery }),
+  const {
+    data: { docs: pressReleases },
+  } = useTRPCQuery({
+    route: "pressRelease",
+    method: "list",
+    params: { query: debouncedQuery, page: 1, limit: 10 },
+    queryFn: async (trpc) => trpc.query({ query: debouncedQuery }),
   });
-
   const [activeItemIndex, setActiveItemIndex] = useState(-1);
   const searchItemRefs = useRef<(HTMLAnchorElement | null)[]>(
-    new Array(data.pressReleases.length),
+    new Array(pressReleases.length),
   );
 
   const setNextActiveItem = useCallback(
     (e?: globalThis.KeyboardEvent) => {
-      if (!e || data.pressReleases.length === 0) {
+      if (!e || pressReleases.length === 0) {
         return;
       }
 
       switch (e.key) {
         case "ArrowDown":
           e.preventDefault();
-          setActiveItemIndex(
-            (index) => (index + 1) % data.pressReleases.length,
-          );
+          setActiveItemIndex((index) => (index + 1) % pressReleases.length);
           break;
         case "ArrowUp":
           e.preventDefault();
           setActiveItemIndex(
             (index) =>
-              (index - 1 + data.pressReleases.length) %
-              data.pressReleases.length,
+              (index - 1 + pressReleases.length) % pressReleases.length,
           );
           break;
         default:
           break;
       }
     },
-    [data],
+    [pressReleases],
   );
 
   useImperativeHandle(
@@ -365,14 +361,14 @@ const SearchResultDropdown = forwardRef<
 
   return (
     <div className={cn("outline-none")}>
-      {data.pressReleases.length === 0 && <SearchResultNone />}
-      {data.pressReleases.length > 0 && (
+      {pressReleases.length === 0 && <SearchResultNone />}
+      {pressReleases.length > 0 && (
         <SearchResultHeading>
           {t("components.SearchInput.titles.pressReleases")}
         </SearchResultHeading>
       )}
-      {data.pressReleases.length > 0 &&
-        data.pressReleases.map((pressRelease, index) => (
+      {pressReleases.length > 0 &&
+        pressReleases.map((pressRelease, index) => (
           <SearchSuggestionLink
             key={pressRelease.id || index}
             href={url("press-releases", pressRelease.id)}
