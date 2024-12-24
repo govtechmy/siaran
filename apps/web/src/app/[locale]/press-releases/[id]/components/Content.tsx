@@ -48,28 +48,27 @@ function Data({ initialData }: { initialData: PressRelease }) {
         )}{" "}
         ({initialData.relatedAgency.acronym})
       </div>
-      <div
+      <h1
         className={cn(
           "mt-[.75rem]",
           "text-2xl text-black-900",
-          "font-semibold",
+          "font-body font-semibold",
           "uppercase",
         )}
       >
         {initialData.title}
-      </div>
+      </h1>
       <RowMetadata
         content={getContent(initialData)}
         dateString={initialData.date_published}
       />
       <RowAction className={cn("mt-[1.125rem]", "no-print")} />
       <HorizontalRule className={cn("my-[1.125rem]")} />
-      <div
+      <article
         className={cn(
           "flex flex-col items-start",
           "text-[1rem] leading-[1.75rem] text-black-700",
           "font-body font-normal",
-          "[&_*]:w-full",
         )}
       >
         {initialData.content.markdown ? (
@@ -82,7 +81,7 @@ function Data({ initialData }: { initialData: PressRelease }) {
         ) : (
           initialData.content.plain
         )}
-      </div>
+      </article>
       <HorizontalRule className={cn("mt-[1.5rem] md:mt-[1.875rem]")} />
       {initialData.attachments && initialData.attachments.length > 0 && (
         <div className={cn("mt-[1.5rem] md:mt-[1.875rem]", "no-print")}>
@@ -165,6 +164,7 @@ const Components: ComponentProps<typeof Markdown>["components"] = {
     <th
       {...props}
       className={cn(
+        "w-fit",
         "px-[1rem] py-[.5rem]",
         "border border-gray-outline-200",
         "text-start",
@@ -175,6 +175,7 @@ const Components: ComponentProps<typeof Markdown>["components"] = {
     <td
       {...props}
       className={cn(
+        "w-fit",
         "px-[1rem] py-[.5rem]",
         "border border-gray-outline-200",
         "text-start",
