@@ -12,7 +12,7 @@ import type { PressRelease } from "@repo/api/cms/types";
 import { format, parseISO } from "date-fns";
 import { useAtom } from "jotai";
 import { useTranslations } from "next-intl";
-import { ComponentProps } from "react";
+import React, { ComponentProps } from "react";
 import Markdown from "react-markdown";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
@@ -171,17 +171,33 @@ const Components: ComponentProps<typeof Markdown>["components"] = {
       )}
     />
   ),
-  td: ({ node, ...props }) => (
-    <td
-      {...props}
-      className={cn(
-        "w-fit",
-        "px-[1rem] py-[.5rem]",
-        "border border-gray-outline-200",
-        "text-start",
-      )}
-    />
-  ),
+  td: ({ node, ...props }) => {
+    const { children } = props;
+
+    return (
+      <td
+        {...props}
+        className={cn(
+          "w-fit",
+          "px-[1rem] py-[.5rem]",
+          "border border-gray-outline-200",
+          "text-start",
+        )}
+      >
+        {Array.isArray(children)
+          ? children.map((child) =>
+              React.isValidElement<HTMLElement>(child) ? (
+                <child.type key={child.key} {...child.props} />
+              ) : child === "<br>" ? (
+                <br />
+              ) : (
+                child
+              ),
+            )
+          : children}
+      </td>
+    );
+  },
   blockquote: ({ node, ...props }) => (
     <blockquote
       {...props}
