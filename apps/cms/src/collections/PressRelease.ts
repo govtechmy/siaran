@@ -165,6 +165,7 @@ const PressRelease: CollectionConfig = {
       },
       type: "text",
       required: true,
+      index: true,
     },
     {
       name: "date_published",
@@ -248,6 +249,7 @@ const PressRelease: CollectionConfig = {
           name: "markdown",
           type: "text",
           required: false,
+          index: true,
           admin: {
             hidden: true,
           },
