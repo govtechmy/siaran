@@ -35,24 +35,24 @@ export const _paramsAtom = atom<ListPressReleaseParams>({});
 export const paramsAtom = atom(
   (get) => get(_paramsAtom),
   (get, set, params: ListPressReleaseParams) => {
+    const current = get(_paramsAtom);
     const isEmpty = Object.keys(params).length === 0;
-
     const updated: ListPressReleaseParams = isEmpty
       ? {}
       : {
-          ...get(_paramsAtom),
+          ...current,
           ...params,
           sort: params.startDate ? "asc" : "desc",
         };
+    const isEqual = equal(current, updated, ["page"]);
+    const hasPageChanged = current.page !== updated.page;
 
-    const isEqual = equal(params, updated, ["page"]);
-
-    // Reset pagination if there are changes
+    // Auto-reset pagination if there are changes
     if (!isEqual) {
       updated.page = 1;
     }
 
     set(_paramsAtom, updated);
-    set(isLoadingAtom, !isEqual);
+    set(isLoadingAtom, !isEqual || hasPageChanged);
   },
 );

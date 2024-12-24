@@ -23,8 +23,24 @@ export default function SearchHero({ agencies, className }: Props) {
   const [query, setQuery] = useState<string>();
   const [filters, setFilters] = useState<Filters>();
 
+  function onSubmitQuery(newQuery: string) {
+    if (query !== newQuery) {
+      setQuery(newQuery);
+    } else {
+      resetParams();
+    }
+  }
+
+  function resetParams() {
+    setParams({
+      page: 1,
+      query,
+      ...filters,
+    });
+  }
+
   useEffectMounted(
-    function clearParamsIfQueryIsEmpty() {
+    function updateParams() {
       setParams({
         query,
         ...filters,
@@ -69,7 +85,7 @@ export default function SearchHero({ agencies, className }: Props) {
         <SearchSuggestion
           className={cn("mt-[1.5rem]")}
           onClearQuery={() => setQuery("")}
-          onSubmitQuery={setQuery}
+          onSubmitQuery={onSubmitQuery}
           isLoading={isLoading}
         />
         <SearchFilterList
