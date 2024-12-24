@@ -1,6 +1,6 @@
-import { endpoints as searchEndpoints } from "./search";
+import { endpoints as exampleEndpoints } from "./example";
 
 export default [
   // Add more endpoints here
-  ...searchEndpoints,
+  ...exampleEndpoints,
 ];
