@@ -15,7 +15,7 @@ import msMY from "./i18n/resources/ms-MY";
 
 export default buildConfig({
   i18n: {
-    fallbackLng: "ms-MY",
+    fallbackLng: "en-MY",
     supportedLngs: ["en-MY", "ms-MY"],
     resources: {
       ["en-MY"]: enMY,

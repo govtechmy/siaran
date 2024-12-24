@@ -282,7 +282,10 @@ const PressRelease: CollectionConfig = {
     },
     {
       name: "uploadAttachments",
-      label: "Attachments",
+      label: {
+        ["en-MY"]: "Attachments",
+        ["ms-MY"]: "Lampiran",
+      },
       type: "ui",
       admin: {
         position: "sidebar",
@@ -291,6 +294,10 @@ const PressRelease: CollectionConfig = {
     },
     {
       name: "attachments",
+      label: {
+        ["en-MY"]: "Attachments",
+        ["ms-MY"]: "Lampiran",
+      },
       type: "array",
       admin: {
         hidden: true,
@@ -320,8 +327,34 @@ const PressRelease: CollectionConfig = {
     },
     {
       name: "relatedAgency",
+      label: {
+        ["en-MY"]: "Agency",
+        ["ms-MY"]: "Agensi",
+      },
       type: "relationship",
       relationTo: "agencies",
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: "createdAt",
+      label: {
+        ["en-MY"]: "Created At",
+        ["ms-MY"]: "Dicipta Pada",
+      },
+      type: "date",
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: "updatedAt",
+      label: {
+        ["en-MY"]: "Updated At",
+        ["ms-MY"]: "Dikemas Kini Pada",
+      },
+      type: "date",
       admin: {
         hidden: true,
       },

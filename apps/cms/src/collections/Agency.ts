@@ -36,26 +36,46 @@ const Agency: CollectionConfig = {
     },
     {
       name: "name",
+      label: {
+        ["en-MY"]: "Name",
+        ["ms-MY"]: "Nama",
+      },
       type: "text",
       required: true,
     },
     {
       name: "acronym",
+      label: {
+        ["en-MY"]: "Abbreviation",
+        ["ms-MY"]: "Singkatan",
+      },
       type: "text",
       required: true,
     },
     {
       name: "email",
+      label: {
+        ["en-MY"]: "Email",
+        ["ms-MY"]: "E-mel",
+      },
       type: "email",
       required: true,
     },
     {
       name: "website",
+      label: {
+        ["en-MY"]: "Website",
+        ["ms-MY"]: "Laman Web",
+      },
       type: "text",
       required: false,
     },
     {
       name: "socialMedia",
+      label: {
+        ["en-MY"]: "Social Media",
+        ["ms-MY"]: "Media Sosial",
+      },
       type: "array",
       fields: [
         {
@@ -84,6 +104,28 @@ const Agency: CollectionConfig = {
         },
       ],
       required: false,
+    },
+    {
+      name: "createdAt",
+      label: {
+        ["en-MY"]: "Created At",
+        ["ms-MY"]: "Dicipta Pada",
+      },
+      type: "date",
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: "updatedAt",
+      label: {
+        ["en-MY"]: "Updated At",
+        ["ms-MY"]: "Dikemas Kini Pada",
+      },
+      type: "date",
+      admin: {
+        hidden: true,
+      },
     },
   ],
 };
