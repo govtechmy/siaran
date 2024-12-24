@@ -4,6 +4,7 @@ import Masthead from "@/components/Masthead";
 import QueryProvider from "@/components/QueryProvider";
 import { Locale } from "@/i18n/routing";
 import { extract } from "@/lib/i18n/utils";
+import { cn } from "@/lib/ui/utils";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { ThemeProvider } from "next-themes";
@@ -22,7 +23,7 @@ export default async function App(props: Props) {
     <ThemeProvider defaultTheme="light">
       <NextIntlClientProvider messages={messages}>
         <QueryProvider>
-          <div className="flex h-[100vh] flex-col">
+          <div className={cn("h-full min-h-screen", "flex flex-col")}>
             <Masthead />
             <Header locale={locale} />
             <div className="flex-1">{props.children}</div>
