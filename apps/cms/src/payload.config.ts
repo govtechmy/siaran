@@ -2,8 +2,6 @@ import path from "path";
 
 import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
-import { payloadCloud } from "@payloadcms/plugin-cloud";
-import search from "@payloadcms/plugin-search";
 import { buildConfig } from "payload/config";
 
 import { slateEditor } from "@payloadcms/richtext-slate";
@@ -17,7 +15,7 @@ import msMY from "./i18n/resources/ms-MY";
 
 export default buildConfig({
   i18n: {
-    fallbackLng: "ms-MY",
+    fallbackLng: "en-MY",
     supportedLngs: ["en-MY", "ms-MY"],
     resources: {
       ["en-MY"]: enMY,
@@ -43,31 +41,7 @@ export default buildConfig({
   typescript: {
     outputFile: path.resolve(__dirname, "payload-types.ts"),
   },
-  graphQL: {
-    schemaOutputFile: path.resolve(__dirname, "generated-schema.graphql"),
-  },
   endpoints,
-  plugins: [
-    payloadCloud(),
-    search({
-      searchOverrides: {
-        slug: "search-collections",
-        admin: {
-          hidden: true,
-        },
-        access: {
-          read: ({ req: { user } }) => {
-            return user != null;
-          },
-        },
-      },
-      collections: ["press-releases", "agencies"],
-      defaultPriorities: {
-        PressRelease: 10,
-        Agency: 20,
-      },
-    }),
-  ],
   db: mongooseAdapter({
     url: process.env.DATABASE_URI,
   }),

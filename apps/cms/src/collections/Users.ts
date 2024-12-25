@@ -31,7 +31,20 @@ const Users: CollectionConfig = {
   },
   fields: [
     {
+      name: "email",
+      label: {
+        ["en-MY"]: "Email",
+        ["ms-MY"]: "E-mel",
+      },
+      type: "email",
+      required: true,
+    },
+    {
       name: "role",
+      label: {
+        ["en-MY"]: "Role",
+        ["ms-MY"]: "Peranan",
+      },
       type: "select",
       required: true,
       options: [
@@ -48,11 +61,35 @@ const Users: CollectionConfig = {
     },
     {
       name: "agency",
+      label: {
+        ["en-MY"]: "Agency",
+        ["ms-MY"]: "Agensi",
+      },
       type: "relationship",
       relationTo: "agencies",
     },
-    // Email added by default
-    // Add more fields as needed
+    {
+      name: "createdAt",
+      label: {
+        ["en-MY"]: "Created At",
+        ["ms-MY"]: "Dicipta Pada",
+      },
+      type: "date",
+      admin: {
+        hidden: true,
+      },
+    },
+    {
+      name: "updatedAt",
+      label: {
+        ["en-MY"]: "Updated At",
+        ["ms-MY"]: "Dikemas Kini Pada",
+      },
+      type: "date",
+      admin: {
+        hidden: true,
+      },
+    },
   ],
 };
 
