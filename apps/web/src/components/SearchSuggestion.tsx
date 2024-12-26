@@ -158,7 +158,7 @@ function SearchForm({
           "h-full w-full",
           "pb-[.375rem] pl-[1.125rem] pr-[4.375rem] pt-[.375rem]",
         )}
-        placeholder={t("components.SearchInput.placeholders.searchInput")}
+        placeholder={t("components.SearchSuggestion.placeholders.searchInput")}
         onChange={(e) => onQueryChange(e.target.value)}
         onFocus={(e) => updateInputFocus(true, !!e.target.value)}
         onKeyDown={function unfocusInput(e) {
@@ -186,7 +186,7 @@ function SearchForm({
         {query && !isLoading && (
           <button
             type="button"
-            className={cn("focus:outline-none", "pointer-events-auto")}
+            className={cn("pointer-events-auto")}
             onClick={function clearQuery() {
               formRef.current?.reset();
               onQueryChange("");
@@ -255,6 +255,7 @@ function SearchResult({
             break;
         }
       }}
+      tabIndex={-1}
       className={cn(
         "mt-[-2.75rem]",
         "outline-none",
@@ -266,7 +267,7 @@ function SearchResult({
         className,
       )}
     >
-      <Suspense fallback={<SearchResultNone />}>
+      <Suspense fallback={<SearchResultSearching />}>
         <SearchResultDropdown query={query} ref={dropdownRef} />
       </Suspense>
     </div>
@@ -360,11 +361,11 @@ const SearchResultDropdown = forwardRef<
   );
 
   return (
-    <div className={cn("outline-none")}>
+    <div className={cn(pressReleases.length > 0 && "pb-[.5rem]")}>
       {pressReleases.length === 0 && <SearchResultNone />}
       {pressReleases.length > 0 && (
         <SearchResultHeading>
-          {t("components.SearchInput.titles.pressReleases")}
+          {t("components.SearchSuggestion.titles.pressReleases")}
         </SearchResultHeading>
       )}
       {pressReleases.length > 0 &&
@@ -394,6 +395,24 @@ const SearchResultDropdown = forwardRef<
 
 SearchResultDropdown.displayName = "SearchResultDropdown";
 
+function SearchResultSearching() {
+  const t = useTranslations();
+
+  return (
+    <div
+      className={cn(
+        "mb-[1.375rem]",
+        "pl-[1.125rem] pt-[1.5rem]",
+        "text-start",
+        "text-gray-dim-500",
+        "font-medium",
+      )}
+    >
+      {t("components.SearchSuggestion.labels.searching")}
+    </div>
+  );
+}
+
 function SearchResultNone() {
   const t = useTranslations();
 
@@ -407,7 +426,7 @@ function SearchResultNone() {
         "font-medium",
       )}
     >
-      {t("components.SearchInput.labels.noResults")}
+      {t("components.SearchSuggestion.labels.noResults")}
     </div>
   );
 }
