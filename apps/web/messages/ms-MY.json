@@ -154,12 +154,13 @@
         "filterBy": "Tapis"
       }
     },
-    "SearchInput": {
+    "SearchSuggestion": {
       "placeholders": {
         "searchInput": "Cari dengan kata kunci"
       },
       "labels": {
-        "noResults": "Tiada keputusan dijumpai"
+        "noResults": "Tiada keputusan dijumpai",
+        "searching": "Sedang mencari..."
       },
       "titles": {
         "pressReleases": "Siaran",

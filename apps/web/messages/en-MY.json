@@ -154,12 +154,13 @@
         "filterBy": "Filter by"
       }
     },
-    "SearchInput": {
+    "SearchSuggestion": {
       "placeholders": {
         "searchInput": "Search by keywords"
       },
       "labels": {
-        "noResults": "No results found"
+        "noResults": "No results found",
+        "searching": "Searching..."
       },
       "titles": {
         "pressReleases": "Press Releases",
