@@ -3,11 +3,11 @@ import * as cms from "#cms/search";
 import { publicProcedure } from "#trpc";
 import { TRPCError } from "@trpc/server";
 
-export const all = publicProcedure
-  .input(cms.input.search)
+export const searchPressReleases = publicProcedure
+  .input(cms.input.searchPressReleases)
   .query(async ({ input }) => {
     try {
-      return await cms.search(input, { token: await getToken() });
+      return await cms.searchPressReleases(input, { token: await getToken() });
     } catch (e) {
       throw new TRPCError({
         code: "INTERNAL_SERVER_ERROR",

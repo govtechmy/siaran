@@ -285,10 +285,10 @@ const SearchResultDropdown = forwardRef<
   const {
     data: { docs: pressReleases },
   } = useTRPCQuery({
-    route: "pressRelease",
-    method: "list",
-    params: { query: debouncedQuery, page: 1, limit: 10 },
-    queryFn: async (trpc) => trpc.query({ query: debouncedQuery }),
+    route: "search",
+    method: "pressReleases",
+    params: { q: debouncedQuery },
+    queryFn: async (trpc) => trpc.query({ q: debouncedQuery }),
   });
   const [activeItemIndex, setActiveItemIndex] = useState(-1);
   const searchItemRefs = useRef<(HTMLAnchorElement | null)[]>(

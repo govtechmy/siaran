@@ -1,21 +1,25 @@
 import type { SessionTokenOnly } from "#cms/schema/session";
-import type { PaginatedSearchResponse } from "#cms/types";
+import type { PaginatedResponse, PaginatedSearchResponse } from "#cms/types";
 import { z } from "#extensions/zod";
 import { cmsFetch, CMSFetchError } from "#http";
 import { logger } from "#logging/logger";
+import { PressRelease } from "./schema/press-release";
 
-export async function search(
-  { page, limit, q }: z.infer<typeof input.search>,
+export async function searchPressReleases(
+  { page, limit, q }: z.infer<typeof input.searchPressReleases>,
   { token }: SessionTokenOnly,
 ) {
   try {
-    return await cmsFetch<PaginatedSearchResponse>("/api/search", {
-      method: "GET",
-      query: { page, limit, q },
-      headers: {
-        ["Authorization"]: `Bearer ${token}`,
+    return await cmsFetch<PaginatedResponse<PressRelease>>(
+      "/api/search/press-releases",
+      {
+        method: "GET",
+        query: { page, limit, q },
+        headers: {
+          ["Authorization"]: `Bearer ${token}`,
+        },
       },
-    });
+    );
   } catch (e) {
     if (e instanceof CMSFetchError) {
       logger.error(
@@ -27,7 +31,7 @@ export async function search(
 }
 
 export const input = {
-  search: z.object({
+  searchPressReleases: z.object({
     page: z.number().min(1).default(1),
     limit: z.number().min(1).default(10),
     q: z.string().default(""),
