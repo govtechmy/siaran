@@ -2,7 +2,6 @@ import { acceptedFileTypes, agencies, filename } from "#cms/schema/common";
 import { pressRelease as pressReleaseSchema } from "#cms/schema/press-release";
 import type { SessionTokenOnly as SessionWithTokenOnly } from "#cms/schema/session";
 import type { PaginatedResponse, PressRelease } from "#cms/types";
-import { mapLocale } from "#cms/utils/locale";
 import { type SinglePossibleClause, whereClause } from "#cms/utils/query";
 import { z } from "#extensions/zod";
 import { cmsFetch, CMSFetchError } from "#http";
@@ -25,7 +24,7 @@ function mapParams<
     : Partial<MappedParams>;
 
   if (params.language) {
-    body.language = mapLocale(params.language);
+    body.language = params.language;
   }
 
   if (params.title != null) {
