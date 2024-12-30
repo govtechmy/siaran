@@ -1,4 +1,4 @@
 import { router as baseRouter } from "#trpc";
-import { all } from "#trpc/procedures/search";
+import { searchPressReleases } from "#trpc/procedures/search";
 
-export const router = baseRouter({ all });
+export const router = baseRouter({ pressReleases: searchPressReleases });

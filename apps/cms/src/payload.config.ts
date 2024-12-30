@@ -3,6 +3,7 @@ import path from "path";
 import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
 import { buildConfig } from "payload/config";
+import search from "@payloadcms/plugin-search";
 
 import { slateEditor } from "@payloadcms/richtext-slate";
 import { Logo } from "./admin/components/Logo";
@@ -45,4 +46,15 @@ export default buildConfig({
   db: mongooseAdapter({
     url: process.env.DATABASE_URI,
   }),
+  plugins: [
+    search({
+      collections: ["press-releases"],
+      defaultPriorities: {
+        "press-releases": 10,
+      },
+      searchOverrides: {
+        slug: "search-results",
+      },
+    }),
+  ],
 });
