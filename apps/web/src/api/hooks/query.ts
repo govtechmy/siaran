@@ -37,7 +37,7 @@ export type Query = {
     ["list"]: Method<ListPressReleaseParams, ListPressReleaseData>;
   };
   ["search"]: {
-    ["all"]: Method<{ page: number }, PaginatedSearchResponse>;
+    ["pressReleases"]: Method<{ page: number }, ListPressReleaseData>;
   };
   ["agency"]: {
     ["list"]: Method<{ page: number }, Agency[]>;
