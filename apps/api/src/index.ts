@@ -23,6 +23,9 @@ app.use(
   }),
 );
 app.use("/webhook", webhook.router);
+app.use("/health", function checkHealth(_, res) {
+  res.send("OK");
+});
 
 const port = parseInt(process.env.PORT || "8080");
 
