@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "paths": {
+      "#logging/*": ["./src/logging/*"],
+      "#cms/*": ["./src/cms/*"],
+      "#trpc": ["./src/trpc/index.ts"],
+      "#trpc/*": ["./src/trpc/*"],
+      "#http": ["./src/http.ts"],
+      "#aws/*": ["./src/aws/*"],
+      "#extensions/*": ["./src/extensions/*"]
+    },
+    "strict": true,
+    "skipLibCheck": true
+  }
+}

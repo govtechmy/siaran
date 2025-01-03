@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import colors from "tailwindcss/colors";
 
 const config: Config = {
   content: [
@@ -7,13 +8,153 @@ const config: Config = {
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
+    container: {
+      center: true,
+      screens: {
+        sm: "40rem",
+        md: "48rem",
+        lg: "64rem",
+        xl: "80rem",
+        "2xl": "96rem",
+      },
+      padding: {
+        DEFAULT: "18px",
+        sm: "18px",
+        md: "24px",
+        lg: "24px",
+        xl: "24px",
+      },
+    },
     extend: {
+      screens: {
+        tall: { raw: "(min-height: 720px)" },
+      },
+      keyframes: {
+        ["pulse-dot"]: {
+          "0%, 100%": { opacity: "1" },
+          "60%": { opacity: "1" },
+          "80%": { opacity: "0" },
+        },
+      },
+      animation: {
+        ["pulse-dot"]: "pulse-dot 2.4s ease-in-out infinite",
+      },
+      backgroundImage: {
+        // Define gradient backgrounds here
+      },
+      boxShadow: {
+        button: "0 1px 3px 0 rgba(0, 0, 0, 0.07)",
+        card: "0px 2px 6px 0 rgba(0, 0, 0, 0.05), 0px 6px 24px 0 rgba(0, 0, 0, 0.05)",
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        brand: {
+          ["50"]: "rgb(var(--brand-50) / <alpha-value>)",
+          ["200"]: "rgb(var(--brand-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--brand-300) / <alpha-value>)",
+          ["600"]: colors.blue[600],
+          ["700"]: colors.blue[700],
+          ["text_only"]: "rgb(var(--brand-text_only) / 0.4)",
+        },
+        theme: {
+          ["50"]: "rgb(var(--theme-50) / <alpha-value>)",
+          ["200"]: "rgb(var(--theme-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--theme-300) / <alpha-value>)",
+          ["600"]: "rgb(var(--theme-600) / <alpha-value>)",
+          ["700"]: "rgb(var(--theme-700) / <alpha-value>)",
+          ["text"]: "rgb(var(--theme-text) / 0.4)",
+          ["text_hero"]: "rgb(var(--theme-text_hero) / <alpha-value>)",
+        },
+        foreground: {
+          ["DEFAULT"]: "rgb(var(--brand-700) / <alpha-value>)",
+          ["success"]: colors.green[700],
+        },
+        background: {
+          ["DEFAULT"]: "rgb(var(--base-white) / <alpha-value>)",
+          ["50"]: "rgb(var(--background-50) / <alpha-value>)",
+        },
+        washed: {
+          ["100"]: "rgb(var(--washed-100) / <alpha-value>)",
+        },
+        outline: {
+          ["200"]: "rgb(var(--outline-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--outline-300) / <alpha-value>)",
+          ["400"]: "rgb(var(--outline-400) / <alpha-value>)",
+        },
+        dim: {
+          ["500"]: "rgb(var(--dim-500) / <alpha-value>)",
+        },
+        danger: {
+          ["50"]: "rgb(var(--danger-50) / <alpha-value>)",
+          ["100"]: "rgb(var(--danger-100) / <alpha-value>)",
+          ["200"]: "rgb(var(--danger-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--danger-300) / <alpha-value>)",
+          ["600"]: "rgb(var(--danger-600) / <alpha-value>)",
+          ["700"]: "rgb(var(--danger-700) / <alpha-value>)",
+          ["text_only"]: "rgb(var(--danger-text_only) / <alpha-value>)",
+          ["text_only-disabled"]: "rgb(var(--danger-text_only-disabled) / 0.4)",
+        },
+        warning: {
+          ["50"]: "rgb(var(--warning-50) / <alpha-value>)",
+          ["100"]: "rgb(var(--warning-100) / <alpha-value>)",
+          ["200"]: "rgb(var(--warning-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--warning-300) / <alpha-value>)",
+          ["600"]: "rgb(var(--warning-600) / <alpha-value>)",
+          ["700"]: "rgb(var(--warning-700) / <alpha-value>)",
+          ["text_only"]: "rgb(var(--warning-text_only) / <alpha-value>)",
+        },
+        success: {
+          ["50"]: "rgb(var(--success-50) / <alpha-value>)",
+          ["100"]: "rgb(var(--success-100) / <alpha-value>)",
+          ["200"]: "rgb(var(--success-200) / <alpha-value>)",
+          ["300"]: "rgb(var(--success-300) / <alpha-value>)",
+          ["600"]: "rgb(var(--success-600) / <alpha-value>)",
+          ["700"]: "rgb(var(--success-700) / <alpha-value>)",
+          ["text_only"]: "rgb(var(--success-text_only) / <alpha-value>)",
+        },
+        black: {
+          ["500"]: "rgb(var(--black-500) / <alpha-value>)",
+          ["700"]: "rgb(var(--black-700) / <alpha-value>)",
+          ["800"]: "rgb(var(--black-800) / <alpha-value>)",
+          ["900"]: "rgb(var(--black-900) / <alpha-value>)",
+          ["text_only-disabled"]: "rgb(var(--black-text_only-disabled) / 0.4)",
+        },
+        gray: {
+          ["text_only-disabled"]: "rgb(var(--gray-text_only-disabled) / 0.4)",
+          ["washed-100"]: "rgb(var(--gray-washed-100) / <alpha-value>)",
+          ["focus_washed-100"]:
+            "rgb(var(--gray-focus_washed-100) / <alpha-value>)",
+          ["outline-200"]: "rgb(var(--gray-outline-200) / <alpha-value>)",
+          ["outline-300"]: "rgb(var(--gray-outline-300) / <alpha-value>)",
+          ["outline-400"]: "rgb(var(--gray-outline-400) / <alpha-value>)",
+          ["dim-500"]: "rgb(var(--gray-dim-500) / <alpha-value>)",
+        },
+        white: {
+          ["background-0"]: "rgb(var(--white-background-0) / <alpha-value>)",
+          ["focus_white-100"]:
+            "rgb(var(--white-focus_white-100) / <alpha-value>)",
+          ["focus_white-200"]:
+            "rgb(var(--white-focus_white-200) / <alpha-value>)",
+          ["text_only-disabled"]: "rgb(var(--white-text_only-disabled) / 0.4)",
+          ["force_white"]: "rgb(var(--white-force_white) / <alpha-value>)",
+        },
+      },
+      fontFamily: {
+        ["heading"]: ["var(--font-poppins)"],
+        ["body"]: ["var(--font-inter)"],
+      },
+      fontSize: {
+        ["xs"]: [".75rem", "1.125rem"],
+        ["sm"]: [".875rem", "1.25rem"],
+        ["base"]: ["1rem", "1.5rem"],
+        ["lg"]: ["1.125rem", "1.625rem"],
+        ["xl"]: ["1.25rem", "1.875rem"],
+        ["2xl"]: ["1.5rem", "2rem"],
+        ["3xl"]: ["1.875rem", "2.375rem"],
       },
     },
   },
-  plugins: [],
+  darkMode: "selector",
+  plugins: [require("tailwindcss-animate")],
 };
+
 export default config;

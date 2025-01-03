@@ -1,0 +1,192 @@
+{
+  "metadata": {
+    "site": {
+      "title": "SiaranGovMY | One stop Government Press Releases & Announcements",
+      "description": "One stop Government Press Releases & Announcements",
+      "openGraph": {
+        "images": {
+          "1": {
+            "url": "https://i.imgur.com/eMZumEA.png",
+            "alt": "One stop Government Press Releases & Announcements"
+          }
+        }
+      }
+    }
+  },
+  "app": {
+    "name": "SiaranGovMY"
+  },
+  "common": {
+    "agencies": {
+      "PMO": "Prime Minister's Office",
+      "MOF": "Ministry of Finance",
+      "MOT": "Ministry of Transport",
+      "KPKM": "Ministry of Agriculture and Food Security",
+      "MOE": "Ministry of Education",
+      "KPKT": "Ministry of Housing and Local Government",
+      "KLN": "Ministry of Foreign Affairs",
+      "KKR": "Ministry of Works",
+      "KDN": "Ministry of Home Affairs",
+      "MITI": "Ministry of Investment, Trade, and Industry",
+      "MINDEF": "Ministry of Defence",
+      "MOSTI": "Ministry of Science, Technology, and Innovation",
+      "KPWKM": "Ministry of Women, Family and Community Development",
+      "MOHE": "Ministry of Higher Education",
+      "MOTAC": "Ministry of Tourism, Arts, and Culture",
+      "KKD": "Ministry of Communications",
+      "KPN": "Ministry of National Unity",
+      "KBS": "Ministry of Youth and Sports",
+      "KPDN": "Ministry of Domestic Trade and Costs of Living",
+      "MPIC": "Ministry of Plantation and Commodities",
+      "MOH": "Ministry of Health",
+      "MOHR": "Ministry of Human Resources",
+      "KKDW": "Ministry of Rural and Regional Development",
+      "PETRA": "Ministry of Energy Transition and Water Transformation",
+      "NRES": "Ministry of Natural Resources and Environmental Sustainability of Malaysia",
+      "KE": "Ministry of Economy",
+      "JWP": "Federal Territories Department",
+      "SPRM": "Malaysian Anti-Corruption Commission",
+      "MCMC": "Malaysian Communications and Multimedia Commission",
+      "SPP": "Education Service Commission",
+      "SPR": "Elections Committee Commission",
+      "SSM": "Companies Commission of Malaysia",
+      "MYCC": "Malaysia Competition Commission",
+      "KUSKOP": "Ministry of Entrepreneur and Cooperatives Development",
+      "KD": "Ministry of Digital"
+    },
+    "http": {
+      "404": "404 Error"
+    },
+    "errors": {
+      "notFound": "Not found"
+    },
+    "names": {
+      "kd": "Ministry of Digital"
+    },
+    "pressRelease": {
+      "types": {
+        "mediaRelease": "Media Release",
+        "speech": "Speech Collection",
+        "other": "Other"
+      },
+      "labels": {
+        "urgent": "Urgent!"
+      }
+    },
+    "readingTime": {
+      "labels": {
+        "minutes": "{minutes, plural, =0 {0 minutes} =1 {1 minute} other {# minutes}} read"
+      }
+    },
+    "labels": {
+      "read": "Read",
+      "print": "Print"
+    },
+    "filters": {
+      "types": {
+        "all": "All",
+        "mediaRelease": "Media Release",
+        "speech": "Speech Collection"
+      },
+      "labels": {
+        "all": "All",
+        "multiple": "Multiple",
+        "agency": "Agency",
+        "type": "Type",
+        "selectAll": "Select All",
+        "clear": "Clear",
+        "none": "None",
+        "reset": "Reset",
+        "search": "Search",
+        "from": "From",
+        "to": "To"
+      }
+    }
+  },
+  "pages": {
+    "notFound": {
+      "titles": {
+        "main": "Page Not Found"
+      },
+      "descriptions": {
+        "main": "It seems that the page you're looking for doesn't exist."
+      },
+      "labels": {
+        "return": "Return to Home"
+      }
+    },
+    "index": {
+      "latestReleases": "Latest Releases",
+      "searchResults": {
+        "count": "{count, plural, =0 {0 results} =1 {1 result} other {# results}} found for \"<query></query>\"",
+        "notFound": "Sorry, we couldn't find any results for your search. Please try again using the search bar above."
+      },
+      "view": {
+        "list": {
+          "short": "List",
+          "long": "List View"
+        },
+        "card": {
+          "short": "Card",
+          "long": "Card View"
+        }
+      },
+      "titles": {
+        "hero": "One Stop Government Press Releases & Announcements"
+      }
+    }
+  },
+  "components": {
+    "FilterDate": {
+      "labels": {
+        "trigger": "Pick a date"
+      }
+    },
+    "GovBadge": {
+      "labels": {
+        "visitPortal": "Visit our portal",
+        "sponsor": "Brought to you by",
+        "governmentOfMalaysia": "Government of Malaysia"
+      }
+    },
+    "SearchFilterList": {
+      "labels": {
+        "filterBy": "Filter by"
+      }
+    },
+    "SearchSuggestion": {
+      "placeholders": {
+        "searchInput": "Search by keywords"
+      },
+      "labels": {
+        "noResults": "No results found",
+        "searching": "Searching..."
+      },
+      "titles": {
+        "pressReleases": "Press Releases",
+        "agencies": "Agencies"
+      }
+    },
+    "PressToSearch": {
+      "label": "Press <shortcut></shortcut> to search"
+    },
+    "Masthead": {
+      "officialGovWebsite": "Official Malaysia Government Website",
+      "howToIdentify": "Here's how you know",
+      "official": "Official government websites end with .gov.my",
+      "notGovWebsite": "If the link does not end with ",
+      "closeSite": ", exit the website immediately even if it looks similar.",
+      "secure": "Secure websites use HTTPS",
+      "findLock": "Look for a lock (",
+      "or": ") or ",
+      "precaution": " as an added precaution. If not present, do not share any sensitive information."
+    },
+    "Header": {},
+    "Footer": {
+      "copyright": "All Rights Reserved",
+      "lastUpdated": "Last Updated",
+      "address": "Aras 13, 14 dan 15, Blok Menara, Menara Usahawan\nNo. 18, Persiaran Perdana, Presint 2\nPusat Pentadbiran Kerajaan Persekutuan\n62000 Putrajaya, Malaysia.",
+      "links": {}
+    }
+  }
+}

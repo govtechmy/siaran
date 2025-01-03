@@ -13,6 +13,15 @@ env:
   PROJECT_ID: "${{ vars.STAGING_GCP_PROJECT_ID }}"
   SERVICE_ACCOUNT: "${{ secrets.STAGING_GCP_SERVICE_ACCOUNT }}"
   WIF_PROVIDER: "${{ secrets.STAGING_WIF_PROVIDER }}"
+  CMS_PAYLOAD_URL: ${{ vars.STAGING_CMS_PAYLOAD_URL }}
+  CMS_PAYLOAD_LOGIN_EMAIL: ${{ secrets.STAGING_CMS_PAYLOAD_LOGIN_EMAIL }}
+  CMS_PAYLOAD_LOGIN_PASSWORD: ${{ secrets.STAGING_CMS_PAYLOAD_LOGIN_PASSWORD }}
+  AWS_REGION: "${{ vars.STAGING_AWS_REGION }}"
+  AWS_ACCESS_KEY_ID: "${{ secrets.STAGING_AWS_ACCESS_KEY_ID }}"
+  AWS_SECRET_ACCESS_KEY: "${{ secrets.STAGING_AWS_SECRET_ACCESS_KEY }}"
+  AWS_S3_ENDPOINT: "${{ vars.STAGING_AWS_S3_ENDPOINT }}"
+  AWS_S3_BUCKET: "${{ vars.STAGING_AWS_S3_BUCKET }}"
+  R2_URL: "${{ secrets.STAGING_R2_URL }}"
 
 jobs:
   deploy:
@@ -24,6 +33,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Copy Dockerfile
+        run: cp ./apps/api/Dockerfile .
 
       - name: Google Auth
         id: auth
@@ -39,5 +51,15 @@ jobs:
           service: ${{ env.SERVICE }}
           region: ${{ env.REGION }}
           flags: "--platform=managed --min-instances=0 --allow-unauthenticated"
-          # Update to the appropriate source folder
-          source: ./apps/api
+          # Use the appropriate source folder
+          source: ./
+          env_vars: |-
+            CMS_PAYLOAD_URL=${{ env.CMS_PAYLOAD_URL }}
+            CMS_PAYLOAD_LOGIN_EMAIL=${{ env.CMS_PAYLOAD_LOGIN_EMAIL }}
+            CMS_PAYLOAD_LOGIN_PASSWORD=${{ env.CMS_PAYLOAD_LOGIN_PASSWORD }}
+            AWS_REGION=${{ env.AWS_REGION }}
+            AWS_ACCESS_KEY_ID=${{ env.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ env.AWS_SECRET_ACCESS_KEY }}
+            AWS_S3_ENDPOINT=${{ env.AWS_S3_ENDPOINT }}
+            AWS_S3_BUCKET=${{ env.AWS_S3_BUCKET }}
+            R2_URL=${{ env.R2_URL }}

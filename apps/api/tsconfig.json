@@ -6,11 +6,18 @@
     "moduleResolution": "Bundler",
     "strict": true,
     "skipLibCheck": true,
-    "types": [
-      "node"
-    ],
-    "jsx": "react-jsx",
-    "jsxImportSource": "hono/jsx",
+    "types": ["node"],
     "outDir": "./dist",
+    "baseUrl": ".",
+    "paths": {
+      "#env": ["src/env.ts"],
+      "#webhook/responses/*": ["src/webhook/responses/*"],
+      "#webhook/router": ["src/webhook/routers/index.ts"],
+      "#webhook/routers/*": ["src/webhook/routers/*"],
+      "#webhook/openapi": ["src/webhook/openapi/index.ts"],
+      "#middlewares/*": ["src/middlewares/*"],
+      "#aws/*": ["src/aws/*"],
+      "#extensions/*": ["src/extensions/*"]
+    }
   }
 }

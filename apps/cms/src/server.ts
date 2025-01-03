@@ -1,12 +1,22 @@
 import express from "express";
 import payload from "payload";
-import apiRoutes from "./routes";
+import path from "path";
+import cookieParser from "cookie-parser";
 
 require("dotenv").config();
+
 const app = express();
+app.use(cookieParser());
+
+// Serve assets
+app.use("/assets", express.static(path.resolve(__dirname, "./assets")));
 
 app.get("/", (_, res) => {
   res.redirect("/admin");
+});
+
+app.get("/health", (_, res) => {
+  res.send("OK");
 });
 
 const start = async () => {
@@ -17,8 +27,6 @@ const start = async () => {
       payload.logger.info(`Payload Admin URL: ${payload.getAdminURL()}`);
     },
   });
-
-  app.use("/api", apiRoutes);
 
   const port = process.env.PORT || 3000;
 

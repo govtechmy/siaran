@@ -1,28 +1,28 @@
 FROM node:20-alpine AS base
 
 FROM base AS builder
-
 RUN apk add --no-cache gcompat
 WORKDIR /app
+COPY . .
+RUN npm install turbo --global
+RUN turbo prune api --docker
 
-COPY package*json tsconfig.json src ./
-
-RUN npm install && \
-    npm run build && \
-    npm prune --production
+FROM base AS installer
+WORKDIR /app
+COPY --from=builder /app/out/json/ .
+RUN npm install
+COPY --from=builder /app/out/full/ .
+RUN npm install -g turbo
+RUN turbo build --filter=api
 
 FROM base AS runner
 WORKDIR /app
-
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 hono
+RUN adduser --system --uid 1001 express
+COPY --from=installer --chown=express:nodejs /app/ .
 
-COPY --from=builder --chown=hono:nodejs /app/node_modules /app/node_modules
-COPY --from=builder --chown=hono:nodejs /app/dist /app/dist
-COPY --from=builder --chown=hono:nodejs /app/package.json /app/package.json
-
-USER hono
+USER express
 EXPOSE $PORT
 ENV HOST=0.0.0.0
 
-CMD ["node", "/app/dist/index.js"]
+CMD ["npm", "start", "--workspace=api"]

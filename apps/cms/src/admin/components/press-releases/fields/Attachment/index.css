@@ -1,0 +1,18 @@
+.attachment {
+    display: flex;
+    flex-flow: row nowrap;
+    align-items: center;
+    padding: .25rem 0;
+}
+
+.attachment__label {
+    margin-left: .5rem;
+}
+
+.attachment-input {
+    margin-top: 1rem;
+}
+
+.error {
+    color: red;
+}
