@@ -15,6 +15,10 @@ app.get("/", (_, res) => {
   res.redirect("/admin");
 });
 
+app.get("/health", (_, res) => {
+  res.send("OK");
+});
+
 const start = async () => {
   await payload.init({
     secret: process.env.PAYLOAD_SECRET,
