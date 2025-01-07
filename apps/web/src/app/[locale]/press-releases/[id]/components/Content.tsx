@@ -62,26 +62,31 @@ function Data({ initialData }: { initialData: PressRelease }) {
         content={getContent(initialData)}
         dateString={initialData.date_published}
       />
-      <RowAction className={cn("mt-[1.125rem]", "no-print")} />
-      <HorizontalRule className={cn("my-[1.125rem]")} />
-      <article
-        className={cn(
-          "flex flex-col items-start",
-          "text-[1rem] leading-[1.75rem] text-black-700",
-          "font-body font-normal",
-        )}
-      >
-        {initialData.content.markdown ? (
-          <Markdown
-            remarkPlugins={[remarkGfm, remarkBreaks]}
-            components={Components}
+      {/* Hide empty content */}
+      {(initialData.content.markdown || initialData.content.plain) && (
+        <>
+          <RowAction className={cn("mt-[1.125rem]", "no-print")} />
+          <HorizontalRule className={cn("my-[1.125rem]")} />
+          <article
+            className={cn(
+              "flex flex-col items-start",
+              "text-[1rem] leading-[1.75rem] text-black-700",
+              "font-body font-normal",
+            )}
           >
-            {initialData.content.markdown}
-          </Markdown>
-        ) : (
-          initialData.content.plain
-        )}
-      </article>
+            {initialData.content.markdown ? (
+              <Markdown
+                remarkPlugins={[remarkGfm, remarkBreaks]}
+                components={Components}
+              >
+                {initialData.content.markdown}
+              </Markdown>
+            ) : (
+              initialData.content.plain
+            )}
+          </article>
+        </>
+      )}
       <HorizontalRule className={cn("mt-[1.5rem] md:mt-[1.875rem]")} />
       {initialData.attachments && initialData.attachments.length > 0 && (
         <div className={cn("mt-[1.5rem] md:mt-[1.875rem]", "no-print")}>
