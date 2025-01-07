@@ -287,6 +287,7 @@ const SearchResultDropdown = forwardRef<
   } = useTRPCQuery({
     route: "search",
     method: "pressReleases",
+    queryKey: [debouncedQuery],
     params: { q: debouncedQuery },
     queryFn: async (trpc) => trpc.query({ q: debouncedQuery }),
   });

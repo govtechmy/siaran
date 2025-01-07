@@ -2,6 +2,7 @@ import { getTrpcServerClient } from "@/api/trpc/proxy/server";
 import Container from "@/components/Container";
 import type { Segment } from "@/components/hooks/view-segment";
 import { Locale } from "@/i18n/routing";
+import { Provider } from "jotai";
 import Content from "./components/Content";
 import HydrateState, { InitialParams } from "./components/HydrateState";
 import SearchHero from "./components/SearchHero";
@@ -21,19 +22,21 @@ export default async function PageIndex({
   const agencies = await trpc.agency.list.query();
 
   return (
-    <HydrateState
-      state={{
-        initialParams: params,
-        initialData: data,
-      }}
-    >
-      <main className="flex flex-col">
-        <SearchHero agencies={agencies} />
-        <Container>
-          <Content />
-        </Container>
-      </main>
-    </HydrateState>
+    <Provider>
+      <HydrateState
+        state={{
+          initialParams: params,
+          initialData: data,
+        }}
+      >
+        <main className="flex flex-col">
+          <SearchHero agencies={agencies} />
+          <Container>
+            <Content />
+          </Container>
+        </main>
+      </HydrateState>
+    </Provider>
   );
 }
 
