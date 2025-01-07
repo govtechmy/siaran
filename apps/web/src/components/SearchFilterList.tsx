@@ -15,7 +15,7 @@ interface FilterTypeOption
   extends FilterOneOf.Option<Exclude<PressReleaseType, "other"> | "all"> {}
 
 export type Filters = {
-  agencies?: string[];
+  agencies?: Agency[];
   type?: PressReleaseType;
   startDate?: string;
   endDate?: string;
@@ -23,7 +23,7 @@ export type Filters = {
 
 type Props = {
   agencies: Agency[];
-  filters?: Filters;
+  initialData?: Filters;
   className?: string;
   onFiltersChange?: (filters: Filters) => void;
 };
@@ -36,19 +36,26 @@ type FilterArg =
 
 export default function SearchFilterList({
   agencies,
+  initialData,
   onFiltersChange,
   className,
 }: Props) {
   const t = useTranslations();
-  const allAgencies = agencies.map(function mapAgency(agency: Agency) {
+
+  // Map agency to filter option
+  function mapAgency(agency: Agency): FilterMultiple.Option {
     return {
       id: agency.id,
       label: agency.acronym,
       info: t(`common.agencies.${agency.acronym}`),
     };
-  }) satisfies FilterMultiple.Option[];
-  const [selectedAgencies, setSelectedAgencies] =
-    useState<FilterMultiple.Option[]>(allAgencies);
+  }
+
+  const allAgencies = agencies.map(mapAgency) satisfies FilterMultiple.Option[];
+  const initialAgencies = initialData?.agencies?.map(mapAgency) || [];
+  const [selectedAgencies, setSelectedAgencies] = useState<
+    FilterMultiple.Option[]
+  >(initialAgencies.length > 0 ? initialAgencies : allAgencies);
 
   const allPostTypes = [
     {
@@ -65,7 +72,12 @@ export default function SearchFilterList({
     },
   ] satisfies FilterTypeOption[];
   const defaultPostType = allPostTypes[0];
-  const [selectedPostType, setSelectedPostType] = useState(defaultPostType);
+  const initialPostType = initialData?.type
+    ? allPostTypes.find((type) => type.id === initialData?.type)
+    : undefined;
+  const [selectedPostType, setSelectedPostType] = useState(
+    initialPostType || defaultPostType,
+  );
 
   const [startDate, setStartDate] = useState<Date>();
   const [endDate, setEndDate] = useState<Date>();
@@ -133,7 +145,9 @@ export default function SearchFilterList({
   useEffectMounted(
     function updateParams() {
       onFiltersChange?.({
-        agencies: selectedAgencies.map((current) => current.id),
+        agencies: agencies.filter((agency) =>
+          selectedAgencies.find((option) => option.id === agency.id),
+        ),
         type: selectedPostType.id === "all" ? undefined : selectedPostType.id,
         startDate: startDate && format(startDate, "yyyy-MM-dd"),
         endDate: endDate && format(endDate, "yyyy-MM-dd"),

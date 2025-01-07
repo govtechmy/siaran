@@ -4,11 +4,12 @@ import GovBadge from "@/components/GovBadge";
 import SearchFilterList, { Filters } from "@/components/SearchFilterList";
 import SearchSuggestion from "@/components/SearchSuggestion";
 import { useEffectMounted } from "@/components/hooks/mounted";
+import { useMergeSearchParams } from "@/components/hooks/search-params";
 import { cn } from "@/lib/ui/utils";
 import type { Agency } from "@repo/api/cms/types";
 import { useAtom } from "jotai";
 import { useTranslations } from "next-intl";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { isLoadingAtom, paramsAtom } from "../stores/press-releases";
 
 type Props = {
@@ -18,10 +19,21 @@ type Props = {
 
 export default function SearchHero({ agencies, className }: Props) {
   const t = useTranslations();
-  const [, setParams] = useAtom(paramsAtom);
+  const [params, setParams] = useAtom(paramsAtom);
   const [isLoading] = useAtom(isLoadingAtom);
   const [query, setQuery] = useState<string>();
-  const [filters, setFilters] = useState<Filters>();
+  const [filters, setFilters] = useState<Filters>({
+    // select agencies based on the provided agency IDs
+    agencies: Array.isArray(params.agencies)
+      ? agencies.filter((agency) =>
+          params.agencies!.find((id) => id === agency.id),
+        )
+      : [],
+    type: params.type,
+    startDate: params.startDate,
+    endDate: params.endDate,
+  });
+  const { mergeSearchParamsHistory } = useMergeSearchParams();
 
   function onSubmitQuery(newQuery: string) {
     if (query !== newQuery) {
@@ -31,19 +43,50 @@ export default function SearchHero({ agencies, className }: Props) {
     }
   }
 
+  // Map filters into serializable format
+  function mapFiltersIntoParams(
+    filters: Filters,
+  ): Omit<Filters, "agencies"> & { agencies?: string[] } {
+    return {
+      agencies:
+        filters.agencies &&
+        filters.agencies.length > 0 &&
+        filters.agencies.length !== agencies.length
+          ? filters.agencies?.map((agency) => agency.id)
+          : undefined,
+      type: filters.type,
+      startDate: filters.startDate,
+      endDate: filters.endDate,
+    };
+  }
+
   function resetParams() {
     setParams({
       page: 1,
       query,
-      ...filters,
+      ...mapFiltersIntoParams(filters),
     });
   }
+
+  useEffect(
+    function persistFilters() {
+      const serialized = mapFiltersIntoParams(filters);
+
+      mergeSearchParamsHistory({
+        agencies: serialized.agencies?.join("|"),
+        type: serialized.type,
+        startDate: serialized.startDate,
+        endDate: serialized.endDate,
+      });
+    },
+    [filters],
+  );
 
   useEffectMounted(
     function updateParams() {
       setParams({
         query,
-        ...filters,
+        ...mapFiltersIntoParams(filters),
       });
     },
     [filters, query],
@@ -89,6 +132,7 @@ export default function SearchHero({ agencies, className }: Props) {
           isLoading={isLoading}
         />
         <SearchFilterList
+          initialData={filters}
           agencies={agencies}
           onFiltersChange={setFilters}
           className={cn("mt-[.75rem]")}
