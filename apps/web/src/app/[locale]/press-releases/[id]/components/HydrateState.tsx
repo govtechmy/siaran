@@ -21,16 +21,11 @@ export default function HydrateState({
   state: { initialData, initialParams },
   children,
 }: Props) {
-  useHydrateAtoms(
-    [
-      [dataAtom, initialData],
-      [paramsAtom, initialParams],
-      [isInitialDataAtom, true],
-    ] as const,
-    {
-      dangerouslyForceHydrate: true,
-    },
-  );
+  useHydrateAtoms([
+    [dataAtom, initialData],
+    [paramsAtom, initialParams],
+    [isInitialDataAtom, true],
+  ] as const);
 
   return children;
 }
