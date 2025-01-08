@@ -12,6 +12,8 @@ type Props = {
   searchParams: { [key: string]: string };
 };
 
+export const revalidate = 0;
+
 export default async function PageIndex({
   params: { locale },
   searchParams,
