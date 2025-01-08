@@ -11,6 +11,8 @@ type Props = {
   params: { locale: Locale; id: string };
 };
 
+export const revalidate = 0;
+
 export default async function PagePressReleases({
   params: { locale, id },
 }: Props) {
@@ -19,7 +21,7 @@ export default async function PagePressReleases({
   let data: PressRelease;
 
   try {
-    data = await trpc.pressRelease.getById.query({ id });
+    data = await trpc.pressRelease.getById.query({ id }, {});
   } catch (e) {
     if (e instanceof Error && e.message === "not_found") {
       notFound();
