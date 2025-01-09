@@ -159,7 +159,11 @@ const Components: ComponentProps<typeof Markdown>["components"] = {
   table: ({ node, ...props }) => (
     <table
       {...props}
-      className="min-w-full border-collapse border border-gray-outline-200"
+      className={cn(
+        "my-[1.5rem]",
+        "min-w-full",
+        "border-collapse border border-gray-outline-200",
+      )}
     />
   ),
   tbody: ({ node, ...props }) => (
