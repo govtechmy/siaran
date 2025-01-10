@@ -17,7 +17,7 @@ import {
   useState,
 } from "react";
 
-import { useTRPCQuery } from "@/api/hooks/query";
+import { useTRPCSuspenseQuery } from "@/api/hooks/query";
 import { cn } from "@/lib/ui/utils";
 import { LoaderCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
@@ -43,6 +43,7 @@ export default function SearchSuggestion({
   onClearQuery,
 }: Props) {
   const [currentQuery, setCurrentQuery] = useState("");
+  const debouncedQuery = useDebounce(currentQuery, 300);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const containerRef = useClickAway<HTMLDivElement>(() =>
     setIsDropdownOpen(false),
@@ -82,7 +83,7 @@ export default function SearchSuggestion({
       {isDropdownOpen && (
         <SearchResult
           dropdownRef={searchResultDropdownRef}
-          query={currentQuery}
+          query={debouncedQuery}
           className={cn("z-1")}
           onKeyEscape={closeSearchResults}
         />
@@ -281,16 +282,21 @@ const SearchResultDropdown = forwardRef<
   const t = useTranslations();
   const { url } = useLocaleURL();
 
-  const debouncedQuery = useDebounce(query, 300);
   const {
     data: { docs: pressReleases },
-  } = useTRPCQuery({
+  } = useTRPCSuspenseQuery({
     route: "search",
     method: "pressReleases",
-    queryKey: [debouncedQuery],
-    params: { q: debouncedQuery },
-    queryFn: async (trpc) => trpc.query({ q: debouncedQuery }),
+    params: { q: query },
+    queryFn: async (trpc) => {
+      if (query === "") {
+        return { docs: [] };
+      }
+
+      return trpc.query({ q: query });
+    },
   });
+
   const [activeItemIndex, setActiveItemIndex] = useState(-1);
   const searchItemRefs = useRef<(HTMLAnchorElement | null)[]>(
     new Array(pressReleases.length),
