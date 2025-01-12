@@ -16,16 +16,6 @@ export const endpoints: Endpoint[] = [
                 contains: req.query.q || "",
               },
             },
-            {
-              ["content.plain"]: {
-                contains: req.query.q || "",
-              },
-            },
-            {
-              ["content.markdown"]: {
-                contains: req.query.q || "",
-              },
-            },
           ],
         },
         limit: 10,
