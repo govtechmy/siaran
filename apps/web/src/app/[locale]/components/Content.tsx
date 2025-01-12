@@ -3,7 +3,7 @@
 import {
   type ListPressReleaseData,
   type ListPressReleaseParams,
-  useTRPCQuery,
+  useTRPCSuspenseQuery,
 } from "@/api/hooks/query";
 import Pagination from "@/components/Pagination";
 import PressReleaseView from "@/components/PressReleaseView";
@@ -139,7 +139,7 @@ function Data({
   onDataChange?: (data: ListPressReleaseData) => void;
   onPageChange?: (page: number) => void;
 }) {
-  const { data } = useTRPCQuery({
+  const { data } = useTRPCSuspenseQuery({
     route: "pressRelease",
     method: "list",
     initialData,

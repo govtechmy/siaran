@@ -44,7 +44,7 @@ export type Query = {
   };
 };
 
-export function useTRPCQuery<
+export function useTRPCSuspenseQuery<
   Route extends keyof Query,
   Method extends keyof Query[Route],
   Data = Query[Route][Method] extends { data: infer T } ? T : never,
@@ -73,6 +73,7 @@ export function useTRPCQuery<
   const { data, isLoading } = useSuspenseQuery<Data>({
     queryKey: [...queryKey, currentParams],
     queryFn: () => queryFn(trpc[route][method], { params: currentParams }),
+    staleTime: 3000,
     initialData: initialData && shouldShowInitialData ? initialData : undefined,
   });
 
