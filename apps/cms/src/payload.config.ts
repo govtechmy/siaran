@@ -2,8 +2,8 @@ import path from "path";
 
 import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
-import { buildConfig } from "payload/config";
 import search from "@payloadcms/plugin-search";
+import { buildConfig } from "payload/config";
 
 import { slateEditor } from "@payloadcms/richtext-slate";
 import { Logo } from "./admin/components/Logo";
@@ -54,6 +54,9 @@ export default buildConfig({
       },
       searchOverrides: {
         slug: "search-results",
+        admin: {
+          hidden: true,
+        },
       },
     }),
   ],
