@@ -3,11 +3,16 @@
 import { getQueryClient } from "@/api/query-client";
 import { AppRouter } from "@repo/api/trpc-router";
 import { QueryClientProvider } from "@tanstack/react-query";
-import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
+import {
+  createTRPCProxyClient,
+  httpBatchLink,
+  HTTPHeaders,
+} from "@trpc/client";
 import { createContext, ReactNode, useContext } from "react";
 
 type Props = {
   httpBatchLinkURL: string;
+  headers?: HTTPHeaders;
   children: ReactNode;
 };
 
@@ -24,7 +29,14 @@ export function useTRPCProxy() {
 export function TRPCProvider(props: Props) {
   const queryClient = getQueryClient();
   const trpcClient = createTRPCProxyClient<AppRouter>({
-    links: [httpBatchLink({ url: props.httpBatchLinkURL })],
+    links: [
+      httpBatchLink({
+        url: props.httpBatchLinkURL,
+        headers() {
+          return props.headers ?? {};
+        },
+      }),
+    ],
   });
 
   return (
