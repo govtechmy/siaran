@@ -22,6 +22,9 @@ env:
   AWS_S3_ENDPOINT: "${{ vars.STAGING_AWS_S3_ENDPOINT }}"
   AWS_S3_BUCKET: "${{ vars.STAGING_AWS_S3_BUCKET }}"
   R2_URL: "${{ secrets.STAGING_R2_URL }}"
+  HTTP_BASIC_AUTH: "${{ vars.STAGING_HTTP_BASIC_AUTH }}"
+  HTTP_BASIC_AUTH_USERNAME: "${{ vars.STAGING_HTTP_BASIC_AUTH_USERNAME }}"
+  HTTP_BASIC_AUTH_PASSWORD: "${{ vars.STAGING_HTTP_BASIC_AUTH_PASSWORD }}"
 
 jobs:
   deploy:
@@ -63,3 +66,6 @@ jobs:
             AWS_S3_ENDPOINT=${{ env.AWS_S3_ENDPOINT }}
             AWS_S3_BUCKET=${{ env.AWS_S3_BUCKET }}
             R2_URL=${{ env.R2_URL }}
+            HTTP_BASIC_AUTH=${{ env.HTTP_BASIC_AUTH }}
+            HTTP_BASIC_AUTH_USERNAME=${{ env.HTTP_BASIC_AUTH_USERNAME }}
+            HTTP_BASIC_AUTH_PASSWORD=${{ env.HTTP_BASIC_AUTH_PASSWORD }}
