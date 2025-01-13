@@ -1,3 +1,4 @@
+import authenticateWithBasicAuth from "#middlewares/basic-auth.js";
 import cors from "#middlewares/cors";
 import helmet from "#middlewares/helmet";
 import logRequest from "#middlewares/log-request";
@@ -15,6 +16,7 @@ app.use(express.urlencoded({ extended: true }));
 app.use(logRequest);
 app.use(helmet);
 app.use(cors);
+app.use(authenticateWithBasicAuth);
 app.use(
   "/api",
   createExpressMiddleware({
