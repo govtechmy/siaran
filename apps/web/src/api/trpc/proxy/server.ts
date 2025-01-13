@@ -1,5 +1,6 @@
 import type { AppRouter } from "@repo/api/trpc-router";
 import { createTRPCProxyClient, httpBatchLink } from "@trpc/client";
+import { headers } from "next/headers";
 
 function getServerUrl() {
   if (typeof window !== "undefined") {
@@ -18,6 +19,15 @@ function getServerUrl() {
 // TODO: Deprecated
 export function getTrpcServerClient() {
   return createTRPCProxyClient<AppRouter>({
-    links: [httpBatchLink({ url: getServerUrl()! })],
+    links: [
+      httpBatchLink({
+        url: getServerUrl()!,
+        headers() {
+          return {
+            ["Authorization"]: headers().get("authorization") ?? undefined,
+          };
+        },
+      }),
+    ],
   });
 }
