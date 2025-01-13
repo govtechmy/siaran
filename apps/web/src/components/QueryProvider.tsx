@@ -1,4 +1,5 @@
 import { TRPCProvider } from "@/api/trpc/proxy/client";
+import { headers } from "next/headers";
 import { ReactNode } from "react";
 
 type Props = {
@@ -17,5 +18,14 @@ export default async function QueryProvider(props: Props) {
     throw new Error("TRPC_HTTP_BATCH_LINK_URL is not set");
   }
 
-  return <TRPCProvider httpBatchLinkURL={url}>{props.children}</TRPCProvider>;
+  return (
+    <TRPCProvider
+      httpBatchLinkURL={url}
+      headers={{
+        ["Authorization"]: headers().get("authorization") ?? undefined,
+      }}
+    >
+      {props.children}
+    </TRPCProvider>
+  );
 }
