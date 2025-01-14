@@ -16,6 +16,7 @@ RUN npm install -g turbo
 RUN turbo build --filter=api
 
 FROM base AS runner
+ENV NODE_ENV=production
 WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 express
