@@ -12,6 +12,7 @@ import {
   ListObjectsV2CommandOutput,
   PutObjectCommand,
   S3Client,
+  S3ClientConfig,
 } from "@aws-sdk/client-s3";
 import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import * as path from "path";
@@ -26,21 +27,24 @@ async function getClient() {
   const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
   const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
   const endpoint = process.env.AWS_S3_ENDPOINT;
+  // Use IAM role to authenticate to S3 in production
+  const opts = (
+    process.env.NODE_ENV === "production"
+      ? {}
+      : {
+          endpoint,
+          credentials: {
+            accessKeyId,
+            secretAccessKey,
+          },
+        }
+  ) as S3ClientConfig;
 
   if (!accessKeyId || !secretAccessKey) {
     throw new Error("AWS credentials not found");
   }
 
-  client = new S3Client({
-    region: getRegion(),
-    endpoint,
-    credentials: {
-      accessKeyId,
-      secretAccessKey,
-    },
-  });
-
-  return client;
+  return new S3Client({ region: getRegion(), ...opts });
 }
 
 function getBucket() {
