@@ -29,12 +29,30 @@ export default function Masthead() {
           className="h-[2.25rem] w-full md:h-[1.75rem]"
           onClick={() => setOpen(!open)}
         >
-          <div className="max-sm:justify-between flex flex-wrap items-center gap-1.5 text-sm/4 text-brand-700 sm:py-1">
+          <div
+            className={cn(
+              "flex flex-nowrap",
+              "max-sm:justify-between items-center",
+              "gap-1.5",
+              "sm:py-1",
+              "text-sm/4 text-brand-700",
+            )}
+          >
             <div className="flex items-center gap-1.5">
-              <FlagMY className="h-[1rem] w-[2rem]" />
-              <span className="text-black-700">{t("officialGovWebsite")}</span>
+              <FlagMY className="h-[1rem] w-[2rem] flex-none" />
+              <span className={cn("text-start text-black-700", "line-clamp-1")}>
+                {t("officialGovWebsite")}
+              </span>
             </div>
-            <div className="max-sm:rounded-md max-sm:bg-outline-200 max-sm:px-1 flex items-center gap-0.5">
+            <div
+              className={cn(
+                "flex flex-none flex-row",
+                "rounded-md bg-outline-200 sm:bg-transparent",
+                "px-1 sm:px-0",
+                "items-center gap-0.5",
+                "ml-auto sm:ml-0",
+              )}
+            >
               <span className="hidden tracking-[-0.01em] sm:block">
                 {t("howToIdentify")}
               </span>
@@ -45,15 +63,31 @@ export default function Masthead() {
           </div>
         </button>
         <Collapse isOpen={open}>
-          <div className="gap-4.5 pt-4.5 grid grid-cols-1 pb-6 sm:grid-cols-2 sm:gap-6 sm:pb-8 sm:pt-6">
-            <span className="static text-sm text-brand-700 sm:hidden">
+          <div
+            className={cn(
+              "flex flex-col sm:flex-row",
+              "gap-[1rem] sm:gap-[1.5rem]",
+              "pt-4.5 pb-6 sm:pb-8 sm:pt-6",
+            )}
+          >
+            <button
+              className={cn(
+                "static",
+                "mt-[1.125rem]",
+                "w-fit",
+                "sm:hidden",
+                "text-sm text-brand-700",
+              )}
+              onClick={() => setOpen(!open)}
+            >
               {t("howToIdentify")}
-            </span>
-
+            </button>
             <div className="flex gap-3">
-              <GovMY className="size-[1.5rem] shrink-0 text-dim-500" />
+              <GovMY className="size-[1.25rem] shrink-0 text-dim-500" />
               <div className="space-y-1.5">
-                <p className="max-sm:text-sm font-medium">{t("official")}</p>
+                <p className="text-sm font-medium md:text-base">
+                  {t("official")}
+                </p>
                 <p className="max-w-prose text-balance text-sm text-black-700">
                   {t("notGovWebsite")}
                   <span className="font-semibold">.gov.my</span>
@@ -62,9 +96,11 @@ export default function Masthead() {
               </div>
             </div>
             <div className="flex gap-3">
-              <EncryptedLock className="size-[1.5rem] shrink-0 text-dim-500" />
+              <EncryptedLock className="size-[1.25rem] shrink-0 text-dim-500" />
               <div className="space-y-1.5">
-                <p className="max-sm:text-sm font-medium">{t("secure")}</p>
+                <p className="text-sm font-medium md:text-base">
+                  {t("secure")}
+                </p>
                 <div className="max-w-prose text-balance text-sm text-black-700">
                   {t("findLock")}{" "}
                   <SolidLock className="-ml-[3px] mb-0.5 mr-px inline size-3.5" />
