@@ -98,7 +98,7 @@ const PressRelease: CollectionConfig = {
         };
 
         if (sessionId && token && shouldCommitUpload) {
-          // Use timeout to let Payload commit the changes first
+          // Wait until Payload commit the changes
           setTimeout(() => {
             commitPreUploadedAttachments({
               pressReleaseId: doc.id as string,
