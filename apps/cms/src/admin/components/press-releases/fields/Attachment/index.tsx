@@ -167,24 +167,31 @@ export function Field({ path }: Props) {
     }
   }
 
-  useEffect(function setSessionContext() {
-    const data = localStorage.getItem("attachments");
+  useEffect(
+    function setSessionContext() {
+      if (fieldSessionId) {
+        return;
+      }
 
-    if (data) {
-      // Read from local storage if the user did not finish in the last session
-      const parsed = JSON.parse(data) as {
-        sessionId: string;
-        attachments: PreUploadAttachment[];
-      };
+      const data = localStorage.getItem("attachments");
 
-      setAttachments(parsed.attachments);
-      setFieldSessionId(parsed.sessionId);
-    } else {
-      setFieldSessionId(sessionId);
-    }
+      if (data) {
+        // Read from local storage if the user did not finish in the last session
+        const parsed = JSON.parse(data) as {
+          sessionId: string;
+          attachments: PreUploadAttachment[];
+        };
 
-    setFieldToken(token);
-  }, []);
+        setFieldSessionId(parsed.sessionId);
+        setAttachments(parsed.attachments);
+      } else {
+        setFieldSessionId(sessionId);
+      }
+
+      setFieldToken(token);
+    },
+    [fieldSessionId],
+  );
 
   useEffect(
     function updateSessionContext() {
