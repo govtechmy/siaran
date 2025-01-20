@@ -12,29 +12,57 @@ import { mapLocale } from "../utils/locale";
 
 const PressRelease: CollectionConfig = {
   slug: "press-releases",
+
   access: {
-    read: ({ req, data }) => {
-      return (
-        req.user &&
-        (req.user.role === "superadmin" ||
-          req.user.agency.id === data.relatedAgency)
-      );
+    create: ({ req }) => {
+      const { user } = req;
+
+      if (!user) return false;
+
+      if (user.role === "superadmin") return true;
+
+      // new logic because we cannot compare with doc related agency because its not loaded yet
+      if (user.role === "admin" && user.agency) {
+        return true;
+      }
+      return false;
     },
+
+    read: ({ req }) => {
+      const { user } = req;
+      if (!user) return false;
+
+      if (user.role === "superadmin") {
+        return true;
+      }
+
+      // admin can only see Press Releases of their own agency
+      return {
+        relatedAgency: {
+          equals: user.agency.id, // user.agency is the ID
+        },
+      };
+    },
+
     update: ({ req, data }) => {
-      return (
-        req.user &&
-        (req.user.role === "superadmin" ||
-          req.user.agency.id === data.relatedAgency)
-      );
+      const { user } = req;
+      if (!user) return false;
+
+      if (user.role === "superadmin") return true;
+
+      return user.agency === data.relatedAgency;
     },
-    delete({ req, data }) {
-      return (
-        req.user &&
-        (req.user.role === "superadmin" ||
-          req.user.agency.id === data.relatedAgency)
-      );
+
+    delete: ({ req, data }) => {
+      const { user } = req;
+      if (!user) return false;
+
+      if (user.role === "superadmin") return true;
+
+      return user.agency === data.relatedAgency;
     },
   },
+
   hooks: {
     beforeValidate: [
       async ({ operation, data }) => {
