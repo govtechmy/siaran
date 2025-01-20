@@ -50,7 +50,11 @@ const PressRelease: CollectionConfig = {
 
       if (user.role === "superadmin") return true;
 
-      return user.agency === data.relatedAgency;
+      return {
+        relatedAgency: {
+          equals: user.agency.id, // have to use agency.id
+        },
+      }
     },
 
     delete: ({ req, data }) => {
@@ -59,7 +63,11 @@ const PressRelease: CollectionConfig = {
 
       if (user.role === "superadmin") return true;
 
-      return user.agency === data.relatedAgency;
+      return {
+        relatedAgency: {
+          equals: user.agency.id, // have to use agency.id
+        },
+      }
     },
   },
 
