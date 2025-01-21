@@ -19,7 +19,6 @@
   "dependencies": {
     "@payloadcms/bundler-webpack": "^1.0.0",
     "@payloadcms/db-mongodb": "^1.0.0",
-    "@payloadcms/plugin-search": "^1.1.1",
     "@payloadcms/richtext-slate": "^1.5.2",
     "cookie-parser": "^1.4.7",
     "cross-env": "^7.0.3",
