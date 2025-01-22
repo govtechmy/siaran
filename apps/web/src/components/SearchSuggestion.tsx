@@ -8,6 +8,7 @@ import { useClickAway, useDebounce } from "@uidotdev/usehooks";
 import {
   ComponentProps,
   forwardRef,
+  ReactNode,
   Ref,
   Suspense,
   useCallback,
@@ -387,7 +388,7 @@ const SearchResultDropdown = forwardRef<
             }}
           >
             <span className="min-w-0 flex-1 truncate">
-              {highlightText(pressRelease.title, query)}
+              {highlighQueryText(pressRelease.title, query)}
             </span>
             <span className="flex items-center gap-1">
               <span className="text-sm text-black-800">
@@ -481,32 +482,38 @@ function SearchResultHeading({
   );
 }
 
-function highlightText(text: string, query: string) {
-  if (!query) {
+function highlighQueryText(text: string, query: string) {
+  if (query == "") {
     return text;
   }
 
-  const escapedQuery = escapeRegExp(query);
-  const regex = new RegExp(escapedQuery, "gi");
-  const parts = text.split(regex);
-  const matches = text.match(regex);
-  const result = [];
+  // match words only (i.e. ignore special characters)
+  const tokens = query.split(/(\w+)/g).filter(Boolean);
 
-  for (let i = 0; i < parts.length; i++) {
-    result.push(parts[i]);
+  // use '|' to match any of the tokens in the query
+  const regex = new RegExp(
+    tokens.map((token) => `(${escapeSpecialChars(token)})`).join("|"),
+    "gi",
+  );
 
-    if (matches && matches[i]) {
-      result.push(
-        <span key={i} className={cn("text-theme-600", "font-medium")}>
-          {matches[i]}
-        </span>,
-      );
-    }
-  }
+  return text
+    .split(regex)
+    .filter(Boolean) // filter out unmatched
+    .map((match, i) => {
+      if (tokens.some((token) => match.toLowerCase() === token.toLowerCase())) {
+        return (
+          <span key={i} className={cn("text-theme-600", "font-medium")}>
+            {match}
+          </span>
+        );
+      }
 
-  return result;
+      return match;
+    });
 }
 
-function escapeRegExp(string: string) {
+function escapeSpecialChars(string: string) {
+  // escape the following special characters with a '\':
+  // . * + ? ^ $ { } ( ) | [ ] \
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }
