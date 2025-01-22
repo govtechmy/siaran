@@ -18,10 +18,11 @@ import {
 } from "react";
 
 import { useTRPCSuspenseQuery } from "@/api/hooks/query";
+import { useAppLocale } from "@/i18n/routing";
 import { cn } from "@/lib/ui/utils";
+import { getLocalizedURL } from "@/lib/url/utils";
 import { LoaderCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useLocaleURL } from "./hooks/url";
 import PressToSearch from "./PressToSearch";
 
 type Props = {
@@ -280,7 +281,7 @@ const SearchResultDropdown = forwardRef<
   { query: string }
 >(({ query }, ref) => {
   const t = useTranslations();
-  const { url } = useLocaleURL();
+  const locale = useAppLocale();
 
   const {
     data: { docs: pressReleases },
@@ -379,7 +380,7 @@ const SearchResultDropdown = forwardRef<
         pressReleases.map((pressRelease, index) => (
           <SearchSuggestionLink
             key={pressRelease.id || index}
-            href={url("press-releases", pressRelease.id)}
+            href={getLocalizedURL(locale, "press-releases", pressRelease.id)}
             data-id={pressRelease.id}
             ref={function setRef(el) {
               searchItemRefs.current[index] = el;

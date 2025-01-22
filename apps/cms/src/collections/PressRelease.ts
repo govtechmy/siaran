@@ -9,6 +9,7 @@ import {
   convertSlateToMarkdown,
 } from "../serialization/slate";
 import { mapLocale } from "../utils/locale";
+import * as fields from "./fields/press-release";
 
 const PressRelease: CollectionConfig = {
   slug: "press-releases",
@@ -168,7 +169,7 @@ const PressRelease: CollectionConfig = {
       index: true,
     },
     {
-      name: "date_published",
+      name: fields.datePublished,
       label: {
         ["en-MY"]: "Date Published",
         ["ms-MY"]: "Tarikh Diterbitkan",
@@ -249,7 +250,6 @@ const PressRelease: CollectionConfig = {
           name: "markdown",
           type: "text",
           required: false,
-          index: true,
           admin: {
             hidden: true,
           },

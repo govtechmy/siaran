@@ -1,5 +1,5 @@
 import type { SessionTokenOnly } from "#cms/schema/session";
-import type { PaginatedResponse, PaginatedSearchResponse } from "#cms/types";
+import type { SearchResponse } from "#cms/types";
 import { z } from "#extensions/zod";
 import { cmsFetch, CMSFetchError } from "#http";
 import { logger } from "#logging/logger";
@@ -10,7 +10,7 @@ export async function searchPressReleases(
   { token }: SessionTokenOnly,
 ) {
   try {
-    return await cmsFetch<PaginatedResponse<PressRelease>>(
+    return await cmsFetch<SearchResponse<PressRelease>>(
       "/api/search/press-releases",
       {
         method: "GET",
