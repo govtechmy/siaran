@@ -16,6 +16,7 @@ env:
   PAYLOAD_SECRET: "${{ secrets.STAGING_PAYLOAD_SECRET }}"
   WIF_PROVIDER: "${{ secrets.STAGING_WIF_PROVIDER }}"
   PAYLOAD_PUBLIC_WEBHOOK_API_HOST: "${{ vars.STAGING_PAYLOAD_PUBLIC_WEBHOOK_API_HOST }}"
+  SERVICE_DATABASE: "${{ vars.STAGING_SERVICE_DATABASE }}"
 
 jobs:
   deploy:
@@ -27,6 +28,9 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Copy Dockerfile
+        run: cp ./apps/cms/Dockerfile .
 
       - name: Google Auth
         id: auth
@@ -43,8 +47,9 @@ jobs:
           region: ${{ env.REGION }}
           flags: "--platform=managed --min-instances=0 --allow-unauthenticated"
           # Use the appropriate source folder
-          source: ./apps/cms
+          source: ./
           env_vars: |-
             DATABASE_URI=${{ env.DATABASE_URI }}
             PAYLOAD_SECRET=${{ env.PAYLOAD_SECRET }}
             PAYLOAD_PUBLIC_WEBHOOK_API_HOST=${{ env.PAYLOAD_PUBLIC_WEBHOOK_API_HOST }}
+            SERVICE_DATABASE=${{ env.SERVICE_DATABASE }}

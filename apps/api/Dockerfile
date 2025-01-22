@@ -12,17 +12,22 @@ WORKDIR /app
 COPY --from=builder /app/out/json/ .
 RUN npm install
 COPY --from=builder /app/out/full/ .
-RUN npm install -g turbo
+# Provide build-time environment variables
+ARG SERVICE_STORAGE
+ENV SERVICE_STORAGE=${SERVICE_STORAGE}
+RUN npm install turbo --global
 RUN turbo build --filter=api
 
 FROM base AS runner
 ENV NODE_ENV=production
 WORKDIR /app
-RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 express
-COPY --from=installer --chown=express:nodejs /app/ .
+ENV NODE_ENV=production
+# RUN addgroup --system --gid 1001 nodejs
+# RUN adduser --system --uid 1001 express
+# COPY --from=installer --chown=express:nodejs /app/ .
+COPY --from=installer /app/ .
 
-USER express
+# USER express
 EXPOSE $PORT
 ENV HOST=0.0.0.0
 

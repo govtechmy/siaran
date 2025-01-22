@@ -1,0 +1,77 @@
+name: (prod) Deploy Payload CMS
+
+on:
+  push:
+    branches:
+      - main
+      - cms
+  workflow_dispatch:
+
+env:
+  REGION: "${{ vars.PROD_AWS_SERVICE_REGION }}"
+  ROLE: "${{ vars.PROD_AWS_SERVICE_ROLE }}"
+  SERVICE: "${{ vars.PROD_AWS_SERVICE_NAME_CMS }}"
+  SPINNAKER_WEBHOOK_SECRET: "${{ secrets.PROD_SPINNAKER_WEBHOOK_SECRET }}"
+  DOCKERFILE: "./apps/cms/Dockerfile"
+  PAYLOAD_PUBLIC_WEBHOOK_API_HOST: "${{ vars.PROD_PAYLOAD_PUBLIC_WEBHOOK_API_HOST }}"
+  SERVICE_DATABASE: "${{ vars.PROD_SERVICE_DATABASE }}"
+
+jobs:
+  deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.REGION }}
+          role-to-assume: ${{ env.ROLE }}
+          role-session-name: siaran-cms
+
+      - name: Login to Amazon ECR
+        id: login-ecr
+        uses: aws-actions/amazon-ecr-login@v2
+
+      - name: Build and push image to Amazon ECR
+        id: build-image
+        env:
+          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+          ECR_IMAGE_TAG: ${{ env.SERVICE }}
+        run: |-
+          echo API_HOST_${{ env.PAYLOAD_PUBLIC_WEBHOOK_API_HOST}}
+          docker build \
+            -t $ECR_REGISTRY/$ECR_IMAGE_TAG:${{ github.sha }} \
+            -f ${{ env.DOCKERFILE }} \
+            --build-arg PAYLOAD_PUBLIC_WEBHOOK_API_HOST=${{ env.PAYLOAD_PUBLIC_WEBHOOK_API_HOST}} \
+            --build-arg SERVICE_DATABASE=${{ env.SERVICE_DATABASE }} \
+            .
+          docker push $ECR_REGISTRY/$ECR_IMAGE_TAG:${{ github.sha }}
+          echo "image=$ECR_REGISTRY/$ECR_IMAGE_TAG" >> $GITHUB_OUTPUT
+          echo "imageVersioned=$ECR_REGISTRY/$ECR_IMAGE_TAG:${{ github.sha }}" >> $GITHUB_OUTPUT
+
+      - name: Log out of Amazon ECR
+        run: docker logout ${{ steps.login-ecr.outputs.registry }}
+
+      - name: Deploy with Spinnaker
+        run: |
+          curl \
+            --request POST \
+            --url https://spin-gate.govtechmy.dev/webhooks/webhook/github \
+            --header 'Content-Type: application/json' \
+            --data '{
+              "secret": "${{ env.SPINNAKER_WEBHOOK_SECRET }}",
+              "artifacts": [
+                {
+                  "type": "docker/image",
+                  "name": "${{ steps.build-image.outputs.image }}",
+                  "reference": "${{ steps.build-image.outputs.imageVersioned }}",
+                  "version": "${{ github.sha }}"
+                }
+              ]
+            }'

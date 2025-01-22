@@ -93,7 +93,7 @@ router.post(
         path: key,
         contentType: req.body.contentType,
       }),
-      previewUrl: getObjectUrl(key),
+      previewUrl: await getObjectUrl(key),
     });
   },
 );
