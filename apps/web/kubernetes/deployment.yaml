@@ -1,0 +1,43 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: siaran
+  name: siaran-web
+  labels:
+    app: siaran-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siaran-web
+  template:
+    metadata:
+      labels:
+        app: siaran-web
+    spec:
+      containers:
+        - name: siaran-web
+          image: 767397910274.dkr.ecr.ap-southeast-1.amazonaws.com/siaran-web
+          ports:
+            - containerPort: 8888
+          env:
+            - name: TRPC_HTTP_BATCH_LINK_URL
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-web-env
+                  key: TRPC_HTTP_BATCH_LINK_URL
+            - name: HTTP_BASIC_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-web-env
+                  key: HTTP_BASIC_AUTH
+            - name: HTTP_BASIC_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-web-env
+                  key: HTTP_BASIC_AUTH_USERNAME
+            - name: HTTP_BASIC_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-web-env
+                  key: HTTP_BASIC_AUTH_PASSWORD
