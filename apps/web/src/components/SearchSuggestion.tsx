@@ -388,7 +388,7 @@ const SearchResultDropdown = forwardRef<
             }}
           >
             <span className="min-w-0 flex-1 truncate">
-              {highlighQueryText(pressRelease.title, query)}
+              {highlightQueryText(pressRelease.title, query)}
             </span>
             <span className="flex items-center gap-1">
               <span className="text-sm text-black-800">
@@ -482,7 +482,7 @@ function SearchResultHeading({
   );
 }
 
-function highlighQueryText(text: string, query: string) {
+function highlightQueryText(text: string, query: string) {
   if (query == "") {
     return text;
   }
