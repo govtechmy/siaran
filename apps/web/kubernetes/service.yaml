@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: siaran
+  name: siaran-web
+spec:
+  type: ClusterIP
+  selector:
+    app: siaran-web
+  ports:
+    - protocol: TCP
+      port: 8888 # Service port
+      targetPort: 8888 # Pod's container port
+---
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: siaran-web
+spec:
+  serviceRef:
+    name: siaran-web
+    port: 8888
+  targetGroupARN: arn:aws:elasticloadbalancing:ap-southeast-1:767397910274:targetgroup/siaran-web/6d380acb4d7e735d

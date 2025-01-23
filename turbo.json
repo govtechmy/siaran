@@ -13,6 +13,9 @@
     "dev": {
       "cache": false,
       "persistent": true
+    },
+    "cms#build": {
+      "env": ["PAYLOAD_PUBLIC_WEBHOOK_API_HOST"]
     }
   }
 }
