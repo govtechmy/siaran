@@ -231,7 +231,7 @@ const PressRelease: CollectionConfig = {
       defaultValue: "normal",
     },
     {
-      name: "content",
+      name: fields.content,
       label: {
         ["en-MY"]: "Content",
         ["ms-MY"]: "Kandungan",
@@ -239,7 +239,7 @@ const PressRelease: CollectionConfig = {
       type: "group",
       fields: [
         {
-          name: "plain",
+          name: fields.contentPlain,
           type: "text",
           required: false,
           admin: {
@@ -247,7 +247,7 @@ const PressRelease: CollectionConfig = {
           },
         },
         {
-          name: "markdown",
+          name: fields.contentMarkdown,
           type: "text",
           required: false,
           admin: {

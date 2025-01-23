@@ -1,0 +1,5 @@
+namespace: siaran
+resources:
+  - deployment.yaml
+  - service.yaml
+  - service-account.yaml

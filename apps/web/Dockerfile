@@ -16,8 +16,8 @@ RUN npm install turbo --global
 RUN turbo build --filter=web
 
 FROM base AS runner
-WORKDIR /app
 ENV NODE_ENV=production
+WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 COPY --from=installer --chown=nextjs:nodejs /app/ .

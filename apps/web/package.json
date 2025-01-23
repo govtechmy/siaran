@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "npm run clean && next dev --port 8888",
     "build": "next build",
-    "start": "next start --port ${PORT:-8080}",
+    "start": "next start --port ${PORT:-8888}",
     "lint": "next lint",
     "clean": "rm -rf .next"
   },

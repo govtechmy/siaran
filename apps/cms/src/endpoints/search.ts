@@ -31,6 +31,13 @@ export const endpoints: Endpoint[] = [
           },
         },
         {
+          $sort: {
+            [`${fields.content}.${fields.contentPlain}`]: {
+              $meta: "textScore",
+            },
+          },
+        },
+        {
           $limit: 10,
         },
       ]);
