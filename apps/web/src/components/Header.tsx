@@ -9,13 +9,13 @@ import {
   SheetOverlay,
   SheetPortal,
 } from "@/components/Sheet";
-import { Link, usePathname } from "@/i18n/routing";
+import { Link, type Locale as AppLocale, usePathname } from "@/i18n/routing";
 import { cn } from "@/lib/ui/utils";
+import { getLocalizedURL } from "@/lib/url/utils";
 import * as NavigationMenu from "@radix-ui/react-navigation-menu";
 import { VariantProps } from "class-variance-authority";
 import { useTranslations } from "next-intl";
 import { ReactNode, Suspense, useState } from "react";
-import { useLocaleURL } from "./hooks/url";
 
 type NavItem = {
   href: string;
@@ -34,12 +34,14 @@ export function Header({ locale }: { locale: string }) {
   ];
 
   const [showMenu, setMenu] = useState<boolean>(false);
-  const { url } = useLocaleURL();
 
   return (
     <header className="sticky top-0 z-50 border-b bg-background lg:bg-background/80 lg:backdrop-blur-[30px]">
       <div className="max-lg:border-b container flex w-full items-center justify-between gap-3 bg-background py-3 lg:gap-4 lg:bg-transparent xl:px-0">
-        <a href={url("index")} className="flex h-full flex-none items-center">
+        <a
+          href={getLocalizedURL(locale as AppLocale, "index")}
+          className="flex h-full flex-none items-center"
+        >
           <img
             width={32}
             height={32}

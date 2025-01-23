@@ -12,7 +12,7 @@ WORKDIR /app
 COPY --from=builder /app/out/json/ .
 RUN npm install
 COPY --from=builder /app/out/full/ .
-RUN npm install -g turbo
+RUN npm install turbo --global
 RUN turbo build --filter=api
 
 FROM base AS runner
@@ -21,6 +21,7 @@ WORKDIR /app
 RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 express
 COPY --from=installer --chown=express:nodejs /app/ .
+COPY --from=installer /app/ .
 
 USER express
 EXPOSE $PORT

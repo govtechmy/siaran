@@ -1,12 +1,13 @@
-import { useLocaleURL } from "@/components/hooks/url";
 import { Link } from "@/components/Link";
 import PressReleaseTag from "@/components/PressReleaseTag";
 import ReadingTime from "@/components/ReadingTime";
 import Separator from "@/components/Separator";
 import UrgentTag from "@/components/UrgentTag";
+import { useAppLocale } from "@/i18n/routing";
 import NewTab from "@/icons/new-tab";
 import { getContent } from "@/lib/data/press-release";
 import { cn } from "@/lib/ui/utils";
+import { getLocalizedURL } from "@/lib/url/utils";
 import type { PressRelease } from "@repo/api/cms/types";
 import { useHover } from "@uidotdev/usehooks";
 import { format, parseISO } from "date-fns";
@@ -21,13 +22,13 @@ export default function PressReleaseCard({ data }: Props) {
   const [ref, isHovering] = useHover<HTMLAnchorElement>();
   const date = parseISO(data.date_published);
   const isStartOfDay = data && date.getHours() === 0 && date.getMinutes() === 0;
-  const { url } = useLocaleURL();
+  const locale = useAppLocale();
   const content = getContent(data);
 
   return (
     <Link
       ref={ref}
-      href={url("press-releases", data.id)}
+      href={getLocalizedURL(locale, "press-releases", data.id)}
       className={cn(
         "rounded-[0.75rem]",
         "border border-gray-outline-200 hover:border-gray-outline-300",
