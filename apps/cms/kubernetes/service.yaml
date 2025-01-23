@@ -1,0 +1,23 @@
+apiVersion: v1
+kind: Service
+metadata:
+  namespace: siaran
+  name: siaran-cms
+spec:
+  type: ClusterIP
+  selector:
+    app: siaran-cms
+  ports:
+    - protocol: TCP
+      port: 3000 # Service port
+      targetPort: 3000 # Pod's container port
+---
+apiVersion: elbv2.k8s.aws/v1beta1
+kind: TargetGroupBinding
+metadata:
+  name: siaran-cms
+spec:
+  serviceRef:
+    name: siaran-cms
+    port: 3000
+  targetGroupARN: arn:aws:elasticloadbalancing:ap-southeast-1:767397910274:targetgroup/siaran-cms/e44c21525424edea

@@ -10,7 +10,7 @@ export default function logRequest(
 
   res.once("finish", () => {
     logger.info(
-      `[${req.method}] ${req.url} ${res.statusCode} ${Date.now() - startTime}ms [decoded URL: ${decodeURIComponent(req.url)}]`,
+      `${new Date().toISOString()}: [${req.method}] ${req.url} ${res.statusCode} ${Date.now() - startTime}ms [decoded URL: ${decodeURIComponent(req.url)}]`,
     );
   });
 

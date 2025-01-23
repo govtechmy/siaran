@@ -9,6 +9,7 @@ import {
   convertSlateToMarkdown,
 } from "../serialization/slate";
 import { mapLocale } from "../utils/locale";
+import * as fields from "./fields/press-release";
 
 const PressRelease: CollectionConfig = {
   slug: "press-releases",
@@ -168,7 +169,7 @@ const PressRelease: CollectionConfig = {
       index: true,
     },
     {
-      name: "date_published",
+      name: fields.datePublished,
       label: {
         ["en-MY"]: "Date Published",
         ["ms-MY"]: "Tarikh Diterbitkan",
@@ -230,7 +231,7 @@ const PressRelease: CollectionConfig = {
       defaultValue: "normal",
     },
     {
-      name: "content",
+      name: fields.content,
       label: {
         ["en-MY"]: "Content",
         ["ms-MY"]: "Kandungan",
@@ -238,7 +239,7 @@ const PressRelease: CollectionConfig = {
       type: "group",
       fields: [
         {
-          name: "plain",
+          name: fields.contentPlain,
           type: "text",
           required: false,
           admin: {
@@ -246,10 +247,9 @@ const PressRelease: CollectionConfig = {
           },
         },
         {
-          name: "markdown",
+          name: fields.contentMarkdown,
           type: "text",
           required: false,
-          index: true,
           admin: {
             hidden: true,
           },

@@ -1,7 +1,7 @@
-export function getEnv() {
-  return {
-    CMS_PAYLOAD_URL: process.env.CMS_PAYLOAD_URL,
-    CMS_PAYLOAD_LOGIN_EMAIL: process.env.CMS_PAYLOAD_LOGIN_EMAIL,
-    CMS_PAYLOAD_LOGIN_PASSWORD: process.env.CMS_PAYLOAD_LOGIN_PASSWORD,
-  };
+export function getServiceStorageName() {
+  return process.env.SERVICE_STORAGE;
+}
+
+export function getS3AuthMethod() {
+  return process.env.AWS_S3_AUTH_METHOD;
 }
