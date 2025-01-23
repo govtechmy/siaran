@@ -8,6 +8,7 @@ import { useClickAway, useDebounce } from "@uidotdev/usehooks";
 import {
   ComponentProps,
   forwardRef,
+  ReactNode,
   Ref,
   Suspense,
   useCallback,
@@ -18,10 +19,11 @@ import {
 } from "react";
 
 import { useTRPCSuspenseQuery } from "@/api/hooks/query";
+import { useAppLocale } from "@/i18n/routing";
 import { cn } from "@/lib/ui/utils";
+import { getLocalizedURL } from "@/lib/url/utils";
 import { LoaderCircle } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { useLocaleURL } from "./hooks/url";
 import PressToSearch from "./PressToSearch";
 
 type Props = {
@@ -280,7 +282,7 @@ const SearchResultDropdown = forwardRef<
   { query: string }
 >(({ query }, ref) => {
   const t = useTranslations();
-  const { url } = useLocaleURL();
+  const locale = useAppLocale();
 
   const {
     data: { docs: pressReleases },
@@ -379,14 +381,14 @@ const SearchResultDropdown = forwardRef<
         pressReleases.map((pressRelease, index) => (
           <SearchSuggestionLink
             key={pressRelease.id || index}
-            href={url("press-releases", pressRelease.id)}
+            href={getLocalizedURL(locale, "press-releases", pressRelease.id)}
             data-id={pressRelease.id}
             ref={function setRef(el) {
               searchItemRefs.current[index] = el;
             }}
           >
             <span className="min-w-0 flex-1 truncate">
-              {highlightText(pressRelease.title, query)}
+              {highlighQueryText(pressRelease.title, query)}
             </span>
             <span className="flex items-center gap-1">
               <span className="text-sm text-black-800">
@@ -480,32 +482,38 @@ function SearchResultHeading({
   );
 }
 
-function highlightText(text: string, query: string) {
-  if (!query) {
+function highlighQueryText(text: string, query: string) {
+  if (query == "") {
     return text;
   }
 
-  const escapedQuery = escapeRegExp(query);
-  const regex = new RegExp(escapedQuery, "gi");
-  const parts = text.split(regex);
-  const matches = text.match(regex);
-  const result = [];
+  // match words only (i.e. ignore special characters)
+  const tokens = query.split(/(\w+)/g).filter(Boolean);
 
-  for (let i = 0; i < parts.length; i++) {
-    result.push(parts[i]);
+  // use '|' to match any of the tokens in the query
+  const regex = new RegExp(
+    tokens.map((token) => `(${escapeSpecialChars(token)})`).join("|"),
+    "gi",
+  );
 
-    if (matches && matches[i]) {
-      result.push(
-        <span key={i} className={cn("text-theme-600", "font-medium")}>
-          {matches[i]}
-        </span>,
-      );
-    }
-  }
+  return text
+    .split(regex)
+    .filter(Boolean) // filter out unmatched
+    .map((match, i) => {
+      if (tokens.some((token) => match.toLowerCase() === token.toLowerCase())) {
+        return (
+          <span key={i} className={cn("text-theme-600", "font-medium")}>
+            {match}
+          </span>
+        );
+      }
 
-  return result;
+      return match;
+    });
 }
 
-function escapeRegExp(string: string) {
+function escapeSpecialChars(string: string) {
+  // escape the following special characters with a '\':
+  // . * + ? ^ $ { } ( ) | [ ] \
   return string.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
 }

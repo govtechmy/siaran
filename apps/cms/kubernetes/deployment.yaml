@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: siaran
+  name: siaran-cms
+  labels:
+    app: siaran-cms
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siaran-cms
+  template:
+    metadata:
+      labels:
+        app: siaran-cms
+    spec:
+      containers:
+        - name: siaran-cms
+          image: 767397910274.dkr.ecr.ap-southeast-1.amazonaws.com/siaran-cms
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DATABASE_URI
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: DATABASE_URI
+            - name: PAYLOAD_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: PAYLOAD_SECRET
+            - name: PAYLOAD_PUBLIC_WEBHOOK_API_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: PAYLOAD_PUBLIC_WEBHOOK_API_HOST
+            - name: HTTP_BASIC_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: HTTP_BASIC_AUTH
+            - name: HTTP_BASIC_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: HTTP_BASIC_AUTH_USERNAME
+            - name: HTTP_BASIC_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: HTTP_BASIC_AUTH_PASSWORD
+            - name: SERVICE_DATABASE
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: SERVICE_DATABASE

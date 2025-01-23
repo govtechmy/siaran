@@ -3,7 +3,9 @@ import payload from "payload";
 import path from "path";
 import cookieParser from "cookie-parser";
 
-require("dotenv").config();
+if (process.env.NODE_ENV === "development") {
+  require("dotenv").config();
+}
 
 const app = express();
 app.use(cookieParser());

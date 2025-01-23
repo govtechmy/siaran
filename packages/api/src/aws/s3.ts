@@ -1,8 +1,8 @@
 import { getRegion } from "#aws/region";
+import { getS3AuthMethod, getServiceStorageName } from "#env";
 import { logger } from "#logging/logger";
 import {
   CopyObjectCommand,
-  CopyObjectCommandInput,
   CopyObjectCommandOutput,
   DeleteObjectCommand,
   DeleteObjectsCommand,
@@ -24,27 +24,26 @@ async function getClient() {
     return client;
   }
 
-  const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
-  const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
-  const endpoint = process.env.AWS_S3_ENDPOINT;
-  // Use IAM role to authenticate to S3 in production
-  const opts = (
-    process.env.NODE_ENV === "production"
-      ? {}
-      : {
-          endpoint,
-          credentials: {
-            accessKeyId,
-            secretAccessKey,
-          },
-        }
-  ) as S3ClientConfig;
+  const auth = getS3AuthMethod();
+  const config: S3ClientConfig = {};
 
-  if (!accessKeyId || !secretAccessKey) {
-    throw new Error("AWS credentials not found");
+  // Use IAM role to authenticate to S3 in production
+  if (auth === "iam-user") {
+    const accessKeyId = process.env.AWS_ACCESS_KEY_ID;
+    const secretAccessKey = process.env.AWS_SECRET_ACCESS_KEY;
+
+    if (!accessKeyId || !secretAccessKey) {
+      throw new Error("AWS credentials not found");
+    }
+
+    config.endpoint = process.env.AWS_S3_ENDPOINT;
+    config.credentials = {
+      accessKeyId,
+      secretAccessKey,
+    };
   }
 
-  return new S3Client({ region: getRegion(), ...opts });
+  return new S3Client({ region: getRegion(), ...config });
 }
 
 function getBucket() {
@@ -57,7 +56,7 @@ function getBucket() {
   return bucket;
 }
 
-function getDomain() {
+function getR2Domain() {
   const domain = process.env.R2_URL;
 
   if (!domain) {
@@ -67,11 +66,21 @@ function getDomain() {
   return domain;
 }
 
-function getObjectUrl(key: string) {
-  return new URL(key, getDomain()).href;
+export async function getObjectUrl(key: string) {
+  const service = getServiceStorageName();
+
+  if (service === "r2") {
+    return new URL(key, getR2Domain()).href;
+  }
+
+  if (service === "s3") {
+    return await getSignedObjectUrl({ key });
+  }
+
+  throw new Error(`Unsupported storage service: ${key}`);
 }
 
-async function getUploadUrl({
+export async function getUploadUrl({
   path,
   contentType,
 }: {
@@ -97,7 +106,7 @@ async function getUploadUrl({
   }
 }
 
-async function getSignedObjectUrl({ key }: { key: string }) {
+export async function getSignedObjectUrl({ key }: { key: string }) {
   try {
     const client = await getClient();
     const command = new GetObjectCommand({
@@ -118,7 +127,7 @@ async function getSignedObjectUrl({ key }: { key: string }) {
   }
 }
 
-async function copyObjects({
+export async function copyObjects({
   srcPrefix,
   destPrefix,
 }: {
@@ -154,7 +163,8 @@ async function copyObjects({
       const bucket = getBucket();
       const command = new CopyObjectCommand({
         Bucket: bucket,
-        CopySource: `${bucket}/${file.key}`,
+        // Encoding is required to avoid issues with special characters
+        CopySource: encodeURIComponent(`${bucket}/${file.key}`),
         Key: `${destPrefix}/${path.basename(file.key)}`,
       });
 
@@ -170,7 +180,7 @@ async function copyObjects({
   }
 }
 
-async function listObjects({ prefix }: { prefix: string }) {
+export async function listObjects({ prefix }: { prefix: string }) {
   let response: ListObjectsV2CommandOutput;
 
   try {
@@ -205,7 +215,7 @@ async function listObjects({ prefix }: { prefix: string }) {
     .filter((obj) => obj !== null);
 }
 
-async function getObject({ key }: { key: string }) {
+export async function getObject({ key }: { key: string }) {
   try {
     const client = await getClient();
     const response = await client.send(
@@ -216,7 +226,7 @@ async function getObject({ key }: { key: string }) {
     );
 
     return {
-      url: getObjectUrl(key),
+      url: await getObjectUrl(key),
       name: path.basename(key),
       content: {
         type: response.ContentType,
@@ -233,7 +243,7 @@ async function getObject({ key }: { key: string }) {
   }
 }
 
-async function deleteObjects({ keys }: { keys: string[] }) {
+export async function deleteObjects({ keys }: { keys: string[] }) {
   let response: DeleteObjectsCommandOutput;
 
   try {
@@ -261,7 +271,7 @@ async function deleteObjects({ keys }: { keys: string[] }) {
   }
 }
 
-async function deleteObject({ key }: { key: string }) {
+export async function deleteObject({ key }: { key: string }) {
   try {
     const client = await getClient();
     await client.send(
@@ -279,14 +289,3 @@ async function deleteObject({ key }: { key: string }) {
     throw new Error("delete_failed");
   }
 }
-
-export {
-  getUploadUrl,
-  getSignedObjectUrl,
-  listObjects,
-  copyObjects,
-  getObject,
-  getObjectUrl,
-  deleteObject,
-  deleteObjects,
-};

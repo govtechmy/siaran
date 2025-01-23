@@ -1,0 +1,84 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: siaran
+  name: siaran-api
+  labels:
+    app: siaran-api
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: siaran-api
+  template:
+    metadata:
+      labels:
+        app: siaran-api
+    spec:
+      serviceAccountName: siaran-api
+      containers:
+        - name: siaran-api
+          image: 767397910274.dkr.ecr.ap-southeast-1.amazonaws.com/siaran-api
+          ports:
+            - containerPort: 8080
+          env:
+            - name: CMS_PAYLOAD_URL
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: CMS_PAYLOAD_URL
+            - name: CMS_PAYLOAD_LOGIN_EMAIL
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: CMS_PAYLOAD_LOGIN_EMAIL
+            - name: CMS_PAYLOAD_LOGIN_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: CMS_PAYLOAD_LOGIN_PASSWORD
+            - name: AWS_REGION
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: AWS_REGION
+            - name: AWS_S3_ENDPOINT
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: AWS_S3_ENDPOINT
+            - name: AWS_S3_BUCKET
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: AWS_S3_BUCKET
+            - name: AWS_S3_AUTH_METHOD
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: AWS_S3_AUTH_METHOD
+            - name: R2_URL
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: R2_URL
+            - name: HTTP_BASIC_AUTH
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: HTTP_BASIC_AUTH
+            - name: HTTP_BASIC_AUTH_USERNAME
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: HTTP_BASIC_AUTH_USERNAME
+            - name: HTTP_BASIC_AUTH_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: HTTP_BASIC_AUTH_PASSWORD
+            - name: SERVICE_STORAGE
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-api-env
+                  key: SERVICE_STORAGE

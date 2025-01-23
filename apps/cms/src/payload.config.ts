@@ -2,7 +2,6 @@ import path from "path";
 
 import { webpackBundler } from "@payloadcms/bundler-webpack";
 import { mongooseAdapter } from "@payloadcms/db-mongodb";
-import search from "@payloadcms/plugin-search";
 import { buildConfig } from "payload/config";
 
 import { slateEditor } from "@payloadcms/richtext-slate";
@@ -45,19 +44,13 @@ export default buildConfig({
   endpoints,
   db: mongooseAdapter({
     url: process.env.DATABASE_URI,
+    ...(process.env.SERVICE_DATABASE === "docdb"
+      ? {
+          connectOptions: {
+            tls: true,
+            tlsCAFile: path.resolve(__dirname, "global-bundle.pem"),
+          },
+        }
+      : {}),
   }),
-  plugins: [
-    search({
-      collections: ["press-releases"],
-      defaultPriorities: {
-        "press-releases": 10,
-      },
-      searchOverrides: {
-        slug: "search-results",
-        admin: {
-          hidden: true,
-        },
-      },
-    }),
-  ],
 });
