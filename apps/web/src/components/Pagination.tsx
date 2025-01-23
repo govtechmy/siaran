@@ -37,11 +37,12 @@ export default function Pagination({
       key={smallest}
       variant={smallest === current ? "theme" : "default"}
       onClick={() => notifyPageChange(smallest)}
+      className={cn("hidden md:block")}
     >
       {smallest}
     </Page>,
     overflowMidSmallest ? (
-      <PageEllipsis />
+      <PageEllipsis className={cn("hidden md:block")} />
     ) : (
       adjacent.length > 0 &&
       smallest + 1 === adjacent[0] - 1 && (
@@ -49,6 +50,7 @@ export default function Pagination({
           key={smallest + 1}
           variant={smallest + 1 === current ? "theme" : "default"}
           onClick={() => notifyPageChange(smallest + 1)}
+          className={cn("hidden md:block")}
         >
           {smallest + 1}
         </Page>
@@ -59,12 +61,13 @@ export default function Pagination({
         key={n}
         variant={n === current ? "theme" : "default"}
         onClick={() => notifyPageChange(n)}
+        className={cn("hidden md:block")}
       >
         {n}
       </Page>
     )),
     overflowMidLargest ? (
-      <PageEllipsis />
+      <PageEllipsis className={cn("hidden md:block")} />
     ) : (
       adjacent.length > 0 &&
       largest - 1 === adjacent[adjacent.length - 1] + 1 && (
@@ -72,6 +75,7 @@ export default function Pagination({
           key={largest - 1}
           variant={largest - 1 === current ? "theme" : "default"}
           onClick={() => notifyPageChange(largest - 1)}
+          className={cn("hidden md:block")}
         >
           {largest - 1}
         </Page>
@@ -82,6 +86,7 @@ export default function Pagination({
         key={largest}
         variant={largest === current ? "theme" : "default"}
         onClick={() => notifyPageChange(largest)}
+        className={cn("hidden md:block")}
       >
         {largest}
       </Page>
@@ -127,8 +132,12 @@ export default function Pagination({
   );
 }
 
-function PageEllipsis() {
-  return <Page variant="ellipsis">...</Page>;
+function PageEllipsis({ className }: { className?: string }) {
+  return (
+    <Page variant="ellipsis" className={className}>
+      ...
+    </Page>
+  );
 }
 
 const variants = cva(

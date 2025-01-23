@@ -40,9 +40,8 @@ export type PaginatedResponse<T> = PaginatedResponseFields & {
   docs: T[];
 };
 
-export type PaginatedSearchResponse = PaginatedResponseFields & {
-  pressReleases: PressRelease[];
-  agencies: Agency[];
+export type SearchResponse<T> = {
+  docs: T[];
 };
 
 export type Locale = "en-MY" | "ms-MY";

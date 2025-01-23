@@ -2,9 +2,9 @@ import { useEffectMounted } from "@/components/hooks/mounted";
 import type {
   Agency,
   PaginatedResponse,
-  PaginatedSearchResponse,
   PressRelease,
   PressReleaseType,
+  SearchResponse,
   Sort,
 } from "@repo/api/cms/types";
 import { QueryKey, useSuspenseQuery } from "@tanstack/react-query";
@@ -37,7 +37,7 @@ export type Query = {
     ["list"]: Method<ListPressReleaseParams, ListPressReleaseData>;
   };
   ["search"]: {
-    ["pressReleases"]: Method<{ page: number }, ListPressReleaseData>;
+    ["pressReleases"]: Method<{ q: string }, SearchResponse<PressRelease>>;
   };
   ["agency"]: {
     ["list"]: Method<{ page: number }, Agency[]>;
