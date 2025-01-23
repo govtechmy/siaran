@@ -44,5 +44,13 @@ export default buildConfig({
   endpoints,
   db: mongooseAdapter({
     url: process.env.DATABASE_URI,
+    ...(process.env.SERVICE_DATABASE === "docdb"
+      ? {
+          connectOptions: {
+            tls: true,
+            tlsCAFile: path.resolve(__dirname, "global-bundle.pem"),
+          },
+        }
+      : {}),
   }),
 });

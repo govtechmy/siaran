@@ -15,7 +15,8 @@
     "#trpc/*": "./src/trpc/*.ts",
     "#http": "./src/http.ts",
     "#aws/*": "./src/aws/*.ts",
-    "#extensions/*": "./src/extensions/*.ts"
+    "#extensions/*": "./src/extensions/*.ts",
+    "#env": "./src/env.ts"
   },
   "exports": {
     "./logging/logger": "./src/logging/logger.ts",
