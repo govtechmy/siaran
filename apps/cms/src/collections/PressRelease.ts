@@ -14,25 +14,45 @@ import * as fields from "./fields/press-release";
 const PressRelease: CollectionConfig = {
   slug: "press-releases",
   access: {
-    read: ({ req, data }) => {
+    create({ req: { user } }) {
       return (
-        req.user &&
-        (req.user.role === "superadmin" ||
-          req.user.agency.id === data.relatedAgency)
+        user &&
+        (user.role === "superadmin" ||
+          (user.role === "admin" && user.agency != null))
       );
     },
-    update: ({ req, data }) => {
+    read({ req: { user } }) {
       return (
-        req.user &&
-        (req.user.role === "superadmin" ||
-          req.user.agency.id === data.relatedAgency)
+        user &&
+        (user.role === "superadmin" ||
+          (user.role === "admin" && {
+            // use a query constraint (read more https://payloadcms.com/docs/v2/queries/overview#operators)
+            relatedAgency: {
+              equals: user.agency.id,
+            },
+          }))
       );
     },
-    delete({ req, data }) {
+    update({ req: { user } }) {
       return (
-        req.user &&
-        (req.user.role === "superadmin" ||
-          req.user.agency.id === data.relatedAgency)
+        user &&
+        (user.role === "superadmin" ||
+          (user.role === "admin" && {
+            relatedAgency: {
+              equals: user.agency.id,
+            },
+          }))
+      );
+    },
+    delete({ req: { user } }) {
+      return (
+        user &&
+        (user.role === "superadmin" ||
+          (user.role === "admin" && {
+            relatedAgency: {
+              equals: user.agency.id,
+            },
+          }))
       );
     },
   },
