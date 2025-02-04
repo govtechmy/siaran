@@ -36,3 +36,6 @@ yarn-error.log*
 # Misc
 .DS_Store
 *.pem
+
+# Include global-bundle.pem for DocumentDB
+!global-bundle.pem
