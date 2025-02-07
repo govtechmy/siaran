@@ -1,0 +1,69 @@
+---
+title: Complete Attachment Upload
+description: Finalize the attachment upload process for a specific press release.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
+
+To complete the attachment upload for a press release, call the `<SERVER_URL>/webhook/press-releases/<ID>/attachment/upload/complete` endpoint using a `POST` request. 
+
+Replace `<ID>` with the unique identifier of the press release for which you are finalizing the upload.
+
+<Callout
+  type="info"
+  icon={<InfoIcon className="size-5" />}
+>
+  **This operation is crucial for ensuring that the database correctly registers the uploaded attachments.**
+</Callout>
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/press-releases/<ID>/attachment/upload/complete" \
+      -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/press-releases/<ID>/attachment/upload/complete",
+        headers={
+            "Authorization": "Bearer <YOUR_ACCESS_TOKEN>"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Successful Response
+
+Upon successful completion, you will receive a `204 No Content` response. This indicates that the server has successfully processed the request and finalized the attachment registration in the database. 
+
+**Example Response:**
+
+```bash
+HTTP/1.1 204 No Content
+```
+
+## Error Responses
+
+### Press Release Not Found
+
+If a press release with the specified `<ID>` does not exist, you will receive a `404 Not Found` response.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Not Found"
+}
+```
+
+This indicates that you should verify the provided `<ID>` and ensure that the press release exists before attempting to complete the attachment upload.
+
+---

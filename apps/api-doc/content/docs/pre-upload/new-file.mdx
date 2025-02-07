@@ -1,0 +1,131 @@
+---
+title: Pramuat Fail Baru
+description: Dapatkan URL prapetanda untuk pramuat naik fail.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
+
+Untuk mendapatkan URL prapetanda bagi pramuat naik fail, panggil titik akhir `<SERVER_URL>/webhook/pre-upload/<SESSION_ID>` menggunakan permintaan `POST`.
+
+Gantikan `<SESSION_ID>` dengan pengecam unik untuk mengumpulkan fail pramuat naik anda. Pengecam ini akan digunakan kemudian untuk menyerahkan fail kepada sumber kemudian.
+
+<Callout
+  type="info"
+  icon={<InfoIcon className="size-5" />}
+>
+    Pramuat naik berguna apabila anda ingin memuat naik fail untuk sumber (contohnya Siaran Media) yang belum wujud.
+</Callout>
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/pre-upload/<SESSION_ID>" \
+      -H "Authorization: Bearer <TOKEN_AKSES_ANDA>" \
+      -H "Content-Type: aprplication/json" \
+      -d '{
+        "filename": "Merdeka_1957_tunku_abdul_rahman.jpg",
+        "contentType": "image/jpeg"
+      }'
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/pre-upload/<SESSION_ID>",
+        headers={
+            "Authorization": "Bearer <TOKEN_AKSES_ANDA>",
+            "Content-Type": "application/json"
+        },
+        json={
+            "filename": "Merdeka_1957_tunku_abdul_rahman.jpg",
+            "contentType": "image/jpeg"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Respons Berjaya
+
+Apabila berjaya, anda akan menerima respons `200 OK` dengan badan JSON yang mengandungi URL prapetanda.
+
+**Contoh Respons:**
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "url": "<URL>"
+}
+```
+URL yang dipulangkan adalah URL prapetanda. Anda perlu menggunakan URL ini untuk memuat naik fail anda menggunakan permintaan `PUT`.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -i -X PUT "<URL>" \
+      -H "Content-Type: image/jpeg" \
+      -T "path/ke/fail/Merdeka_1957_tunku_abdul_rahman.jpg"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    with open("path/ke/fail/Merdeka_1957_tunku_abdul_rahman.jpg", "rb") as file_data:
+        response = requests.put(
+          "<URL>",
+          headers={"Content-Type": "image/jpeg"},
+          data=file_data
+        )
+    ```
+  </Tab>
+</Tabs>
+
+<Callout
+  type="warn"
+  icon={<InfoIcon className="size-5" />}
+>
+  **Sila gunakan `Content-Type` yang betul.**<br/><br/>
+  Pembekal storan memerlukan `Content-Type` yang tepat untuk mengenal pasti jenis fail yang anda muat naik dan menyimpannya dengan betul.
+  Untuk senarai lengkap nilai `Content-Type` yang sah, anda boleh merujuk pada [IANA Media Types](https://www.iana.org/assignments/media-types).
+</Callout>
+
+## Respons Ralat
+
+### Badan Permintaan Tidak Sah
+
+Jika badan permintaan tidak sah atau medan yang diperlukan hilang, anda akan menerima respons `400 Bad Request`.
+
+```bash
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "code": "invalid_type",
+      "expected": "string",
+      "received": "undefined",
+      "path": [
+        "filename"
+      ],
+      "message": "Required"
+    }
+  ]
+}
+```
+
+### Pengguna Tidak Dijumpai
+
+```bash
+HTTP/1.1 404 Not Found
+```
+
+Ini menunjukkan bahawa pengguna yang memanggil titik akhir mungkin tidak wujud.
+
+---

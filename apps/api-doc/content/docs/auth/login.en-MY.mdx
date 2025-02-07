@@ -1,0 +1,115 @@
+---
+title: Log In
+description: Obtain an access token for accessing the API.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+To login, simply call the `<SERVER_URL>/webhook/users/login` endpoint as follows:
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/users/login" -H "Content-Type: application/json" -d '{"email":"<EMAIL>","password":"<PASSWORD>"}'
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/users/login",
+        headers={"Content-Type": "application/json"},
+        json={
+            "email": "<EMAIL>",
+            "password": "<PASSWORD>"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Successful Response
+
+Upon successful login, you will receive a `200 OK` response with a JSON body containing your access token. **The access token will be valid for 2 hours.** 
+
+[Read more](/docs/auth/refresh-token) to learn how to refresh an expired token.
+
+**Example Response:**
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "exp": 1738041827000,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OTg0ZGI4OGIwNjZlNzRlOWQ4MDkzMSIsImNvbGxlY3Rpb24iOiJ1c2VycyIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTczODAzNDYyNywiZXhwIjoxNzM4MDQxODI3fQ.rzE1_3uQqLvcjHfgNU4o_KbxLOSc4WXKgvtzQsw79ok"
+}
+```
+
+You should store this `token` securely as it will be used to authenticate subsequent requests to protected endpoints.
+
+## Error Responses
+
+### Invalid Credentials
+
+If the provided email or password is incorrect, you will receive a `401 Unauthorized` response.
+
+```bash
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+
+{
+  "code": "invalid_credential",
+  "message": "Unauthorized: Invalid credential"
+}
+```
+
+### Missing Credentials
+
+If you do not provide the `email` or `password` in the request body, you will receive a `400 Bad Request` response.
+
+```bash
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "code": "invalid_type",
+      "expected": "string",
+      "received": "undefined",
+      "path": [
+        "password"
+      ],
+      "message": "Required"
+    }
+  ]
+}
+```
+
+## Using the Access Token
+
+To access protected endpoints, you need to include the `token` in the `Authorization` header of your requests.  The token should be prefixed with `Bearer `.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/press-releases" -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/press-releases",
+        headers={"Authorization": "Bearer <YOUR_ACCESS_TOKEN>"}
+    )
+    ```
+  </Tab>
+</Tabs>
+
+Replace `<YOUR_ACCESS_TOKEN>` with the actual access token you received upon successful login.
+
+---
