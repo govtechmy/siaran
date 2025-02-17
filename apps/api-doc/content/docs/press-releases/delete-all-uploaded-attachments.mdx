@@ -1,6 +1,57 @@
 ---
-title: Padam Semua Lampiran
-description: Padam lampiran-lampiran yang telah dimuat naik dari siaran media tertentu.
+title: Padam Lampiran Siaran Akhbar
+description: Padam semua lampiran yang berkaitan dengan siaran akhbar tertentu berdasarkan ID.
 ---
 
-doc goes here...
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+Untuk memadam semua lampiran bagi siaran akhbar, panggil endpoint `<SERVER_URL>/webhook/press-releases/<ID>/attachments` menggunakan kaedah `DELETE`. Gantikan `<ID>` dalam URL endpoint dengan pengecam unik siaran akhbar yang lampirannya ingin dipadam.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X DELETE "<SERVER_URL>/webhook/press-releases/<ID>/attachments" \
+      -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.delete(
+        "<SERVER_URL>/webhook/press-releases/<ID>/attachments",
+        headers={"Authorization": "Bearer <YOUR_ACCESS_TOKEN>"}
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Respons Berjaya
+
+Setelah pemadaman berjaya, anda akan menerima respons `204 No Content` yang menunjukkan bahawa semua lampiran bagi siaran akhbar telah berjaya dipadam dan tiada kandungan tambahan dalam respons.
+
+**Contoh Respons:**
+
+```bash
+HTTP/1.1 204 No Content
+```
+
+## Respons Ralat
+
+### Siaran Akhbar Tidak Dijumpai
+
+Jika siaran akhbar dengan `<ID>` yang ditentukan tidak wujud, anda akan menerima respons `404 Not Found`.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Press release not found"
+}
+```
+
+**Nota:**
+
+* Memadam siaran akhbar itu sendiri juga akan menghapuskan semua lampiran yang berkaitan.
