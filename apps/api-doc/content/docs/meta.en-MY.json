@@ -11,7 +11,7 @@
     "press-releases/read",
     "press-releases/delete",
     "press-releases/upload-attachment",
-    "press-releases/complete-upload-attachment",
+    "press-releases/completing-upload-attachment",
     "press-releases/delete-all-uploaded-attachments",
     "press-releases/delete-uploaded-attachment"
   ]

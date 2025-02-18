@@ -4,6 +4,7 @@ description: Cipta siaran media baharu melalui webhook.
 ---
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
 
 Untuk mencipta siaran media baharu, panggil _endpoint_ `<SERVER_URL>/webhook/press-releases` menggunakan permintaan `POST` seperti berikut:
 
@@ -74,7 +75,12 @@ Untuk mencipta siaran media baharu, panggil _endpoint_ `<SERVER_URL>/webhook/pre
   </Tab>
 </Tabs>
 
-**Nota:** Pastikan bahawa `datePublished` diberikan dalam format ISO 8601 (contohnya, `YYYY-MM-DDTHH:mm:ss.sssZ`).
+<Callout 
+    type="info"
+    icon={<InfoIcon className="size-5" />}
+>
+    Pastikan bahawa `datePublished` diberikan dalam format ISO 8601 (contohnya, `YYYY-MM-DDTHH:mm:ss.sssZ`).
+</Callout>
 
 ## Respons Berjaya
 

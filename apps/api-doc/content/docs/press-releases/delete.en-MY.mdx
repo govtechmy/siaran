@@ -4,6 +4,7 @@ description: Delete a specific press release by its ID.
 ---
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { WarningIcon } from "@govtechmy/myds-react/icon";
 
 To delete a press release, call the `<SERVER_URL>/webhook/press-releases/<ID>` endpoint using the `DELETE` method. Replace `<ID>` in the endpoint URL with the unique identifier of the press release you wish to delete.
 
@@ -25,6 +26,14 @@ To delete a press release, call the `<SERVER_URL>/webhook/press-releases/<ID>` e
     ```
     </Tab>
 </Tabs>
+
+<Callout 
+    type="warn"
+    className="bg-fd-primary/10 border-none"
+    icon={<WarningIcon className="size-5 text-fd-primary" />}
+>
+  This will also delete all the associated attachments.
+</Callout>
 
 ## Successful Response
 
@@ -51,9 +60,5 @@ Content-Type: application/json
   "message": "Press release not found"
 }
 ```
-
-**Note:**
-
-* The associated attachments will also be deleted.
 
 ---

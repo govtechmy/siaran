@@ -4,6 +4,7 @@ description: Padam siaran media tertentu berdasarkan ID-nya.
 ---
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { WarningIcon } from "@govtechmy/myds-react/icon";
 
 Untuk memadam siaran media, panggil _endpoint_ `<SERVER_URL>/webhook/press-releases/<ID>` menggunakan kaedah `DELETE`. Gantikan `<ID>` dalam URL _endpoint_ dengan pengecam unik siaran media yang ingin anda padamkan.
 
@@ -25,6 +26,14 @@ Untuk memadam siaran media, panggil _endpoint_ `<SERVER_URL>/webhook/press-relea
     ```
     </Tab>
 </Tabs>
+
+<Callout 
+    type="warn"
+    className="bg-fd-primary/10 border-none"
+    icon={<WarningIcon className="size-5 text-fd-primary" />}
+>
+  Lampiran yang berkaitan juga akan dipadamkan.
+</Callout>
 
 ## Respons Berjaya
 
@@ -51,9 +60,5 @@ Content-Type: application/json
   "message": "Not Found"
 }
 ```
-
-**Nota:**
-
-* Lampiran yang berkaitan juga akan dipadamkan.
 
 ---

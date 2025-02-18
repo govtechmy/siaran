@@ -1,9 +1,10 @@
 ---
-title: Delete Uploaded Attachment
+title: Delete Attachment
 description: Delete an uploaded attachment from a specific press release.
 ---
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
 
 To delete a specific attachment for a press release, call the `<SERVER_URL>/webhook/press-releases/<ID>/attachment/<FILENAME>` endpoint using the `DELETE` method. Replace `<ID>` in the endpoint URL with the unique identifier of the press release and `<FILENAME>` with the name of the attachment file to be deleted.
 
@@ -65,7 +66,3 @@ Content-Type: application/json
   "message": "Not found"
 }
 ```
-
-**Note:**
-
-* Deleting the press release itself will also remove all associated attachments.

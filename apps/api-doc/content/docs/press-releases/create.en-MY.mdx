@@ -4,6 +4,7 @@ description: Create a new press release via webhook.
 ---
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
 
 To create a new press release, call the `<SERVER_URL>/webhook/press-releases` endpoint using a `POST` request as follows:
 
@@ -74,7 +75,13 @@ To create a new press release, call the `<SERVER_URL>/webhook/press-releases` en
   </Tab>
 </Tabs>
 
-**Note:** Ensure that the `datePublished` is provided in ISO 8601 format (e.g., `YYYY-MM-DDTHH:mm:ss.sssZ`).
+<Callout 
+    type="warn"
+    icon={<InfoIcon className="size-5" />}
+>
+  Ensure that `datePublished` is provided in ISO 8601 format (e.g., `YYYY-MM-DDTHH:mm:ss.sssZ`).
+</Callout>
+
 
 ## Successful Response
 
