@@ -1,15 +1,17 @@
 import appleIcon from "@repo/icons/web/apple-icon.png";
 import icon from "@repo/icons/web/icon.svg";
-import { I18nProvider } from "fumadocs-ui/i18n";
+import { I18nProvider, Translations } from "fumadocs-ui/i18n";
 import { RootProvider } from "fumadocs-ui/provider";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
 import type { ReactNode } from "react";
 import "./global.css";
 
+type Locale = "en-MY" | "ms-MY";
+
 type Props = {
   children: React.ReactNode;
-  params: { lang: string };
+  params: { lang: Locale };
 };
 
 const inter = Inter({
@@ -20,6 +22,30 @@ const locales = [
   { locale: "en-MY", name: "English" },
   { locale: "ms-MY", name: "B. Malaysia" },
 ];
+
+const translations: Record<Locale, Partial<Translations>> = {
+  ["en-MY"]: {
+    toc: "On this page",
+    nextPage: "Next",
+    previousPage: "Previous",
+  },
+  ["ms-MY"]: {
+    toc: "Pada halaman ini",
+    nextPage: "Seterusnya",
+    previousPage: "Sebelumnya",
+  },
+};
+
+export async function generateStaticParams() {
+  return [
+    {
+      lang: "en-MY",
+    },
+    {
+      lang: "ms-MY",
+    },
+  ];
+}
 
 export async function generateMetadata({
   params,
@@ -41,11 +67,26 @@ export default async function Layout({
   params: Promise<Props["params"]>;
   children: ReactNode;
 }) {
+  const locale = (await params).lang;
+
   return (
-    <html lang="en" className={inter.className} suppressHydrationWarning>
+    <html className={inter.className} suppressHydrationWarning>
       <body className="flex flex-col min-h-screen">
-        <I18nProvider locale={(await params).lang} locales={locales}>
-          <RootProvider>{children}</RootProvider>
+        <I18nProvider
+          locale={locale}
+          locales={locales}
+          translations={translations[locale]}
+        >
+          <RootProvider
+            search={{
+              options: {
+                type: "static",
+              },
+              enabled: true,
+            }}
+          >
+            {children}
+          </RootProvider>
         </I18nProvider>
       </body>
     </html>
