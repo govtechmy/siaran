@@ -3,4 +3,69 @@ title: Delete Uploaded Attachment
 description: Delete an uploaded attachment from a specific press release.
 ---
 
-doc goes here...
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+To delete a specific attachment for a press release, call the `<SERVER_URL>/webhook/press-releases/<ID>/attachment/<FILENAME>` endpoint using the `DELETE` method. Replace `<ID>` in the endpoint URL with the unique identifier of the press release and `<FILENAME>` with the name of the attachment file to be deleted.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X DELETE "<SERVER_URL>/webhook/press-releases/<ID>/attachment/<FILENAME>" \
+      -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.delete(
+        "<SERVER_URL>/webhook/press-releases/<ID>/attachment/<FILENAME>",
+        headers={"Authorization": "Bearer <YOUR_ACCESS_TOKEN>"}
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Successful Response
+
+Upon successful deletion, you will receive a `204 No Content` response indicating that the attachment has been successfully removed and that there is no additional content in the response body.
+
+**Example Response:**
+
+```bash
+HTTP/1.1 204 No Content
+```
+
+## Error Responses
+
+### Press Release Not Found
+
+If a press release with the specified `<ID>` does not exist, you will receive a `404 Not Found` response.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Press release not found"
+}
+```
+
+### Attachment Not Found
+
+If an attachment with the specified `<FILENAME>` does not exist for the press release, you will receive a `404 Not Found` response.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Not found"
+}
+```
+
+**Note:**
+
+* Deleting the press release itself will also remove all associated attachments.

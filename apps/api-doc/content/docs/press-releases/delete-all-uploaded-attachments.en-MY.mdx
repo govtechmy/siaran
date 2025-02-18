@@ -1,6 +1,57 @@
 ---
-title: Delete All Uploaded Attachments
-description: Delete all uploaded attachments from a specific press release.
+title: Delete Press Release Attachments
+description: Delete all attachments associated with a specific press release by its ID.
 ---
 
-doc goes here...
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+To delete all attachments for a press release, call the `<SERVER_URL>/webhook/press-releases/<ID>/attachments` endpoint using the `DELETE` method. Replace `<ID>` in the endpoint URL with the unique identifier of the press release whose attachments you wish to delete.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X DELETE "<SERVER_URL>/webhook/press-releases/<ID>/attachments" \
+      -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.delete(
+        "<SERVER_URL>/webhook/press-releases/<ID>/attachments",
+        headers={"Authorization": "Bearer <YOUR_ACCESS_TOKEN>"}
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Successful Response
+
+Upon successful deletion, you will receive a `204 No Content` response indicating that all attachments for the press release have been successfully removed and that there is no additional content to send in the response body.
+
+**Example Response:**
+
+```bash
+HTTP/1.1 204 No Content
+```
+
+## Error Responses
+
+### Press Release Not Found
+
+If a press release with the specified `<ID>` does not exist, you will receive a `404 Not Found` response.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Press release not found"
+}
+```
+
+**Note:**
+
+* Deleting the press release itself will also remove all associated attachments.

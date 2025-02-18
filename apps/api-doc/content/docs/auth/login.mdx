@@ -5,7 +5,7 @@ description: Dapatkan token akses untuk mengakses API.
 
 import { Tab, Tabs } from "fumadocs-ui/components/tabs";
 
-Untuk log masuk, hanya panggil titik akhir `<SERVER_URL>/webhook/users/login` seperti berikut:
+Untuk log masuk, hanya panggil _endpoint_ `<SERVER_URL>/webhook/users/login` seperti berikut:
 
 <Tabs items={["cURL", "Python"]}>
   <Tab value="cURL">
@@ -47,7 +47,7 @@ Content-Type: application/json
 }
 ```
 
-Anda perlu menyimpan `token` ini dengan selamat kerana ia akan digunakan untuk mengesahkan permintaan seterusnya ke titik akhir yang dilindungi.
+Anda perlu menyimpan `token` ini dengan selamat kerana ia akan digunakan untuk mengesahkan permintaan seterusnya ke _endpoint_ yang dilindungi.
 
 ## Respons Ralat
 
@@ -90,7 +90,7 @@ Content-Type: application/json
 
 ## Menggunakan Token Akses
 
-Untuk mengakses titik akhir yang dilindungi, anda perlu memasukkan `token` dalam header `Authorization` bagi permintaan anda. Token tersebut harus diawali dengan `Bearer `.
+Untuk mengakses _endpoint_ yang dilindungi, anda perlu memasukkan `token` dalam header `Authorization` bagi permintaan anda. Token tersebut harus diawali dengan `Bearer `.
 
 <Tabs items={["cURL", "Python"]}>
   <Tab value="cURL">
