@@ -1,0 +1,5 @@
+{
+  "watch": ["app", "components", "content", "pagefind.yml", "next.config.mjs"],
+  "ext": "*",
+  "exec": "npm run serve-static"
+}

@@ -1,12 +1,14 @@
+// @ts-nocheck - TODO: remove this after MYDS upgrades to React 19
+
 import { source } from "@/lib/source";
+import defaultMdxComponents from "fumadocs-ui/mdx";
 import {
-  DocsPage,
   DocsBody,
   DocsDescription,
+  DocsPage,
   DocsTitle,
 } from "fumadocs-ui/page";
 import { notFound } from "next/navigation";
-import defaultMdxComponents from "fumadocs-ui/mdx";
 import { ReactNode } from "react";
 
 type Props = { slug?: string[]; lang: string };
@@ -31,7 +33,7 @@ export default async function Page({
   const MDX = page.data.body;
 
   return (
-    <DocsPage toc={page.data.toc} full={page.data.full}>
+    <DocsPage toc={page.data.toc} full={page.data.full} data-pagefind-body>
       <DocsTitle>{page.data.title}</DocsTitle>
       <DocsDescription>{page.data.description}</DocsDescription>
       <DocsBody>
