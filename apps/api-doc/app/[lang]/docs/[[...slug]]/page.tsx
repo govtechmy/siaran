@@ -1,5 +1,3 @@
-// @ts-nocheck - TODO: remove this after MYDS upgrades to React 19
-
 import { source } from "@/lib/source";
 import defaultMdxComponents from "fumadocs-ui/mdx";
 import {

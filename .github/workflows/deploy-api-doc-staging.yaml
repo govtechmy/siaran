@@ -1,0 +1,50 @@
+name: Deploy API doc
+
+on:
+  push:
+    branches:
+      - staging
+      - staging-api-doc
+  workflow_dispatch:
+
+env:
+  REGION: "${{ vars.STAGING_GCP_REGION }}"
+  SERVICE: "${{ vars.STAGING_GCP_SERVICE_NAME_API }}"
+  PROJECT_ID: "${{ vars.STAGING_GCP_PROJECT_ID }}"
+  SERVICE_ACCOUNT: "${{ secrets.STAGING_GCP_SERVICE_ACCOUNT }}"
+  WIF_PROVIDER: "${{ secrets.STAGING_WIF_PROVIDER }}"
+  FIREBASE_SERVICE_ACCOUNT: "${{ secrets.STAGING_FIREBASE_SERVICE_ACCOUNT }}"
+  FIREBASE_PROJECT_ID: "${{ secrets.STAGING_FIREBASE_PROJECT_ID }}"
+  WORKING_DIRECTORY: "apps/api-doc"
+
+jobs:
+  deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      # force using @govtechmy/myds-react which ison React 18
+      - name: Install dependencies
+        working-directory: ${{ ENV.WORKING_DIRECTORY }}
+        run: npm install --legacy-peer-deps
+
+      - name: Build static site
+        working-directory: ${{ ENV.WORKING_DIRECTORY }}
+        run: npm run build-static
+
+      - name: Install Firebase CLI
+        run: npm install -g firebase-tools
+
+      - name: Produce Firebase service account
+        run: echo "${{ env.FIREBASE_SERVICE_ACCOUNT }}" | base64 --decode > /tmp/service-account.json
+
+      - name: Deploy to Firebase Hosting
+        working-directory: ${{ ENV.WORKING_DIRECTORY }}
+        env:
+          GOOGLE_APPLICATION_CREDENTIALS: /tmp/service-account.json
+        run: firebase deploy --project ${{ env.FIREBASE_PROJECT_ID }} --only hosting

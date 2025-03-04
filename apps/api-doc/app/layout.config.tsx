@@ -1,5 +1,3 @@
-// @ts-nocheck - TODO: remove this after MYDS upgrades to React 19
-
 import Search from "@/components/Search";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 

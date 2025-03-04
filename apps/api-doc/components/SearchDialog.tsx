@@ -1,7 +1,6 @@
-// @ts-nocheck - TODO: remove this after MYDS upgrades to React 19
-
 "use client";
 
+import { getPath } from "@/lib/path";
 import {
   Dialog,
   DialogBody,
@@ -28,7 +27,6 @@ import {
   ReactNode,
   useContext,
   useEffect,
-  useRef,
   useState,
 } from "react";
 
@@ -68,6 +66,10 @@ export function SearchDialogProvider({ children }: { children: ReactNode }) {
     setIsOpen(!isOpen);
   }
 
+  function getPagefindBundle(assetPath: string) {
+    return getPath(`/pagefind/${assetPath}`);
+  }
+
   useEffect(function setUp() {
     window.addEventListener("keydown", onKeyDown);
     window.addEventListener("pagefind-loaded", onPagefindLoaded);
@@ -80,11 +82,15 @@ export function SearchDialogProvider({ children }: { children: ReactNode }) {
 
   return (
     <SearchDialogContext.Provider value={{ isOpen, isPagefindReady, onToggle }}>
-      <link href="/pagefind/pagefind-ui.css" rel="stylesheet" />
-      <Script src="/pagefind/pagefind-ui.js" strategy="beforeInteractive" />
+      {/* If you need pagefind default UI */}
+      {/* <link href={getPagefindBundle("pagefind-ui.css")} rel="stylesheet" />
+      <Script
+        src={getPagefindBundle("pagefind-ui.js")}
+        strategy="beforeInteractive"
+      /> */}
       <Script strategy="afterInteractive">
         {`
-          import("/pagefind/pagefind.js").then(mod => {
+          import("${getPagefindBundle("pagefind.js")}").then(mod => {
             window.pagefind = mod;
             window.dispatchEvent(new Event("pagefind-loaded"));
           });

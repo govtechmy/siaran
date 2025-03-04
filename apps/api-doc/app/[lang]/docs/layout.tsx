@@ -1,5 +1,3 @@
-// @ts-nocheck - TODO: remove this after MYDS upgrades to React 19
-
 import { baseOptions } from "@/app/layout.config";
 import { source } from "@/lib/source";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";

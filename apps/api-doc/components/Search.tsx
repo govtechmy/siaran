@@ -1,5 +1,3 @@
-// @ts-nocheck - TODO: remove this after MYDS upgrades to React 19
-
 "use client";
 
 import { Button } from "@govtechmy/myds-react/button";

@@ -1,5 +1,3 @@
-// @ts-nocheck - TODO: remove this after upgrading to React 19
-
 import type { ReactNode } from "react";
 import { HomeLayout } from "fumadocs-ui/layouts/home";
 import { baseOptions } from "@/app/layout.config";
