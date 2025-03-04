@@ -1,17 +1,18 @@
+import { SearchDialogProvider } from "@/components/SearchDialog";
 import appleIcon from "@repo/icons/web/apple-icon.png";
 import icon from "@repo/icons/web/icon.svg";
 import { I18nProvider, Translations } from "fumadocs-ui/i18n";
 import { RootProvider } from "fumadocs-ui/provider";
 import { Metadata } from "next";
 import { Inter } from "next/font/google";
-import type { ReactNode } from "react";
+import { type ReactNode } from "react";
 import "./global.css";
 
 type Locale = "en-MY" | "ms-MY";
 
 type Props = {
   children: React.ReactNode;
-  params: { lang: Locale };
+  params: Promise<{ lang: Locale }>;
 };
 
 const inter = Inter({
@@ -64,7 +65,7 @@ export default async function Layout({
   params,
   children,
 }: {
-  params: Promise<Props["params"]>;
+  params: Props["params"];
   children: ReactNode;
 }) {
   const locale = (await params).lang;
@@ -79,13 +80,10 @@ export default async function Layout({
         >
           <RootProvider
             search={{
-              options: {
-                type: "static",
-              },
-              enabled: true,
+              enabled: false,
             }}
           >
-            {children}
+            <SearchDialogProvider>{children}</SearchDialogProvider>
           </RootProvider>
         </I18nProvider>
       </body>

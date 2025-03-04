@@ -1,3 +1,6 @@
+// @ts-nocheck - TODO: remove this after MYDS upgrades to React 19
+
+import Search from "@/components/Search";
 import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
 
 /**
@@ -9,15 +12,15 @@ import type { BaseLayoutProps } from "fumadocs-ui/layouts/shared";
  */
 export const baseOptions: BaseLayoutProps = {
   nav: {
-    // can be JSX too!
-    title: "Siaran API",
+    title: <div>Siaran API</div>,
+    children: <Search />,
   },
-  links: [
-    {
-      text: "Documentation",
-      url: "/docs",
-      active: "nested-url",
-    },
-  ],
+  // links: [
+  //   {
+  //     text: "Documentation",
+  //     url: "/docs",
+  //     active: "nested-url",
+  //   },
+  // ],
   i18n: true,
 };

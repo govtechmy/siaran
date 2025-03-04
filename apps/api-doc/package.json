@@ -5,6 +5,9 @@
   "scripts": {
     "build": "next build",
     "clean": "rm -rf .next .source",
+    "pagefind": "npx -y pagefind --site out",
+    "serve-static": "npm run clean && npm run build && npm run pagefind && npx serve out -l 1234",
+    "dev-static": "nodemon --config nodemon.dev-static.json",
     "dev": "next dev --port 1234",
     "start": "next start --port ${PORT:-1234}",
     "postinstall": "fumadocs-mdx"
@@ -12,6 +15,7 @@
   "dependencies": {
     "@govtechmy/myds-react": "^0.0.4",
     "@govtechmy/myds-style": "^0.0.3",
+    "@uidotdev/usehooks": "^2.4.1",
     "fumadocs-core": "14.7.7",
     "fumadocs-mdx": "11.3.1",
     "fumadocs-ui": "14.7.7",

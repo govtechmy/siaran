@@ -3,17 +3,20 @@ import Link from "next/link";
 export default function HomePage() {
   return (
     <main className="flex flex-1 flex-col justify-center text-center">
-      <h1 className="mb-4 text-2xl font-bold">Hello World</h1>
-      <p className="text-fd-muted-foreground">
-        You can open{" "}
+      <div className="flex flex-col text-fd-muted-foreground">
         <Link
-          href="/docs/auth/login"
+          href="/ms-MY/docs/auth/login"
           className="text-fd-foreground font-semibold underline"
         >
-          /docs
-        </Link>{" "}
-        and see the documentation.
-      </p>
+          B. Malaysia
+        </Link>
+        <Link
+          href="/en-MY/docs/auth/login"
+          className="text-fd-foreground font-semibold underline"
+        >
+          English
+        </Link>
+      </div>
     </main>
   );
 }
