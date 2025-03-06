@@ -1,5 +1,6 @@
 "use client";
 
+import { getString, Locale } from "@/lib/i18n";
 import { getPath } from "@/lib/path";
 import {
   Dialog,
@@ -111,8 +112,8 @@ export function SearchDialog() {
   const debouncedQuery = useDebounce(query, 300);
   const [resultItems, setResultItems] = useState<SearchResultItem[]>([]);
 
-  const searchBarRef = useClickAway(onToggle);
-  const shouldOpen = query && resultItems.length > 0;
+  const searchBarRef = useClickAway<HTMLDivElement>(onToggle);
+  const shouldOpen = !!query;
 
   async function searchWithQuery(query: string) {
     if (!isPagefindReady) {
@@ -148,7 +149,6 @@ export function SearchDialog() {
         <DialogContent className="h-0">
           <DialogHeader>
             <DialogTitle className="hidden">Search</DialogTitle>
-            <span id="search-dialog"></span>
           </DialogHeader>
           <SearchBar size="large" ref={searchBarRef}>
             <SearchBarInputContainer>
@@ -158,29 +158,37 @@ export function SearchDialog() {
             </SearchBarInputContainer>
             <SearchBarResults open={shouldOpen}>
               <SearchBarResultsList className="max-h-[350px] overflow-y-scroll">
-                {resultItems.map((item) => (
-                  <SearchBarResultsItem key={item.url} value={item.url}>
-                    <a href={item.url} className="flex flex-col items-start">
-                      <p className={cn("line-clamp-1", "text-sm")}>
-                        {item.title}
-                      </p>
-                      <p
-                        className={cn(
-                          "mt-[0.25rem]",
-                          "flex-1",
-                          "line-clamp-2",
-                          "text-xs text-txt-black-500",
-                          "leading-normal",
-                          "[&_mark]:bg-transparent",
-                          "[&_mark]:text-txt-black-900",
-                        )}
-                        dangerouslySetInnerHTML={{
-                          __html: item.excerpt,
-                        }}
-                      ></p>
-                    </a>
+                {resultItems.length > 0 ? (
+                  resultItems.map((item) => (
+                    <SearchBarResultsItem key={item.url} value={item.url}>
+                      <a href={item.url} className="flex flex-col items-start">
+                        <p className={cn("line-clamp-1", "text-sm")}>
+                          {item.title}
+                        </p>
+                        <p
+                          className={cn(
+                            "mt-[0.25rem]",
+                            "flex-1",
+                            "line-clamp-2",
+                            "text-xs text-txt-black-500",
+                            "leading-normal",
+                            "[&_mark]:bg-transparent",
+                            "[&_mark]:text-txt-black-900",
+                          )}
+                          dangerouslySetInnerHTML={{
+                            __html: item.excerpt,
+                          }}
+                        ></p>
+                      </a>
+                    </SearchBarResultsItem>
+                  ))
+                ) : (
+                  <SearchBarResultsItem>
+                    <p className="text-sm">
+                      {getString("noResults", lang as Locale)}
+                    </p>
                   </SearchBarResultsItem>
-                ))}
+                )}
               </SearchBarResultsList>
             </SearchBarResults>
           </SearchBar>
