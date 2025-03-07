@@ -1,6 +1,7 @@
 import { baseOptions } from "@/app/layout.config";
 import { source } from "@/lib/source";
 import { DocsLayout } from "fumadocs-ui/layouts/docs";
+import { Metadata } from "next";
 import type { ReactNode } from "react";
 
 type Props = {
@@ -29,3 +30,9 @@ export default async function Layout({
     </DocsLayout>
   );
 }
+export const metadata: Metadata = {
+  title: {
+    template: "%s | Siaran API",
+    default: "Webhooks",
+  },
+};
