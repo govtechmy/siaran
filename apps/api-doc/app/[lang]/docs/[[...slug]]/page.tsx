@@ -41,10 +41,6 @@ export default async function Page({
   );
 }
 
-export async function generateStaticParams() {
-  return source.generateParams();
-}
-
 export async function generateMetadata({ params }: { params: Promise<Props> }) {
   const { slug, lang } = await params;
   const page = source.getPage(slug, lang);
@@ -54,4 +50,8 @@ export async function generateMetadata({ params }: { params: Promise<Props> }) {
     title: page.data.title,
     description: page.data.description,
   };
+}
+
+export async function generateStaticParams() {
+  return source.generateParams();
 }

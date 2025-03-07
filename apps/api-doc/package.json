@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "build": "next build",
-    "clean": "rm -rf .next .source",
+    "clean": "rm -rf out .next .source",
     "pagefind": "npx -y pagefind --site out",
     "build-static": "npm run clean && npm run build && npm run pagefind",
     "serve-static": "npm run build-static && npx serve out -l 1234",
