@@ -1,0 +1,133 @@
+---
+title: Upload Attachment
+description: Obtain a pre-signed URL to upload an attachment file to a specific media release.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
+
+To obtain a pre-signed URL for uploading an attachment, call the `<SERVER_URL>/webhook/press-releases/<ID>/attachment/upload` endpoint using a `POST` request.
+
+Replace `<ID>` with the unique identifier of the media release to which you want to upload an attachment.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/press-releases/<ID>/attachment/upload" \
+      -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+      -H "Content-Type: application/json" \
+      -d '{
+        "filename": "attachment.pdf",
+        "contentType": "application/pdf"
+      }'
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/press-releases/<ID>/attachment/upload",
+        headers={
+            "Authorization": "Bearer <YOUR_ACCESS_TOKEN>",
+            "Content-Type": "application/json"
+        },
+        json={
+            "filename": "attachment.pdf",
+            "contentType": "application/pdf"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Successful Response
+
+Upon success, you will receive a `200 OK` response with a JSON body containing the pre-signed URL.
+
+**Example Response:**
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "url": "<URL>"
+}
+```
+
+The returned URL is a pre-signed URL. You need to use this URL to upload your attachment file using a `PUT` request.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -i -X PUT "<URL>" \
+      -H "Content-Type: application/pdf" \
+      -T "path/to/file/attachment.pdf"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    with open("path/to/file/attachment.pdf", "rb") as file_data:
+        response = requests.put(
+          "<URL>",
+          headers={"Content-Type": "application/pdf"},
+          data=file_data
+        )
+    ```
+  </Tab>
+</Tabs>
+
+<Callout
+  type="warn"
+  icon={<InfoIcon className="size-5" />}
+>
+  **Please use the correct `Content-Type`**.<br/><br/>
+  The storage provider requires the accurate `Content-Type` to identify the type of file you are uploading and store it correctly.
+  For a comprehensive list of valid `Content-Type` values, you can refer to [IANA Media Types](https://www.iana.org/assignments/media-types).
+</Callout>
+
+## Error Responses
+
+### Invalid Request Body
+
+If the request body is invalid or required fields are missing, you will receive a `400 Bad Request` response.
+
+```bash
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "code": "invalid_type",
+      "expected": "string",
+      "received": "undefined",
+      "path": [
+        "filename"
+      ],
+      "message": "Required"
+    }
+  ]
+}
+```
+
+### Press Release Not Found
+
+If a press release with the specified `<ID>` does not exist, you will receive a `404 Not Found` response.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "invalid_press_release",
+  "message": "Not Found: Invalid press release"
+}
+```
+
+This indicates that you need to verify the provided `<ID>` and ensure that the media release exists.
+
+---

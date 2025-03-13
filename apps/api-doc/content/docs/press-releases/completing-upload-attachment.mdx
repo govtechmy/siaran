@@ -1,0 +1,64 @@
+---
+title: Lengkapkan Muat Naik Lampiran
+description: Lengkapkan proses muat naik lampiran untuk siaran media tertentu.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
+
+Untuk melengkapkan proses muat naik lampiran dan memberitahu sistem bahawa fail telah berjaya dimuat naik, panggil _endpoint_ `/webhook/press-releases/<ID>/attachment/upload/complete` menggunakan permintaan `POST`.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/press-releases/<ID>/attachment/upload/complete" \
+      -H "Authorization: Bearer <TOKEN_AKSES_ANDA>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/press-releases/<ID>/attachment/upload/complete",
+        headers={
+            "Authorization": "Bearer <TOKEN_AKSES_ANDA>"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+<Callout
+  type="info"
+  icon={<InfoIcon className="size-5" />}
+>
+  **Panggilan API ini diperlukan untuk memastikan pangkalan data dapat mendaftarkan lampiran yang dimuat naik.**
+</Callout>
+
+## Respons Berjaya
+
+Apabila berjaya, anda akan menerima respons `204 No Content`. Ini menunjukkan bahawa sistem telah berjaya merekodkan muat naik lampiran.
+
+```bash
+HTTP/1.1 204 No Content
+```
+
+## Respons Ralat
+
+### Siaran Media Tidak Dijumpai
+
+Jika siaran media dengan `<ID>` yang dinyatakan tidak wujud, anda akan menerima respons `404 Tidak Dijumpai`.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "invalid_press_release",
+  "message": "Not Found: Invalid press release"
+}
+```
+
+Ini menunjukkan bahawa anda perlu mengesahkan `<ID>` yang diberikan dan memastikan bahawa siaran media itu wujud.
+---

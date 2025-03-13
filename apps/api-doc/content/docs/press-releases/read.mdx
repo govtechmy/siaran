@@ -1,0 +1,93 @@
+---
+title: Dapat Siaran Media Dengan ID
+description: Dapatkan siaran media tertentu menggunakan pengecam uniknya.
+---
+
+import { Tab, Tabs } from 'fumadocs-ui/components/tabs';
+
+Untuk mendapatkan siaran media berdasarkan ID, panggil _endpoint_ `<SERVER_URL>/webhook/press-releases/<ID>` menggunakan permintaan `GET`. Gantikan `<ID>` dengan pengecam unik siaran media yang ingin anda dapatkan.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X GET "<SERVER_URL>/webhook/press-releases/<ID>" \
+      -H "Authorization: Bearer <TOKEN_AKSES_ANDA>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.get(
+        "<SERVER_URL>/webhook/press-releases/<ID>",
+        headers={
+            "Authorization": "Bearer <TOKEN_AKSES_ANDA>"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Respons Berjaya
+
+Apabila berjaya mendapatkan, anda akan menerima respons `200 OK` dengan badan JSON yang mengandungi butiran siaran media yang diminta.
+
+**Contoh Respons:**
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": "67a17f3fad34bf885cc21adc",
+  "language": "ms-MY",
+  "title": "Pengisytiharan Kemerdekaan Tanah Melayu",
+  "date_published": "1957-08-31T02:00:00.000Z",
+  "type": "kenyataan_media",
+  "priority": "high",
+  "content": {
+    "plain": "Dengan nama Allah, Yang Maha Pemurah, lagi Maha Mengasihani. Segala puji bagi Allah, Tuhan semesta alam dan selawat serta salam ke atas junjungan Rasulullah dan mereka yang berhubung kait dengan baginda.\n\nMaka sesungguhnya telah tiba masanya bagi rakyat Persekutuan Tanah Melayu untuk mencapai taraf sebuah negara yang merdeka, berdaulat dan bebas antara bangsa-bangsa di Dunia.",
+    "markdown": "_[Dengan nama Allah, Yang Maha Pemurah, lagi Maha Mengasihani](https://en.wikipedia.org/wiki/Basmala). Segala puji bagi Allah, Tuhan semesta alam dan selawat serta salam ke atas junjungan Rasulullah dan mereka yang berhubung kait dengan baginda.\n\nMaka sesungguhnya telah tiba masanya bagi rakyat Persekutuan Tanah Melayu untuk mencapai taraf sebuah negara yang merdeka, berdaulat dan bebas antara bangsa-bangsa di Dunia._"
+  },
+  "attachments": [
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/6/69/Merdeka_1957_tunku_abdul_rahman.jpg",
+      "file_name": "Merdeka_1957_tunku_abdul_rahman.jpg",
+      "file_type": "image/jpeg",
+      "file_size": 51102,
+      "id": "67a17f3f0d473480033f55e4"
+    }
+  ],
+  "relatedAgency": {
+    "id": "PMO",
+    "name": "Prime Minister's Office",
+    "acronym": "PMO",
+    "email": "release@pmo.gov.my",
+    "createdAt": "2024-09-11T05:53:02.942Z",
+    "updatedAt": "2024-10-23T07:16:20.957Z",
+    "socialMedia": []
+  },
+  "createdAt": "2025-02-04T02:45:19.579Z",
+  "updatedAt": "2025-02-04T02:45:19.579Z"
+}
+```
+
+## Respons Ralat
+
+### Siaran Media Tidak Dijumpai
+
+Jika siaran media dengan `<ID>` yang dinyatakan tidak wujud, anda akan menerima respons `404 Tidak Dijumpai`.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Not Found"
+}
+```
+
+Ini menunjukkan bahawa anda perlu mengesahkan `<ID>` yang diberikan dan memastikan bahawa siaran media itu wujud.
+
+---
