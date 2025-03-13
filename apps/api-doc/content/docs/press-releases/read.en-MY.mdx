@@ -1,0 +1,93 @@
+---
+title: Get Press Release by ID
+description: Retrieve a specific press release using its unique identifier.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+To retrieve a press release by its ID, call the `<SERVER_URL>/webhook/press-releases/<ID>` endpoint using a `GET` request. Replace `<ID>` with the unique identifier of the press release you wish to retrieve.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X GET "<SERVER_URL>/webhook/press-releases/<ID>" \
+      -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.get(
+        "<SERVER_URL>/webhook/press-releases/<ID>",
+        headers={
+            "Authorization": "Bearer <YOUR_ACCESS_TOKEN>"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Successful Response
+
+Upon successful retrieval, you will receive a `200 OK` response with a JSON body containing the details of the requested press release.
+
+**Example Response:**
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "id": "67a17f3fad34bf885cc21adc",
+  "language": "ms-MY",
+  "title": "Malayan Declaration of Independence",
+  "date_published": "1957-08-31T02:00:00.000Z",
+  "type": "kenyataan_media",
+  "priority": "high",
+  "content": {
+    "plain": "In the name of Allah, the Compassionate, the Merciful. Praise be to Allah, the Lord of the Universe and may the blessings and peace of Allah be upon His Messenger and those related to him.\n\nWhereas the time has now arrived when the people of the Federation of Malaya will assume the status of a free independent and sovereign nation among nations of the World.",
+    "markdown": "_[In the name of Allah, the Compassionate, the Merciful](https://en.wikipedia.org/wiki/Basmala). Praise be to Allah, the Lord of the Universe and may the blessings and peace of Allah be upon His Messenger and those related to him.\n\nWhereas the time has now arrived when the people of the Federation of Malaya will assume the status of a free independent and sovereign nation among nations of the World._"
+  },
+  "attachments": [
+    {
+      "url": "https://upload.wikimedia.org/wikipedia/commons/6/69/Merdeka_1957_tunku_abdul_rahman.jpg",
+      "file_name": "Merdeka_1957_tunku_abdul_rahman.jpg",
+      "file_type": "image/jpeg",
+      "file_size": 51102,
+      "id": "67a17f3f0d473480033f55e4"
+    }
+  ],
+  "relatedAgency": {
+    "id": "PMO",
+    "name": "Prime Minister's Office",
+    "acronym": "PMO",
+    "email": "release@pmo.gov.my",
+    "createdAt": "2024-09-11T05:53:02.942Z",
+    "updatedAt": "2024-10-23T07:16:20.957Z",
+    "socialMedia": []
+  },
+  "createdAt": "2025-02-04T02:45:19.579Z",
+  "updatedAt": "2025-02-04T02:45:19.579Z"
+}
+```
+
+## Error Responses
+
+### Press Release Not Found
+
+If a press release with the specified `<ID>` does not exist, you will receive a `404 Not Found` response.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Not Found"
+}
+```
+
+This indicates that you should verify the provided `<ID>` and ensure that the press release exists.
+
+---
