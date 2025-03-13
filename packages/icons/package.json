@@ -1,0 +1,11 @@
+{
+  "name": "@repo/icons",
+  "version": "0.0.1",
+  "private": true,
+  "files": [
+    "./web/**/*.{svg,jpeg,jpg,png,gif,webp}"
+  ],
+  "exports": {
+    "./web/*": "./web/*"
+  }
+}
