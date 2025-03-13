@@ -1,0 +1,50 @@
+name: (prod) Deploy API doc
+
+on:
+  push:
+    branches:
+      - main
+      - api-doc
+  workflow_dispatch:
+
+env:
+  REGION: "${{ vars.PROD_AWS_SERVICE_REGION }}"
+  ROLE: "${{ vars.PROD_AWS_SERVICE_ROLE }}"
+  BUCKET: "${{ vars.PROD_AWS_S3_BUCKET_API_DOC }}"
+  WORKING_DIRECTORY: "apps/api-doc"
+
+jobs:
+  deploy:
+    permissions:
+      contents: "read"
+      id-token: "write"
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-region: ${{ env.REGION }}
+          role-to-assume: ${{ env.ROLE }}
+          role-session-name: siaran-api-doc
+
+      # force using @govtechmy/myds-react which ison React 18
+      - name: Install dependencies
+        working-directory: ${{ ENV.WORKING_DIRECTORY }}
+        run: npm install --legacy-peer-deps
+
+      - name: Build static site
+        working-directory: ${{ ENV.WORKING_DIRECTORY }}
+        run: npm run build-static
+
+      - name: Deploy to AWS S3
+        working-directory: ${{ ENV.WORKING_DIRECTORY }}
+        run: aws s3 sync out s3://${{ env.BUCKET }} --delete
+
+      # Uncomment the following lines to host the static site on Amplify
+      # - name: Deploy to Amplify
+      #   working-directory: ${{ ENV.WORKING_DIRECTORY }}
+      #   run: aws amplify start-deployment --app-id ${{ env.BUCKET }} --branch-name v1 --source-url s3://${{ env.BUCKET }}/

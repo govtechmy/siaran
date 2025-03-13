@@ -167,6 +167,7 @@ async function getById(
     });
   } catch (e) {
     if (e instanceof CMSFetchError) {
+      console.log("---", e.statusCode);
       logger.error(e.stack);
       logger.error(JSON.stringify({ id }, null, 2));
 

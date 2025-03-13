@@ -14,6 +14,7 @@ import { useAtom } from "jotai";
 import { useTranslations } from "next-intl";
 import React, { ComponentProps } from "react";
 import Markdown from "react-markdown";
+import rehypeRaw from "rehype-raw";
 import remarkBreaks from "remark-breaks";
 import remarkGfm from "remark-gfm";
 import { dataAtom } from "../stores/press-release";
@@ -76,6 +77,7 @@ function Data({ initialData }: { initialData: PressRelease }) {
           >
             {initialData.content.markdown ? (
               <Markdown
+                rehypePlugins={[rehypeRaw]}
                 remarkPlugins={[remarkGfm, remarkBreaks]}
                 components={Components}
               >

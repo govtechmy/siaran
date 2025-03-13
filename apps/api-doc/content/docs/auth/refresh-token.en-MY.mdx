@@ -1,0 +1,101 @@
+---
+title: Refresh Token
+description: Refresh an expired access token to obtain a new one.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
+
+To refresh your access token, call the `<SERVER_URL>/webhook/users/refresh-token` endpoint using a `POST` request. You must include a valid access token in the request body.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/users/refresh-token" -H "Content-Type: application/json" -d '{"token":"<YOUR_ACCESS_TOKEN>"}'
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/users/refresh-token",
+        headers={"Content-Type": "application/json"},
+        json={"token": "<YOUR_ACCESS_TOKEN>"}
+    )
+    ```
+  </Tab>
+</Tabs>
+
+
+Replace `<YOUR_ACCESS_TOKEN>` with the access token you previously obtained during the login process or a prior token refresh.
+
+<Callout 
+    type="warn"
+    icon={<InfoIcon className="size-5" />}
+>
+    The access token must be valid (not expired). If your access token has expired, you will have to log in again to obtain a new access token.
+</Callout>
+
+## Successful Response
+
+Upon successful token refresh, you will receive a `200 OK` response with a JSON body containing a new access token and a new expiry date. **The new access token will be valid for 2 hours.**
+
+**Example Response:**
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "exp": 1738041827000,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OTg0ZGI4OGIwNjZlNzRlOWQ4MDkzMSIsImNvbGxlY3Rpb24iOiJ1c2VycyIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTczODAzNDYyNywiZXhwIjoxNzM4MDQxODI3fQ.rzE1_3uQqLvcjHfgNU4o_KbxLOSc4WXKgvtzQsw79ok"
+}
+```
+
+You should securely store both the new `token` (access token) for future API requests and token refreshes.
+
+## Error Responses
+
+### Invalid Access Token
+
+If the provided `token` is invalid or expired, you will receive a `403 Forbidden` response.
+
+```bash
+HTTP/1.1 403 Forbidden
+Content-Type: application/json
+
+{
+  "code": "access_denied",
+  "message": "Forbidden: Access denied"
+}
+```
+
+### Missing Access Token
+
+If you do not provide the `token` in the request body, you will receive a `400 Bad Request` response.
+
+```bash
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "code": "invalid_type",
+      "expected": "string",
+      "received": "undefined",
+      "path": [
+        "token"
+      ],
+      "message": "Required"
+    }
+  ]
+}
+```
+
+## Using the New Access Token
+
+The newly obtained `token` from the refresh endpoint functions identically to the access token received upon login.  You should use it in the `Authorization` header of your requests to access protected endpoints.
+
+---
