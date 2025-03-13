@@ -1,0 +1,130 @@
+---
+title: Create Press Release
+description: Create a new press release via webhook.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
+
+To create a new press release, call the `<SERVER_URL>/webhook/press-releases` endpoint using a `POST` request as follows:
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/press-releases" \
+      -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+      -H "Content-Type: application/json" \
+      -d '{
+      "language": "ms-MY",
+      "title": "Pemasyhuran Kemerdekaan Tanah Melayu",
+      "type": "kenyataan_media",
+      "datePublished": "1957-08-31T02:00:00.000Z",
+      "content": {
+        "plain": "Dengan nama Allah yang Maha Murah lagi Mengasihani, segala puji bagi Allah yang Maha Berkuasa dan selawat dan salam ke atas sekalian Rasul-Nya.\n\nBahawasanya oleh kerana telah tibalah masanya bagi umat Persekutuan Tanah Melayu ini mencapai taraf suatu bangsa yang merdeka lagi berdaulat sama setimbal kedudukannya dengan segala bangsa seluruh dunia.",
+        "markdown": "*[Dengan nama Allah yang Maha Murah lagi Mengasihani](https://en.wikipedia.org/wiki/Basmala), segala puji bagi Allah yang Maha Berkuasa dan selawat dan salam ke atas sekalian Rasul-Nya.\n\nBahawasanya oleh kerana telah tibalah masanya bagi umat Persekutuan Tanah Melayu ini mencapai taraf suatu bangsa yang merdeka lagi berdaulat sama setimbal kedudukannya dengan segala bangsa seluruh dunia.*"
+      },
+      "priority": "high",
+      "attachments": [
+        {
+          "url": "https://upload.wikimedia.org/wikipedia/commons/6/69/Merdeka_1957_tunku_abdul_rahman.jpg",
+          "alt": "Tunku Abdul Rahman melaungkan \"merdeka!\" ketika menandatangani Perisytiharan Kemerdekaan Tanah Melayu pada tahun 1957.",
+          "file": {
+            "name": "Merdeka_1957_tunku_abdul_rahman.jpg",
+            "type": "image/jpeg",
+            "size": 51102
+          }
+        }
+      ]
+    }'
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/press-releases",
+        headers={
+            "Authorization": "Bearer <YOUR_ACCESS_TOKEN>",
+            "Content-Type": "application/json"
+        },
+        json={
+            "language": "ms-MY",
+            "title": "Pengisytiharan Kemerdekaan Tanah Melayu",
+            "type": "kenyataan_media",
+            "datePublished": "1957-08-31T02:00:00.000Z",
+            "content": {
+                "plain": "Dengan nama Allah yang Maha Murah lagi Mengasihani, segala puji bagi Allah yang Maha Berkuasa dan selawat dan salam ke atas sekalian Rasul-Nya.\n\nBahawasanya oleh kerana telah tibalah masanya bagi umat Persekutuan Tanah Melayu ini mencapai taraf suatu bangsa yang merdeka lagi berdaulat sama setimbal kedudukannya dengan segala bangsa seluruh dunia.",
+                "markdown": "*[Dengan nama Allah yang Maha Murah lagi Mengasihani](https://en.wikipedia.org/wiki/Basmala), segala puji bagi Allah yang Maha Berkuasa dan selawat dan salam ke atas sekalian Rasul-Nya.\n\nBahawasanya oleh kerana telah tibalah masanya bagi umat Persekutuan Tanah Melayu ini mencapai taraf suatu bangsa yang merdeka lagi berdaulat sama setimbal kedudukannya dengan segala bangsa seluruh dunia.*"
+            },
+            "priority": "high",
+            "attachments": [
+                {
+                    "url": "https://upload.wikimedia.org/wikipedia/commons/6/69/Merdeka_1957_tunku_abdul_rahman.jpg",
+                    "alt": "Tunku Abdul Rahman melaungkan \"merdeka!\" ketika menandatangani Perisytiharan Kemerdekaan Tanah Melayu pada tahun 1957.",
+                    "file": {
+                        "name": "Merdeka_1957_tunku_abdul_rahman.jpg",
+                        "type": "image/jpeg",
+                        "size": 51102
+                    }
+                }
+            ]
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+<Callout 
+    type="warn"
+    icon={<InfoIcon className="size-5" />}
+>
+  Ensure that `datePublished` is provided in ISO 8601 format (e.g., `YYYY-MM-DDTHH:mm:ss.sssZ`).
+</Callout>
+
+
+## Successful Response
+
+Upon successful creation of the press release, you will receive a `201 Created` response. The response body will include the newly created press release object.
+
+**Example Response:**
+
+```bash
+HTTP/1.1 201 Created
+Content-Type: application/json
+
+{
+  "doc": {
+    "id": "67a17f3fad34bf885cc21adc"
+  }
+}
+```
+
+The `id` field uniquely identifies the newly created press release.
+
+## Error Responses
+
+### Invalid Request Body
+
+If the request body is invalid or missing required fields, you will receive a `400 Bad Request` response. This could be due to incorrect data types, missing fields like `title`, or invalid date formats.
+
+```bash
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "code": "invalid_type",
+      "expected": "string",
+      "received": "undefined",
+      "path": [
+        "title"
+      ],
+      "message": "Required"
+    }
+  ]
+}
+```
+
+---

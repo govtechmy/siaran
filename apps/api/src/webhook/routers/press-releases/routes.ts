@@ -200,6 +200,20 @@ router.delete(
     } catch (e) {
       if (e instanceof Error) {
         logger.error(e.stack);
+
+        switch (e.message) {
+          case "invalid_credential":
+            res.status(401).send(invalidCredential);
+            return;
+          case "access_denied":
+            res.status(403).send(accessDenied);
+            return;
+          case "not_found":
+            res.status(401).send(invalidUser);
+            return;
+          default:
+            break;
+        }
       }
 
       res.status(500).send(internalServerError);

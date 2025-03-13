@@ -1,0 +1,115 @@
+---
+title: Log Masuk
+description: Dapatkan token akses untuk mengakses API.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+Untuk log masuk, hanya panggil _endpoint_ `<SERVER_URL>/webhook/users/login` seperti berikut:
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/users/login" -H "Content-Type: application/json" -d '{"email":"<EMAIL>","password":"<PASSWORD>"}'
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/users/login",
+        headers={"Content-Type": "application/json"},
+        json={
+            "email": "<EMAIL>",
+            "password": "<PASSWORD>"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Respons Berjaya
+
+Selepas log masuk berjaya, anda akan menerima respons `200 OK` dengan badan JSON yang mengandungi token akses anda. **Token akses ini akan sah selama 2 jam.** 
+
+[Baca lebih lanjut](/ms-MY/docs/auth/refresh-token) untuk mengetahui cara menyegarkan token yang telah tamat tempoh.
+
+**Contoh Respons:**
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "exp": 1738041827000,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OTg0ZGI4OGIwNjZlNzRlOWQ4MDkzMSIsImNvbGxlY3Rpb24iOiJ1c2VycyIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTczODAzNDYyNywiZXhwIjoxNzM4MDQxODI3fQ.rzE1_3uQqLvcjHfgNU4o_KbxLOSc4WXKgvtzQsw79ok"
+}
+```
+
+Anda perlu menyimpan `token` ini dengan selamat kerana ia akan digunakan untuk mengesahkan permintaan seterusnya ke _endpoint_ yang dilindungi.
+
+## Respons Ralat
+
+### Kredensial Tidak Sah
+
+Jika e-mel atau kata laluan yang diberikan tidak betul, anda akan menerima respons `401 Unauthorized`.
+
+```bash
+HTTP/1.1 401 Unauthorized
+Content-Type: application/json
+
+{
+  "code": "invalid_credential",
+  "message": "Unauthorized: Invalid credential"
+}
+```
+
+### Kredensial Hilang
+
+Jika anda tidak memberikan `email` atau `password` dalam badan permintaan, anda akan menerima respons `400 Bad Request`.
+
+```bash
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "code": "invalid_type",
+      "expected": "string",
+      "received": "undefined",
+      "path": [
+        "password"
+      ],
+      "message": "Required"
+    }
+  ]
+}
+```
+
+## Menggunakan Token Akses
+
+Untuk mengakses _endpoint_ yang dilindungi, anda perlu memasukkan `token` dalam header `Authorization` bagi permintaan anda. Token tersebut harus diawali dengan `Bearer `.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+  ```bash
+  curl -X POST "<SERVER_URL>/webhook/press-releases" -H "Authorization: Bearer <TOKEN_AKSES_ANDA>"
+  ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/press-releases",
+        headers={"Authorization": "Bearer <TOKEN_AKSES_ANDA>"}
+    )
+    ```
+  </Tab>
+</Tabs>
+
+Gantikan `<TOKEN_AKSES_ANDA>` dengan token akses sebenar yang anda terima selepas log masuk berjaya.
+
+---
