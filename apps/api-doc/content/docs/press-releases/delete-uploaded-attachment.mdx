@@ -1,0 +1,67 @@
+---
+title: Padam Lampiran
+description: Padam satu lampiran yang dimuat naik daripada siaran akhbar tertentu.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+
+Untuk memadam satu lampiran tertentu bagi siaran akhbar, panggil _endpoint_ `<SERVER_URL>/webhook/press-releases/<ID>/attachment/<FILENAME>` menggunakan kaedah `DELETE`. Gantikan `<ID>` dalam URL _endpoint_ dengan pengecam unik siaran akhbar dan `<FILENAME>` dengan nama fail lampiran yang ingin dipadam.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X DELETE "<SERVER_URL>/webhook/press-releases/<ID>/attachment/<FILENAME>" \
+      -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.delete(
+        "<SERVER_URL>/webhook/press-releases/<ID>/attachment/<FILENAME>",
+        headers={"Authorization": "Bearer <YOUR_ACCESS_TOKEN>"}
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Respons Berjaya
+
+Setelah pemadaman berjaya, anda akan menerima respons `204 No Content` yang menunjukkan bahawa lampiran telah berjaya dipadam dan tiada kandungan tambahan dalam respons.
+
+**Contoh Respons:**
+
+```bash
+HTTP/1.1 204 No Content
+```
+
+## Respons Ralat
+
+### Siaran Akhbar Tidak Dijumpai
+
+Jika siaran akhbar dengan `<ID>` yang ditentukan tidak wujud, anda akan menerima respons `404 Not Found`.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Press release not found"
+}
+```
+
+### Lampiran Tidak Dijumpai
+
+Jika lampiran dengan `<FILENAME>` yang ditentukan tidak wujud untuk siaran akhbar, anda akan menerima respons `404 Not Found`.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Not found"
+}
+```
