@@ -85,6 +85,18 @@ const PressRelease: CollectionConfig = {
         return doc;
       },
     ],
+    afterRead: [
+      async ({ req: { user }, doc }) => {
+        // Remove internal fields for non-superadmin users
+        if (user.role !== "superadmin") {
+          delete doc.content.slate;
+          delete doc.relatedAgency.loginAttempts;
+          delete doc.relatedAgency.relatedTo;
+        }
+
+        return doc;
+      },
+    ],
     beforeChange: [
       ({ req, operation, data, context }) => {
         context.operation = operation;

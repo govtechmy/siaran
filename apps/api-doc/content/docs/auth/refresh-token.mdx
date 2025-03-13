@@ -1,0 +1,104 @@
+---
+title: Token Segar Semula
+description: Segar semula token akses yang telah tamat tempoh untuk mendapatkan token baharu.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
+
+Untuk menyegar semula token akses anda, panggil _endpoint_ `<SERVER_URL>/webhook/users/refresh-token` menggunakan permintaan `POST`. Anda mesti menyertakan token akses yang sah dalam badan permintaan.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/users/refresh-token" -H "Content-Type: application/json" -d '{"token":"<TOKEN_AKSES_ANDA>"}'
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/users/refresh-token",
+        headers={
+            "Content-Type": "application/json"
+        },
+        json={
+            "token": "<TOKEN_AKSES_ANDA>"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+Gantikan `<TOKEN_AKSES_ANDA>` dengan token akses yang anda peroleh sebelum ini semasa proses log masuk atau penyegaran token sebelumnya.
+
+<Callout
+    type="warn"
+    icon={<InfoIcon className="size-5" />}
+>
+    Token akses mestilah sah (belum tamat tempoh). Jika token akses anda telah tamat tempoh, anda perlu log masuk semula untuk mendapatkan token akses baharu.
+</Callout>
+
+## Respons Berjaya
+
+Apabila penyegaran token berjaya, anda akan menerima respons `200 OK` dengan badan JSON yang mengandungi token akses baharu dan tarikh luput baharu. **Token akses baharu ini akan sah selama 2 jam.**
+
+**Contoh Respons:**
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "exp": 1738041827000,
+  "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY3OTg0ZGI4OGIwNjZlNzRlOWQ4MDkzMSIsImNvbGxlY3Rpb24iOiJ1c2VycyIsImVtYWlsIjoidGVzdEBleGFtcGxlLmNvbSIsImlhdCI6MTczODAzNDYyNywiZXhwIjoxNzM4MDQxODI3fQ.rzE1_3uQqLvcjHfgNU4o_KbxLOSc4WXKgvtzQsw79ok"
+}
+```
+
+Anda perlu menyimpan token `token` (token akses) baharu dengan selamat untuk permintaan API dan penyegaran token pada masa hadapan.
+
+## Respons Ralat
+
+### Token Akses Tidak Sah
+
+Jika `token` yang diberikan tidak sah atau telah tamat tempoh, anda akan menerima respons `403 Forbidden`.
+
+```bash
+HTTP/1.1 403 Forbidden
+Content-Type: application/json
+
+{
+  "code": "access_denied",
+  "message": "Forbidden: Access denied"
+}
+```
+
+### Token Akses Hilang
+
+Jika anda tidak memberikan `token` dalam badan permintaan, anda akan menerima respons `400 Bad Request`.
+
+```bash
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "code": "invalid_type",
+      "expected": "string",
+      "received": "undefined",
+      "path": [
+        "token"
+      ],
+      "message": "Required"
+    }
+  ]
+}
+```
+
+## Menggunakan Token Akses Baharu
+
+`token` yang baharu diperoleh daripada _endpoint_ penyegaran berfungsi sama seperti token akses yang diterima semasa log masuk. Anda patut menggunakannya dalam pengepala `Authorization` bagi permintaan anda untuk mengakses _endpoint_ yang dilindungi.
+
+---
