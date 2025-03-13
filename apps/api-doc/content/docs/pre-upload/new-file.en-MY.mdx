@@ -1,0 +1,131 @@
+---
+title: Pre-upload a New File
+description: Obtain a pre-signed URL to pre-upload a file.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { InfoIcon } from "@govtechmy/myds-react/icon";
+
+To obtain a pre-signed URL for pre-uploading a file, call the `<SERVER_URL>/webhook/pre-upload/<SESSION_ID>` endpoint using a `POST` request.
+
+Replace `<SESSION_ID>` with an unique identifier to group your pre-uploaded files. The identifier will be used later to commit the files to a resource later.
+
+<Callout
+  type="info"
+  icon={<InfoIcon className="size-5" />}
+>
+    Pre-uploading is useful when you want to upload a file for a resource (e.g. Press Release) that does not exist yet.
+</Callout>
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X POST "<SERVER_URL>/webhook/pre-upload/<SESSION_ID>" \
+      -H "Authorization: Bearer <YOUR_ACCESS_TOKEN>" \
+      -H "Content-Type: aprplication/json" \
+      -d '{
+        "filename": "Merdeka_1957_tunku_abdul_rahman.jpg",
+        "contentType": "image/jpeg"
+      }'
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.post(
+        "<SERVER_URL>/webhook/pre-upload/<SESSION_ID>",
+        headers={
+            "Authorization": "Bearer <YOUR_ACCESS_TOKEN>",
+            "Content-Type": "application/json"
+        },
+        json={
+            "filename": "Merdeka_1957_tunku_abdul_rahman.jpg",
+            "contentType": "image/jpeg"
+        }
+    )
+    ```
+  </Tab>
+</Tabs>
+
+## Successful Response
+
+Upon success, you will receive a `200 OK` response with a JSON body containing the pre-signed URL.
+
+**Example Response:**
+
+```bash
+HTTP/1.1 200 OK
+Content-Type: application/json
+
+{
+  "url": "<URL>"
+}
+```
+The returned URL is a pre-signed URL. You need to use this URL to upload your file using a `PUT` request.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -i -X PUT "<URL>" \
+      -H "Content-Type: image/jpeg" \
+      -T "path/to/file/Merdeka_1957_tunku_abdul_rahman.jpg"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    with open("path/to/file/Merdeka_1957_tunku_abdul_rahman.jpg", "rb") as file_data:
+        response = requests.put(
+          "<URL>",
+          headers={"Content-Type": "image/jpeg"},
+          data=file_data
+        )
+    ```
+  </Tab>
+</Tabs>
+
+<Callout
+  type="warn"
+  icon={<InfoIcon className="size-5" />}
+>
+  **Please use the correct `Content-Type`**.<br/><br/>
+  The storage provider requires the accurate `Content-Type` to identify the type of file you are uploading and store it correctly.
+  For a comprehensive list of valid `Content-Type` values, you can refer to [IANA Media Types](https://www.iana.org/assignments/media-types).
+</Callout>
+
+## Error Responses
+
+### Invalid Request Body
+
+If the request body is invalid or required fields are missing, you will receive a `400 Bad Request` response.
+
+```bash
+HTTP/1.1 400 Bad Request
+Content-Type: application/json
+
+{
+  "errors": [
+    {
+      "code": "invalid_type",
+      "expected": "string",
+      "received": "undefined",
+      "path": [
+        "filename"
+      ],
+      "message": "Required"
+    }
+  ]
+}
+```
+
+### User Not Found
+
+```bash
+HTTP/1.1 404 Not Found
+```
+
+This indicates that the user calling the endpoint might not exist.
+
+---

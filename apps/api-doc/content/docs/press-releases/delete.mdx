@@ -1,0 +1,64 @@
+---
+title: Padam Siaran Media Dengan ID
+description: Padam siaran media tertentu berdasarkan ID-nya.
+---
+
+import { Tab, Tabs } from "fumadocs-ui/components/tabs";
+import { WarningIcon } from "@govtechmy/myds-react/icon";
+
+Untuk memadam siaran media, panggil _endpoint_ `<SERVER_URL>/webhook/press-releases/<ID>` menggunakan kaedah `DELETE`. Gantikan `<ID>` dalam URL _endpoint_ dengan pengecam unik siaran media yang ingin anda padamkan.
+
+<Tabs items={["cURL", "Python"]}>
+  <Tab value="cURL">
+    ```bash
+    curl -X DELETE "<SERVER_URL>/webhook/press-releases/<ID>" \
+      -H "Authorization: Bearer <TOKEN_AKSES_ANDA>"
+    ```
+  </Tab>
+  <Tab value="Python">
+    ```python
+    import requests
+
+    response = requests.delete(
+        "<SERVER_URL>/webhook/press-releases/<ID>",
+        headers={"Authorization": "Bearer <TOKEN_AKSES_ANDA>"}
+    )
+    ```
+    </Tab>
+</Tabs>
+
+<Callout 
+    type="warn"
+    className="bg-fd-primary/10 border-none"
+    icon={<WarningIcon className="size-5 text-fd-primary" />}
+>
+  Lampiran yang berkaitan juga akan dipadamkan.
+</Callout>
+
+## Respons Berjaya
+
+Apabila pemadaman berjaya, anda akan menerima respons `204 No Content` yang menandakan bahawa siaran media telah berjaya dipadam dan tiada kandungan tambahan untuk dihantar dalam badan respons.
+
+**Contoh Respons:**
+
+```bash
+HTTP/1.1 204 No Content
+```
+
+## Respons Ralat
+
+### Siaran Media Tidak Ditemui
+
+Jika siaran media dengan `<id>` yang dinyatakan tidak wujud, anda akan menerima respons `404 Not Found`.
+
+```bash
+HTTP/1.1 404 Not Found
+Content-Type: application/json
+
+{
+  "code": "not_found",
+  "message": "Not Found"
+}
+```
+
+---
