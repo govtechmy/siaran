@@ -20,6 +20,7 @@
     "@payloadcms/bundler-webpack": "^1.0.0",
     "@payloadcms/db-mongodb": "^1.0.0",
     "@payloadcms/richtext-slate": "^1.5.2",
+    "@repo/aws": "*",
     "cookie-parser": "^1.4.7",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
