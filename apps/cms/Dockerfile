@@ -10,7 +10,8 @@ RUN turbo prune cms --docker
 FROM base AS installer
 WORKDIR /app
 COPY --from=builder /app/out/json/ .
-RUN npm install
+# due to React version mismatch (api-doc, @govtechmy/myds-react)
+RUN npm install --force
 COPY --from=builder /app/out/full/ .
 # Provide build-time environment variables
 ARG PAYLOAD_PUBLIC_WEBHOOK_API_HOST
