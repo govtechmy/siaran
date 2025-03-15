@@ -1,0 +1,19 @@
+{
+  "name": "@repo/aws",
+  "scripts": {
+    "dev": "tsc --watch",
+    "build": "tsc --noCheck"
+  },
+  "exports": {
+    "./secrets-manager": {
+      "types": "./src/secrets-manager.ts",
+      "default": "./dist/secrets-manager.js"
+    }
+  },
+  "devDependencies": {
+    "typescript": "latest"
+  },
+  "dependencies": {
+    "@aws-sdk/client-secrets-manager": "^3.758.0"
+  }
+}

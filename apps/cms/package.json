@@ -20,6 +20,7 @@
     "@payloadcms/bundler-webpack": "^1.0.0",
     "@payloadcms/db-mongodb": "^1.0.0",
     "@payloadcms/richtext-slate": "^1.5.2",
+    "@repo/aws": "*",
     "cookie-parser": "^1.4.7",
     "cross-env": "^7.0.3",
     "dotenv": "^8.2.0",
@@ -28,6 +29,7 @@
     "remark-parse": "^9.0.0",
     "remark-slate": "^1.8.6",
     "remark-stringify": "^9.0.1",
+    "repeat-string": "^1.6.1",
     "strip-markdown": "^3.1.2",
     "unified": "^9.2.2"
   },
