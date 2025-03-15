@@ -15,17 +15,48 @@ spec:
       labels:
         app: siaran-cms
     spec:
+      serviceAccountName: siaran-cms
       containers:
         - name: siaran-cms
           image: 767397910274.dkr.ecr.ap-southeast-1.amazonaws.com/siaran-cms
           ports:
             - containerPort: 3000
           env:
-            - name: DATABASE_URI
+            - name: DATABASE_USERNAME
               valueFrom:
                 secretKeyRef:
                   name: siaran-cms-env
-                  key: DATABASE_URI
+                  key: DATABASE_USERNAME
+            - name: DATABASE_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: DATABASE_PASSWORD
+            - name: DATABASE_HOST
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: DATABASE_HOST
+            - name: DATABASE_PORT
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: DATABASE_PORT
+            - name: DATABASE_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: DATABASE_NAME
+            - name: DATABASE_OPTIONS
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: DATABASE_OPTIONS
+            - name: DATABASE_SECRET_NAME
+              valueFrom:
+                secretKeyRef:
+                  name: siaran-cms-env
+                  key: DATABASE_SECRET_NAME
             - name: PAYLOAD_SECRET
               valueFrom:
                 secretKeyRef:

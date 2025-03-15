@@ -2,6 +2,7 @@ import express from "express";
 import payload from "payload";
 import path from "path";
 import cookieParser from "cookie-parser";
+import { initDatabaseUri } from "./utils/database";
 
 if (process.env.NODE_ENV === "development") {
   require("dotenv").config();
@@ -21,7 +22,8 @@ app.get("/health", (_, res) => {
   res.send("OK");
 });
 
-const start = async () => {
+async function start() {
+  await initDatabaseUri();
   await payload.init({
     secret: process.env.PAYLOAD_SECRET,
     express: app,
@@ -35,6 +37,6 @@ const start = async () => {
   app.listen(port, () => {
     console.log(`Server is now running on port ${port}`);
   });
-};
+}
 
 start();

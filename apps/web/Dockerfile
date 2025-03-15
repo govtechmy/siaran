@@ -10,7 +10,8 @@ RUN turbo prune web --docker
 FROM base AS installer
 WORKDIR /app
 COPY --from=builder /app/out/json/ .
-RUN npm install
+# due to React version mismatch (api-doc, @govtechmy/myds-react)
+RUN npm install --force
 COPY --from=builder /app/out/full/ .
 RUN npm install turbo --global
 RUN turbo build --filter=web
