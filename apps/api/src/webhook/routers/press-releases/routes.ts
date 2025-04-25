@@ -93,11 +93,16 @@ router.post(
 
     let result: Awaited<ReturnType<typeof cmsPressReleases.create>>;
 
+    const relatedAgency =
+      user.role === "superadmin"
+        ? req.body.relatedAgency
+        : (user.agency.id as cmsPressReleases.Input.Agency);
+
     try {
       result = await cmsPressReleases.create(
         {
           ...req.body,
-          relatedAgency: user.agency.id as cmsPressReleases.Input.Agency,
+          relatedAgency,
         },
         {
           token: res.locals.session.token,
